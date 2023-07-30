@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
-import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
-import Swiper from "react-native-deck-swiper";
-import axios from "axios";
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
+import Swiper from 'react-native-deck-swiper';
+import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 // Import the placeholder image
@@ -38,9 +38,11 @@ const HeartScreen = () => {
         <Swiper
           ref={swiperRef}
           cards={restaurants}
+          backgroundColor={'white'} // Add this line to change the background color
           renderCard={(card) => (
             <View style={styles.card}>
               <Image source={placeholderImage} style={styles.image} />
+              <Text style={styles.cardText}>{card.name}</Text>
               <View style={styles.buttons}>
                 <Icon.Button name="times" backgroundColor="white" color="black" size={30} onPress={() => swiperRef.current.swipeLeft()} />
                 <Icon.Button name="heart" backgroundColor="white" color="black" size={30} onPress={() => swiperRef.current.swipeRight()} />
@@ -58,37 +60,49 @@ const HeartScreen = () => {
   );
 };
 
-// Get the device window's width and height
 const { width, height } = Dimensions.get('window');
 
-// Then adjust your styles accordingly
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: 'white', // Change this line to adjust the background color of the entire app
   },
   card: {
-    width: width * 0.9, // 90% of screen width
-    height: height * 0.6, // 60% of screen height
+    width: width * 0.9,
+    height: height * 0.6,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white', // Set card background color to white
+    backgroundColor: '#EFE2EB', // Change this line to adjust the color of the cards
     borderRadius: 20,
+    
   },
   image: {
-    width: '100%', // Use 100% of the card's width
-    height: '85%', // Use 85% of the card's height
+    width: '100%',
+    height: '85%',
     position: 'absolute',
-    top: 0, // Start from the top of the card
-    borderRadius: 15, // this will make the image corners rounded
+    top: 0,
+    borderRadius: 15,
+
+  },
+  cardText: {
+    position: 'absolute',
+    bottom: 50,
+    left: 10,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10
   },
   buttons: {
-    flexDirection: "row", 
-    justifyContent: "space-between", // This will increase the distance between the buttons
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     position: 'absolute',
-    bottom: 10, // Position buttons at the bottom of the card
-    width: '100%', // Take the full width of the card
-    paddingHorizontal: 20, // Add horizontal padding to prevent the buttons from touching the edges
+    bottom: 10,
+    width: '100%',
+    paddingHorizontal: 20,
   }
 });
 
