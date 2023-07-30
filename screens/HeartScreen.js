@@ -44,9 +44,9 @@ const HeartScreen = () => {
               <Image source={placeholderImage} style={styles.image} />
               <Text style={styles.cardText}>{card.name}</Text>
               <View style={styles.buttons}>
-                <Icon.Button name="times" backgroundColor="white" color="black" size={30} onPress={() => swiperRef.current.swipeLeft()} />
-                <Icon.Button name="heart" backgroundColor="white" color="black" size={30} onPress={() => swiperRef.current.swipeRight()} />
-                <Icon.Button name="phone" backgroundColor="white" color="black" size={30} onPress={() => onBook(swiperRef.current.state.index)} />
+                <Icon.Button name="times" backgroundColor="#EFE2EB" color="black" size={30} onPress={() => swiperRef.current.swipeLeft()} />
+                <Icon.Button name="heart" backgroundColor="#EFE2EB" color="black" size={30} onPress={() => swiperRef.current.swipeRight()} />
+                <Icon.Button name="phone" backgroundColor="#EFE2EB" color="black" size={30} onPress={() => onBook(swiperRef.current.state.index)} />
               </View>
             </View>
           )}
