@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { TextInput, TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native';
+import {KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native';
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 import { app } from './firebase';
 import { getAuth, signInWithPhoneNumber } from 'firebase/auth';
@@ -30,30 +30,36 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <LinearGradient colors={['#A833E1', '#EC32A3']} style={styles.container}>
-      <FirebaseRecaptchaVerifierModal
-        ref={recaptchaVerifier}
-        firebaseConfig={app.options}
-      />
-      <Image style={styles.logo} source={require('./batman.png')} />
-      <Text style={styles.title}>YourWingMan</Text>
-      <Image style={styles.image} source={require('./kissing-cups.png')} />
-      <Text style={styles.relationship}>Your new relationship wingman!</Text>
-      <Text style={styles.welcome}>Welcome!</Text>
-      <Text style={styles.phone}>Please enter your phone number to start</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{flex: 1}}
+    >
+      <LinearGradient colors={['#A833E1', '#EC32A3']} style={styles.container}>
+        <FirebaseRecaptchaVerifierModal
+          ref={recaptchaVerifier}
+          firebaseConfig={app.options}
+        />
+        <Image style={styles.logo} source={require('./batman.png')} />
+        <Text style={styles.title}>YourWingMan</Text>
+        <Image style={styles.image} source={require('./kissing-cups.png')} />
+        <Text style={styles.relationship}>Your new relationship wingman!</Text>
+        <Text style={styles.welcome}>Welcome!</Text>
+        <Text style={styles.phone}>Please enter your phone number to start</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Phone Number"
-        value={phoneNumber} // Bind phoneNumber state here
-        onChangeText={text => setPhoneNumber(`+${text.replace(/\D/g, '')}`)} // Remove all non-numeric characters and prepend '+'
-        keyboardType="phone-pad"
-        autoCompleteType="tel"
-      />
-      <TouchableOpacity style={styles.button} onPress={sendVerification}>
-        <Text style={styles.buttonText}>Next</Text>
-      </TouchableOpacity>
-    </LinearGradient>
+        <TextInput
+  style={styles.input}
+  placeholder="+1(650) 5555-3434"
+  value={phoneNumber} // Bind phoneNumber state here
+  onChangeText={text => setPhoneNumber(`+${text.replace(/\D/g, '')}`)} // Remove all non-numeric characters and prepend '+'
+  keyboardType="numeric"
+  returnKeyType="done" // Add this line
+  autoCompleteType="tel"
+/>
+        <TouchableOpacity style={styles.button} onPress={sendVerification}>
+          <Text style={styles.buttonText}>Next</Text>
+        </TouchableOpacity>
+      </LinearGradient>
+    </KeyboardAvoidingView>
   );
 }
 
