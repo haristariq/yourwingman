@@ -12,6 +12,9 @@ export default function VerificationScreen({ route, navigation }) {
       const auth = getAuth(app);
       await verificationId.confirm(verificationCode);
       console.log('Phone authentication successful 👍');
+      
+      // Navigate to the Main screen (TabNavigator) after successful authentication
+      navigation.navigate('Main');
     } catch (err) {
       console.log(err);
     }
