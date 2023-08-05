@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Button, Text } from 'react-native';
-import { logout } from './firebase';  // Import the logout function
+import { logout } from '../firebase';  // Import the logout function
 
 export default function ProfileScreen() {
   return (
