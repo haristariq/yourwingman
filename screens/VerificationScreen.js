@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextInput, View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
-import { app } from './firebase';
+import { app } from '../firebase';
 import { getAuth, signInWithPhoneNumber } from 'firebase/auth';
 
 export default function VerificationScreen({ route, navigation }) {

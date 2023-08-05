@@ -11,8 +11,8 @@ import HomeScreen from './screens/HomeScreen';
 import HeartScreen from './screens/HeartScreen';
 import ChatScreen from './screens/ChatScreen';
 import PlayScreen from './screens/PlayScreen';
-import LoginScreen from './LoginScreen';
-import VerificationScreen from './VerificationScreen';
+import LoginScreen from './screens/LoginScreen';
+import VerificationScreen from './screens/VerificationScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();

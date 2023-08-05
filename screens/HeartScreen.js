@@ -5,7 +5,7 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 // Import the placeholder image
-import placeholderImage from './restaurant.png';
+import placeholderImage from '../assets/images/restaurant.png';
 
 const HeartScreen = () => {
   const [restaurants, setRestaurants] = useState([]);

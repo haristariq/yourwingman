@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import {KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native';
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
-import { app } from './firebase';
+import { app } from '../firebase';
 import { getAuth, signInWithPhoneNumber } from 'firebase/auth';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -39,9 +39,9 @@ export default function LoginScreen({ navigation }) {
           ref={recaptchaVerifier}
           firebaseConfig={app.options}
         />
-        <Image style={styles.logo} source={require('./batman.png')} />
+        <Image style={styles.logo} source={require('../assets/images/batman.png')} />
         <Text style={styles.title}>YourWingMan</Text>
-        <Image style={styles.image} source={require('./kissing-cups.png')} />
+        <Image style={styles.image} source={require('../assets/images/kissing-cups.png')} />
         <Text style={styles.relationship}>Your new relationship wingman!</Text>
         <Text style={styles.welcome}>Welcome!</Text>
         <Text style={styles.phone}>Please enter your phone number to start</Text>
