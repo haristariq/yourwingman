@@ -132,7 +132,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 80, // adjust this value based on your needs
-    fontFamily: 'DM Sans',
 
   },
 
@@ -174,7 +173,6 @@ const styles = StyleSheet.create({
   },
   userName: {
     marginBottom: 15, // adjust this value based on your needs
-    fontFamily: 'DM Sans',
 
   },
 
@@ -199,7 +197,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     paddingTop: 10, // Move the title a bit down
-    fontFamily: 'DM Sans',
 
   },
   secondTitle: {
