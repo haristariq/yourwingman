@@ -66,7 +66,7 @@ function TabNavigator() {
         tabBarInactiveTintColor: 'gray',
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="insideHome" component={HomeScreen} options={{ headerShown: false }} />
       <Tab.Screen name="Heart" component={ChatScreen} options={{ headerShown: false }} />
       <Tab.Screen name="Chat" component={ChatScreen} options={{ headerShown: false }}/>
       <Tab.Screen name="Play" component={PlayScreen} options={{ headerShown: false }}/>

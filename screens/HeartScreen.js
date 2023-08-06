@@ -151,7 +151,7 @@ export default function App() {
     tabBarIcon: ({ focused, color, size }) => {
       let iconName;
 
-      if (route.name === 'HeartScreen') {
+      if (route.name === 'insideHeartScreen') {
         iconName = 'home-outline';
       
       } else if (route.name === 'Matches') {
@@ -175,7 +175,7 @@ export default function App() {
     tabBarInactiveTintColor: 'gray',
   })}
 >
-  <Tab.Screen name="HeartScreen" component={HeartScreen} options={{ headerShown: false }} />
+  <Tab.Screen name="insideHeartScreen" component={HeartScreen} options={{ headerShown: false }} />
   <Tab.Screen name="Matches" component={Matches} options={{ headerShown: false }} />
 
   {/* Add more Tab.Screen here for other screens */}
