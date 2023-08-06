@@ -4,6 +4,8 @@ import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 import { app } from '../firebase';
 import { getAuth, signInWithPhoneNumber } from 'firebase/auth';
 import { LinearGradient } from 'expo-linear-gradient';
+import SansFont from '../SansFont';
+
 
 export default function LoginScreen({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -39,12 +41,12 @@ export default function LoginScreen({ navigation }) {
           ref={recaptchaVerifier}
           firebaseConfig={app.options}
         />
-        <Image style={styles.logo} source={require('../assets/images/batman.png')} />
-        <Text style={styles.title}>YourWingMan</Text>
+        <Image style={styles.logo} source={require('../assets/images/White-Heart.png')} />
+        <SansFont style={styles.title}>YourWingMan</SansFont>
         <Image style={styles.image} source={require('../assets/images/kissing-cups.png')} />
-        <Text style={styles.relationship}>Your new relationship wingman!</Text>
-        <Text style={styles.welcome}>Welcome!</Text>
-        <Text style={styles.phone}>Please enter your phone number to start</Text>
+        <SansFont style={styles.relationship}>Your new relationship wingman!</SansFont>
+        <SansFont style={styles.welcome}>Welcome!</SansFont>
+        <SansFont style={styles.phone}>Please enter your phone number to start</SansFont>
 
         <TextInput
   style={styles.input}
@@ -56,7 +58,7 @@ export default function LoginScreen({ navigation }) {
   autoCompleteType="tel"
 />
         <TouchableOpacity style={styles.button} onPress={sendVerification}>
-          <Text style={styles.buttonText}>Next</Text>
+          <SansFont style={styles.buttonText}>Next</SansFont>
         </TouchableOpacity>
       </LinearGradient>
     </KeyboardAvoidingView>
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   title: {
-    top: '-5%',
+    top: '-2%',
     fontSize: 40,
     fontWeight: 'semibold',
     color: '#fff',

@@ -6,6 +6,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { View } from 'react-native';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';  // Import the auth object
+import * as Font from 'expo-font';
+import AppLoading from 'expo-app-loading';
 
 import HomeScreen from './screens/HomeScreen';
 import HeartScreen from './screens/HeartScreen';
@@ -16,6 +18,13 @@ import VerificationScreen from './screens/VerificationScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'DM Sans': require('./assets/fonts/DM_Sans/static/DMSans-Regular.ttf'),
+  });
+};
+
 
 // Define the TabNavigator component
 function TabNavigator() {
@@ -62,6 +71,7 @@ function TabNavigator() {
 export default function App() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState(null);
+  const [fontLoaded, setFontLoaded] = useState(false);
 
   // Handle user state changes
   function onAuthStateChange(user) {
@@ -71,11 +81,12 @@ export default function App() {
 
   useEffect(() => {
     const subscriber = onAuthStateChanged(auth, onAuthStateChange);
+    fetchFonts().then(() => setFontLoaded(true));
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  if (initializing) {
-    return null; // or a loading spinner
+  if (initializing || !fontLoaded) {
+    return <AppLoading />;
   }
 
   return (

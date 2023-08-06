@@ -7,6 +7,7 @@ import thumbnail1 from '../assets/images/thumbnail.png';
 import action2 from '../assets/images/compatibility-quiz.png';
 import thumbnail3 from '../assets/images/new-feature.png';
 import { LinearGradient } from 'expo-linear-gradient';
+import SansFont from '../SansFont';
 
 
 export default function HomeScreen({ navigation }) {
@@ -41,18 +42,18 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.topPart}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => {/* Code to select location */}}>
-            <Text style={styles.buttonText}>Select Location</Text>
+            <SansFont style={styles.buttonText}>Select Location</SansFont>
           </TouchableOpacity>
           <TouchableOpacity onPress={logout}>
-            <Text style={styles.buttonText}>Logout</Text>
+            <SansFont style={styles.buttonText}>Logout</SansFont>
           </TouchableOpacity>
         </View>
-        <Text style={styles.headerName}>{header}</Text>
+        <SansFont style={styles.headerName}>{header}</SansFont>
 
         <View style={styles.usersContainer}>
           {users.map(user => (
             <View key={user.key} style={styles.userContainer}>
-                <Text style={styles.userName}>{user.name}</Text>
+                <SansFont style={styles.userName}>{user.name}</SansFont>
               <Image source={{ uri: user.image }} style={styles.userImage} />
             </View>
           ))}
@@ -62,7 +63,7 @@ export default function HomeScreen({ navigation }) {
 
 
       <View style={styles.whiteContainer}>
-        <Text style={styles.title}>Easy Date</Text>
+        <SansFont style={styles.title}>Easy Date</SansFont>
 
         <FlatList
           style={styles.middlePart}
@@ -72,12 +73,12 @@ export default function HomeScreen({ navigation }) {
           renderItem={({ item }) => (
             <View style={styles.thumbnailContainer}>
               <Image source={{ uri: placeholderImage }} style={styles.middleThumbnail} />
-              <Text style={styles.thumbnailText}>{item.text}</Text>
+              <SansFont style={styles.thumbnailText}>{item.text}</SansFont>
             </View>
           )}
         />
 
-        <Text style={styles.secondTitle}>Actions</Text>
+        <SansFont style={styles.secondTitle}>Actions</SansFont>
 
         <Swiper showsPagination loop={false} paginationStyle={{ bottom: -5 }} style={{ marginTop: 30 }}>
           {buttonSets.map(set => (
@@ -86,7 +87,7 @@ export default function HomeScreen({ navigation }) {
               {set.showButtons && (
                 <View style={styles.buttons}>
                   {set.buttons.map(button => (
-                    <TouchableOpacity key={button} style={styles.button}><Text>{button}</Text></TouchableOpacity>
+                    <TouchableOpacity key={button} style={styles.button}><SansFont>{button}</SansFont></TouchableOpacity>
                   ))}
                 </View>
               )}
@@ -102,6 +103,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 80, // adjust this value based on your needs
+    fontFamily: 'DM Sans',
+
   },
 
   topPart: {
@@ -142,11 +145,14 @@ const styles = StyleSheet.create({
   },
   userName: {
     marginBottom: 15, // adjust this value based on your needs
+    fontFamily: 'DM Sans',
+
   },
 
   lilac: {
     height: 20,
     backgroundColor: '#DBD8E3', // Adjust the color to your need
+    
   },
   whiteContainer: {
     flex: 3,
@@ -164,6 +170,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     paddingTop: 10, // Move the title a bit down
+    fontFamily: 'DM Sans',
+
   },
   secondTitle: {
     fontSize: 20,
