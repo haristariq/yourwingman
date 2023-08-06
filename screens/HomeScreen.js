@@ -37,7 +37,6 @@ export default function App() {
 function HomeScreen({ navigation }) {
 
   const header = "Explore"; // Replace this with your actual user data
-  const placeholderImage = "https://via.placeholder.com/100"; // Placeholder image URL
 
   const thumbnails = [
     { key: '1', text: 'Food Spots', navigateTo: 'HeartScreen', image: food},

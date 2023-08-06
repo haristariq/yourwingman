@@ -6,9 +6,10 @@ const SansFont = (props) => {
 };
 
 const styles = StyleSheet.create({
-    defaultText: {
-        fontFamily: 'DM Sans',
-    },
+    
+    boldText: {
+        fontFamily: 'DM Sans Bold',
+    }
 });
 
 export default SansFont;

@@ -25,7 +25,8 @@ const Stack = createStackNavigator();
 
 const fetchFonts = () => {
   return Font.loadAsync({
-    'DM Sans': require('./assets/fonts/DM_Sans/static/DMSans-Regular.ttf'),
+    'DM Sans Bold': require('./assets/fonts/DM_Sans/static/DMSans-Bold.ttf'),
+
   });
 };
 
