@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, FlatList, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { logout } from '../firebase';  // Import the logout function
 import Swiper from 'react-native-swiper';
 import thumbnail1 from '../assets/images/thumbnail.png';
@@ -8,15 +7,50 @@ import action2 from '../assets/images/compatibility-quiz.png';
 import thumbnail3 from '../assets/images/new-feature.png';
 import { LinearGradient } from 'expo-linear-gradient';
 import SansFont from '../SansFont';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import PlacesToGo from './PlacesToGo';
+import SpicyTime from './SpicyTime';
+import HeartScreen from './HeartScreen';
 
 
-export default function HomeScreen({ navigation }) {
+const Stack = createStackNavigator();
+
+export default function App() {
+  return (
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen 
+        name="Home" 
+        component={HomeScreen} 
+        options={{ headerShown: false }} 
+      />
+      <Stack.Screen 
+        name="Places To Go" 
+        component={PlacesToGo} 
+        options={{ headerShown: false }} 
+      />
+      <Stack.Screen 
+        name="Spicy Time" 
+        component={SpicyTime} 
+        options={{ headerShown: false }} 
+      />
+      <Stack.Screen 
+        name="HeartScreen" 
+        component={HeartScreen} 
+        options={{ headerShown: false }} 
+      />
+    </Stack.Navigator>
+  );
+}
+
+
+function HomeScreen({ navigation }) {
 
   const header = "Explore"; // Replace this with your actual user data
   const placeholderImage = "https://via.placeholder.com/100"; // Placeholder image URL
 
   const thumbnails = [
-    { key: '1', text: 'Food Spots', navigateTo: 'FoodSpots' },
+    { key: '1', text: 'Food Spots', navigateTo: 'HeartScreen' },
     { key: '2', text: 'Places to Go', navigateTo: 'PlacesToGo' },
     { key: '3', text: 'Spicy Time', navigateTo: 'SpicyTime' },
   ];
@@ -33,6 +67,8 @@ export default function HomeScreen({ navigation }) {
   ];
 
   return (
+    
+    
     <LinearGradient 
       start={{ x: 0, y: 0 }} 
       end={{ x: 1, y: 0 }} 
@@ -44,9 +80,12 @@ export default function HomeScreen({ navigation }) {
           <TouchableOpacity onPress={() => {/* Code to select location */}}>
             <SansFont style={styles.buttonText}>Select Location</SansFont>
           </TouchableOpacity>
-          <TouchableOpacity onPress={logout}>
-            <SansFont style={styles.buttonText}>Logout</SansFont>
-          </TouchableOpacity>
+          <TouchableOpacity onPress={async () => {
+  await logout();
+  navigation.navigate('Login');
+}}>
+  <SansFont style={styles.buttonText}>Logout</SansFont>
+</TouchableOpacity>
         </View>
         <SansFont style={styles.headerName}>{header}</SansFont>
 
@@ -66,18 +105,19 @@ export default function HomeScreen({ navigation }) {
         <SansFont style={styles.title}>Easy Date</SansFont>
 
         <FlatList
-          style={styles.middlePart}
-          data={thumbnails}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <View style={styles.thumbnailContainer}>
-              <Image source={{ uri: placeholderImage }} style={styles.middleThumbnail} />
-              <SansFont style={styles.thumbnailText}>{item.text}</SansFont>
-            </View>
-          )}
-        />
-
+  style={styles.middlePart}
+  data={thumbnails}
+  horizontal
+  showsHorizontalScrollIndicator={false}
+  renderItem={({ item }) => (
+    <TouchableOpacity onPress={() => navigation.navigate(item.navigateTo)}>
+      <View style={styles.thumbnailContainer}>
+        <Image source={{ uri: placeholderImage }} style={styles.middleThumbnail} />
+        <SansFont style={styles.thumbnailText}>{item.text}</SansFont>
+      </View>
+    </TouchableOpacity>
+  )}
+/>
         <SansFont style={styles.secondTitle}>Actions</SansFont>
 
         <Swiper showsPagination loop={false} paginationStyle={{ bottom: -5 }} style={{ marginTop: 30 }}>

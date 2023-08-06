@@ -8,6 +8,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';  // Import the auth object
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
+import SansFont from './SansFont';
+
 
 import HomeScreen from './screens/HomeScreen';
 import HeartScreen from './screens/HeartScreen';

@@ -1,6 +1,8 @@
 // HomeScreen.js
 import React from 'react';
 import { View, Text } from 'react-native';
+import SansFont from '../SansFont';
+
 
 export default function PlayScreen() {
   return (
