@@ -11,6 +11,7 @@ import AppLoading from 'expo-app-loading';
 import SansFont from './SansFont';
 import PlacesToGo from './screens/PlacesToGo';
 import SpicyTime from './screens/SpicyTime';
+import Matches from './screens/Matches';
 
 
 import HomeScreen from './screens/HomeScreen';
@@ -67,7 +68,7 @@ function TabNavigator() {
       })}
     >
       <Tab.Screen name="insideHome" component={HomeScreen} options={{ headerShown: false }} />
-      <Tab.Screen name="Heart" component={ChatScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Heart" component={Matches} options={{ headerShown: false }} />
       <Tab.Screen name="Chat" component={ChatScreen} options={{ headerShown: false }}/>
       <Tab.Screen name="Play" component={PlayScreen} options={{ headerShown: false }}/>
     </Tab.Navigator>
