@@ -6,24 +6,12 @@ import Swiper from 'react-native-swiper';
 import thumbnail1 from '../assets/images/thumbnail.png';
 import action2 from '../assets/images/compatibility-quiz.png';
 import thumbnail3 from '../assets/images/new-feature.png';
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 export default function HomeScreen({ navigation }) {
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity onPress={logout}>
-          <Text style={{ marginRight: 10 }}>Logout</Text>
-        </TouchableOpacity>
-      ),
-      headerLeft: () => (
-        <TouchableOpacity onPress={() => {/* Code to select location */}}>
-          <Text style={{ marginLeft: 10 }}>Select Location</Text>
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation]);
 
-  const user = "John Doe"; // Replace this with your actual user data
+  const header = "Explore"; // Replace this with your actual user data
   const placeholderImage = "https://via.placeholder.com/100"; // Placeholder image URL
 
   const thumbnails = [
@@ -39,77 +27,101 @@ export default function HomeScreen({ navigation }) {
   ];
 
   return (
-    <View style={styles.container}>
-      <View style={styles.topPart}>
-        <Text style={styles.userName}>{user}</Text>
-        <View style={styles.lilac} />
+    <LinearGradient 
+    start={{ x: 0, y: 0 }} 
+    end={{ x: 1, y: 0 }} 
+    colors={['#C56AF0', '#F578C9']} 
+    style={styles.container}
+  >
+    <View style={styles.topPart}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => {/* Code to select location */}}>
+          <Text style={styles.buttonText}>Select Location</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={logout}>
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
       </View>
+      <Text style={styles.headerName}>{header}</Text>
+    </View>
+
 
       <View style={styles.whiteContainer}>
         <Text style={styles.title}>Easy Date</Text>
 
         <FlatList
-  style={styles.middlePart}
-  data={thumbnails}
-  horizontal
-  showsHorizontalScrollIndicator={false}
-  renderItem={({ item }) => (
-    <View style={styles.thumbnailContainer}>
-      <Image source={{ uri: placeholderImage }} style={styles.middleThumbnail} />
-      <Text style={styles.thumbnailText}>{item.text}</Text>
-    </View>
-  )}
-/>
+          style={styles.middlePart}
+          data={thumbnails}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <View style={styles.thumbnailContainer}>
+              <Image source={{ uri: placeholderImage }} style={styles.middleThumbnail} />
+              <Text style={styles.thumbnailText}>{item.text}</Text>
+            </View>
+          )}
+        />
 
         <Text style={styles.secondTitle}>Actions</Text>
 
         <Swiper showsPagination loop={false} paginationStyle={{ bottom: -5 }} style={{ marginTop: 30 }}>
-  {buttonSets.map(set => (
-    <View key={set.key} style={styles.actions}>
-      <Image source={set.thumbnail} style={[styles.bottomThumbnail, { width: set.thumbnailWidth }]} />
-      {set.showButtons && (
-        <View style={styles.buttons}>
-          {set.buttons.map(button => (
-            <TouchableOpacity key={button} style={styles.button}><Text>{button}</Text></TouchableOpacity>
+          {buttonSets.map(set => (
+            <View key={set.key} style={styles.actions}>
+              <Image source={set.thumbnail} style={[styles.bottomThumbnail, { width: set.thumbnailWidth }]} />
+              {set.showButtons && (
+                <View style={styles.buttons}>
+                  {set.buttons.map(button => (
+                    <TouchableOpacity key={button} style={styles.button}><Text>{button}</Text></TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </View>
           ))}
-        </View>
-      )}
-    </View>
-  ))}
-</Swiper>
+        </Swiper>
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e1c4ff',
     paddingTop: 80, // adjust this value based on your needs
-
   },
   topPart: {
     flex: 1,
+    justifyContent: 'center',
+    marginTop: -70,
+    marginBottom: 90,
+    padding: 10,
   },
-  userName: {
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  headerName: {
     fontSize: 32,
     fontWeight: 'bold',
   },
+  buttonText: {
+    marginLeft: 10,
+    marginRight: 10,
+  }, 
+    
   lilac: {
     height: 20,
     backgroundColor: '#DBD8E3', // Adjust the color to your need
   },
   whiteContainer: {
-  flex: 3,
-  backgroundColor: '#FFFFFF',
-  borderTopLeftRadius: 50, // Adjust this value
-  borderTopRightRadius: 50, // Adjust this value
-  paddingTop: 20,
-  paddingBottom: 20,
-  paddingLeft: 20,
-  paddingRight: 0, // Remove padding from the right side
-},
+    flex: 3,
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 50, // Adjust this value
+    borderTopRightRadius: 50, // Adjust this value
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 20,
+    paddingRight: 0, // Remove padding from the right side
+  },
 
   title: {
     fontSize: 20,
