@@ -26,24 +26,39 @@ export default function HomeScreen({ navigation }) {
     { key: '3', thumbnail: thumbnail3, thumbnailWidth: '100%', showButtons: false }, // increased size
   ];
 
+  const users = [
+    { key: '1', name: 'User1', image: 'https://via.placeholder.com/100' },
+    { key: '2', name: 'User2', image: 'https://via.placeholder.com/100' },
+  ];
+
   return (
     <LinearGradient 
-    start={{ x: 0, y: 0 }} 
-    end={{ x: 1, y: 0 }} 
-    colors={['#C56AF0', '#F578C9']} 
-    style={styles.container}
-  >
-    <View style={styles.topPart}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => {/* Code to select location */}}>
-          <Text style={styles.buttonText}>Select Location</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={logout}>
-          <Text style={styles.buttonText}>Logout</Text>
-        </TouchableOpacity>
+      start={{ x: 0, y: 0 }} 
+      end={{ x: 1, y: 0 }} 
+      colors={['#C56AF0', '#F578C9']} 
+      style={styles.container}
+    >
+      <View style={styles.topPart}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => {/* Code to select location */}}>
+            <Text style={styles.buttonText}>Select Location</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={logout}>
+            <Text style={styles.buttonText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.headerName}>{header}</Text>
+
+        <View style={styles.usersContainer}>
+          {users.map(user => (
+            <View key={user.key} style={styles.userContainer}>
+                <Text style={styles.userName}>{user.name}</Text>
+              <Image source={{ uri: user.image }} style={styles.userImage} />
+            </View>
+          ))}
+        </View>
+
       </View>
-      <Text style={styles.headerName}>{header}</Text>
-    </View>
 
 
       <View style={styles.whiteContainer}>
@@ -88,6 +103,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 80, // adjust this value based on your needs
   },
+
   topPart: {
     flex: 1,
     justifyContent: 'center',
@@ -108,6 +124,26 @@ const styles = StyleSheet.create({
     marginRight: 10,
   }, 
     
+  usersContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  marginTop: 20,
+  marginBottom: -100,
+  },
+  userContainer: {
+    alignItems: 'center',
+    marginHorizontal: -3, // adjust this value based on your needs
+  },
+  userImage: {
+    width: 80, // adjust this value based on your needs
+    height: 80, // adjust this value based on your needs
+    borderRadius: 50, // adjust this value based on your needs
+  },
+  userName: {
+    marginBottom: 15, // adjust this value based on your needs
+  },
+
   lilac: {
     height: 20,
     backgroundColor: '#DBD8E3', // Adjust the color to your need
