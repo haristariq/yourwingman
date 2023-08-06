@@ -49,24 +49,24 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.title}>Easy Date</Text>
 
         <FlatList
-          style={styles.middlePart}
-          data={thumbnails}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => navigation.navigate(item.navigateTo)}>
-              <Image source={{ uri: placeholderImage }} style={styles.middleThumbnail} />
-              <Text style={styles.thumbnailText}>{item.text}</Text>
-            </TouchableOpacity>
-          )}
-        />
+  style={styles.middlePart}
+  data={thumbnails}
+  horizontal
+  showsHorizontalScrollIndicator={false}
+  renderItem={({ item }) => (
+    <View style={styles.thumbnailContainer}>
+      <Image source={{ uri: placeholderImage }} style={styles.middleThumbnail} />
+      <Text style={styles.thumbnailText}>{item.text}</Text>
+    </View>
+  )}
+/>
 
         <Text style={styles.secondTitle}>Actions</Text>
 
         <Swiper showsPagination loop={false} paginationStyle={{ bottom: -5 }} style={{ marginTop: 30 }}>
   {buttonSets.map(set => (
     <View key={set.key} style={styles.actions}>
-      <Image source={set.thumbnail} style={[styles.buttomThumbnail, { width: set.thumbnailWidth }]} />
+      <Image source={set.thumbnail} style={[styles.bottomThumbnail, { width: set.thumbnailWidth }]} />
       {set.showButtons && (
         <View style={styles.buttons}>
           {set.buttons.map(button => (
@@ -122,21 +122,34 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 20, // Move thumbnails a bit down
   },
-  middleThumbnail: {
+  thumbnailContainer: {
     width: 120,
     height: 140,
-    marginHorizontal: 10, // Adjust this value to increase or decrease the gap
+    marginHorizontal: 10,
     borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
   },
-  buttomThumbnail: {
+  middleThumbnail: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  thumbnailText: {
+    position: 'absolute',
+    color: '#fff', // text color on the image
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
+  bottomThumbnail: {
     height: 180,
     marginHorizontal: 10, // Adjust this value to increase or decrease the gap
     borderRadius: 10,
   },
 
-  thumbnailText: {
-    textAlign: 'center',
-  },
+  
   bottomPart: {
     flex: 1,
   },
