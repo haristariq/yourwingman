@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   secondTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 10,
     marginTop: -40, // Move the second title a bit up
   },
   middlePart: {
