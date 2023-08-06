@@ -5,7 +5,7 @@ import { logout } from '../firebase';  // Import the logout function
 import Swiper from 'react-native-swiper';
 import thumbnail1 from '../assets/images/thumbnail.png';
 import action2 from '../assets/images/compatibility-quiz.png';
-import thumbnail3 from '../assets/images/thumbnail.png';
+import thumbnail3 from '../assets/images/new-feature.png';
 
 export default function HomeScreen({ navigation }) {
   React.useLayoutEffect(() => {
@@ -33,9 +33,9 @@ export default function HomeScreen({ navigation }) {
   ];
 
   const buttonSets = [
-    { key: '1', thumbnail: thumbnail1 , thumbnailWidth: 100, buttons: ['Button 1', 'Button 2', 'Button 3'], showButtons: true },
-    { key: '2', thumbnail: thumbnail1 , thumbnailWidth: 150, showButtons: false },
-    { key: '3', thumbnail: action2, thumbnailWidth: 150, showButtons: false },
+    { key: '1', thumbnail: thumbnail1 , thumbnailWidth: '40%', buttons: ['Button 1', 'Button 2', 'Button 3'], showButtons: true },
+    { key: '2', thumbnail: action2 , thumbnailWidth: '95%', showButtons: false }, // increased size
+    { key: '3', thumbnail: thumbnail3, thumbnailWidth: '95%', showButtons: false }, // increased size
   ];
 
   return (
@@ -55,18 +55,18 @@ export default function HomeScreen({ navigation }) {
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => navigation.navigate(item.navigateTo)}>
-              <Image source={{ uri: placeholderImage }} style={styles.thumbnail} />
+              <Image source={{ uri: placeholderImage }} style={styles.middleThumbnail} />
               <Text style={styles.thumbnailText}>{item.text}</Text>
             </TouchableOpacity>
           )}
         />
 
-        <Text style={styles.title}>Actions</Text>
+        <Text style={styles.secondTitle}>Actions</Text>
 
-        <Swiper showsPagination loop={false}>
+        <Swiper showsPagination loop={false} paginationStyle={{ bottom: -5 }} style={{ marginTop: 30 }}>
   {buttonSets.map(set => (
     <View key={set.key} style={styles.actions}>
-      <Image source={set.thumbnail} style={[styles.thumbnail, { width: set.thumbnailWidth }]} />
+      <Image source={set.thumbnail} style={[styles.buttomThumbnail, { width: set.thumbnailWidth }]} />
       {set.showButtons && (
         <View style={styles.buttons}>
           {set.buttons.map(button => (
@@ -85,7 +85,6 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: '#e1c4ff',
   },
   topPart: {
@@ -100,24 +99,41 @@ const styles = StyleSheet.create({
     backgroundColor: '#DBD8E3', // Adjust the color to your need
   },
   whiteContainer: {
-    flex: 3,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    padding: 20,
-  },
+  flex: 3,
+  backgroundColor: '#FFFFFF',
+  borderTopLeftRadius: 50, // Adjust this value
+  borderTopRightRadius: 50, // Adjust this value
+  padding: 20,
+},
+
   title: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+    paddingTop: 10, // Move the title a bit down
+  },
+  secondTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginTop: -20, // Move the second title a bit up
   },
   middlePart: {
     flex: 1,
+    marginTop: 20, // Move thumbnails a bit down
   },
-  thumbnail: {
-    width: 100,
-    height: 100,
+  middleThumbnail: {
+    width: 120,
+    height: 140,
     marginHorizontal: 10, // Adjust this value to increase or decrease the gap
+    borderRadius: 10,
   },
+  buttomThumbnail: {
+    height: 180,
+    marginHorizontal: 10, // Adjust this value to increase or decrease the gap
+    borderRadius: 10,
+  },
+
   thumbnailText: {
     textAlign: 'center',
   },
@@ -127,13 +143,25 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: -25,
+    
   },
   buttons: {
     flexDirection: 'column',
   },
   button: {
-    backgroundColor: '#DBD8E3',
+    backgroundColor: '#FFFF',
     padding: 10,
-    marginVertical: 5,
+    marginVertical: '7%',
+    borderRadius: 10,
+    width: 150,
+    shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.23,
+  shadowRadius: 2.62,
+  elevation: 4,
   },
 });
