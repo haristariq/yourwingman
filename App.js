@@ -51,10 +51,10 @@ function TabNavigator() {
         tabBarInactiveTintColor: 'gray',
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Heart" component={HeartScreen} />
-      <Tab.Screen name="Chat" component={ChatScreen} />
-      <Tab.Screen name="Play" component={PlayScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Heart" component={HeartScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Chat" component={ChatScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Play" component={PlayScreen} options={{ headerShown: false }}/>
     </Tab.Navigator>
   );
 }

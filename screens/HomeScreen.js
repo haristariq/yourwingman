@@ -34,8 +34,8 @@ export default function HomeScreen({ navigation }) {
 
   const buttonSets = [
     { key: '1', thumbnail: thumbnail1 , thumbnailWidth: '40%', buttons: ['Button 1', 'Button 2', 'Button 3'], showButtons: true },
-    { key: '2', thumbnail: action2 , thumbnailWidth: '95%', showButtons: false }, // increased size
-    { key: '3', thumbnail: thumbnail3, thumbnailWidth: '95%', showButtons: false }, // increased size
+    { key: '2', thumbnail: action2 , thumbnailWidth: '100%', showButtons: false }, // increased size
+    { key: '3', thumbnail: thumbnail3, thumbnailWidth: '100%', showButtons: false }, // increased size
   ];
 
   return (
@@ -86,6 +86,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#e1c4ff',
+    paddingTop: 80, // adjust this value based on your needs
+
   },
   topPart: {
     flex: 1,
@@ -103,7 +105,10 @@ const styles = StyleSheet.create({
   backgroundColor: '#FFFFFF',
   borderTopLeftRadius: 50, // Adjust this value
   borderTopRightRadius: 50, // Adjust this value
-  padding: 20,
+  paddingTop: 20,
+  paddingBottom: 20,
+  paddingLeft: 20,
+  paddingRight: 0, // Remove padding from the right side
 },
 
   title: {
@@ -115,20 +120,20 @@ const styles = StyleSheet.create({
   secondTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10,
-    marginTop: -20, // Move the second title a bit up
+    marginBottom: 20,
+    marginTop: -40, // Move the second title a bit up
   },
   middlePart: {
     flex: 1,
-    marginTop: 20, // Move thumbnails a bit down
+    marginTop: 5, // Move thumbnails a bit down
   },
   thumbnailContainer: {
     width: 120,
-    height: 140,
+    height: 150,
     marginHorizontal: 10,
     borderRadius: 10,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end', // Change this
     overflow: 'hidden',
   },
   middleThumbnail: {
@@ -137,15 +142,14 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   thumbnailText: {
-    position: 'absolute',
     color: '#fff', // text color on the image
     fontWeight: 'bold',
     textAlign: 'center',
+    marginBottom: 10,
   },
 
   bottomThumbnail: {
-    height: 180,
-    marginHorizontal: 10, // Adjust this value to increase or decrease the gap
+    height: 190,
     borderRadius: 10,
   },
 
@@ -161,7 +165,9 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: 'column',
-  },
+  justifyContent: 'space-between', // Add this
+},
+
   button: {
     backgroundColor: '#FFFF',
     padding: 10,
@@ -170,11 +176,11 @@ const styles = StyleSheet.create({
     width: 150,
     shadowColor: "#000",
   shadowOffset: {
-    width: 0,
+    width: -1.9,
     height: 2,
   },
   shadowOpacity: 0.23,
-  shadowRadius: 2.62,
+  shadowRadius: 2,
   elevation: 4,
   },
 });
