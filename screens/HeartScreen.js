@@ -3,11 +3,15 @@ import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
-// Import the placeholder image
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import SansFont from '../SansFont';
 import placeholderImage from '../assets/images/restaurant.png';
+import Matches from './Matches';
 
 const HeartScreen = () => {
+  const navigation = useNavigation();
   const [restaurants, setRestaurants] = useState([]);
   const swiperRef = useRef(null);
 
@@ -33,20 +37,25 @@ const HeartScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
+    <View style={styles.header}>
+      <Icon.Button name="close" backgroundColor="white" color="black" size={30} onPress={() => navigation.goBack()} />
+      <SansFont style={styles.headerText}>Explore</SansFont>
+    </View>
+    <View style={styles.swiperContainer}>
       {restaurants.length > 0 ? (
         <Swiper
           ref={swiperRef}
           cards={restaurants}
-          backgroundColor={'white'} // Add this line to change the background color
+          backgroundColor={'white'}
           renderCard={(card) => (
             <View style={styles.card}>
               <Image source={placeholderImage} style={styles.image} />
-              <Text style={styles.cardText}>{card.name}</Text>
+              <SansFont style={styles.cardText}>{card.name}</SansFont>
               <View style={styles.buttons}>
-                <Icon.Button name="times" backgroundColor="#EFE2EB" color="black" size={30} onPress={() => swiperRef.current.swipeLeft()} />
-                <Icon.Button name="heart" backgroundColor="#EFE2EB" color="black" size={30} onPress={() => swiperRef.current.swipeRight()} />
-                <Icon.Button name="phone" backgroundColor="#EFE2EB" color="black" size={30} onPress={() => onBook(swiperRef.current.state.index)} />
+                <Icon.Button name="times" backgroundColor="white" color="#A833E1" size={30} onPress={() => swiperRef.current.swipeLeft()} />
+                <Icon.Button name="heart" backgroundColor="white" color="#A833E1" size={30} onPress={() => swiperRef.current.swipeRight()} />
+                <Icon.Button name="phone" backgroundColor="white" color="#A833E1" size={30} onPress={() => onBook(swiperRef.current.state.index)} />
               </View>
             </View>
           )}
@@ -54,10 +63,11 @@ const HeartScreen = () => {
           onSwipedRight={onSwipeRight}
         />
       ) : (
-        <Text>Loading...</Text>
+        <SansFont>Loading...</SansFont>
       )}
     </View>
-  );
+  </View>
+);
 };
 
 const { width, height } = Dimensions.get('window');
@@ -66,16 +76,43 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'white', // Change this line to adjust the background color of the entire app
+    backgroundColor: 'white',
+  },
+  swiperContainer: {
+    flex: 1,
+  },
+  header: {
+    marginTop: 50,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignSelf: 'flex-start',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    zIndex: 1000,
+    backgroundColor: 'white',
+    marginBottom: -60,
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 500,
+    marginTop: 10,
   },
   card: {
+    marginTop: 50,
     width: width * 0.9,
     height: height * 0.6,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#EFE2EB', // Change this line to adjust the color of the cards
+    backgroundColor: 'white',
     borderRadius: 20,
-    
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
   },
   image: {
     width: '100%',
@@ -83,7 +120,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     borderRadius: 15,
-
   },
   cardText: {
     position: 'absolute',
@@ -94,16 +130,56 @@ const styles = StyleSheet.create({
     color: 'white',
     textShadowColor: 'rgba(0, 0, 0, 0.75)',
     textShadowOffset: {width: -1, height: 1},
-    textShadowRadius: 10
+    textShadowRadius: 10,
   },
-  buttons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    position: 'absolute',
-    bottom: 10,
-    width: '100%',
-    paddingHorizontal: 20,
-  }
+buttons: {
+flexDirection: 'row',
+justifyContent: 'space-between',
+position: 'absolute',
+bottom: 10,
+width: '100%',
+paddingHorizontal: 20,
+}
 });
 
-export default HeartScreen;
+const Tab = createBottomTabNavigator();
+
+export default function App() {
+  return (
+    <Tab.Navigator
+  screenOptions={({ route }) => ({
+    tabBarIcon: ({ focused, color, size }) => {
+      let iconName;
+
+      if (route.name === 'HeartScreen') {
+        iconName = 'home-outline';
+      
+      } else if (route.name === 'Matches') {
+        iconName = 'play-circle-outline';
+      }
+
+      return (
+        <View 
+          style={{
+            padding: 2,
+            borderRadius: 5,
+            backgroundColor: focused ? '#A333E5' : 'transparent',
+          }}
+        >
+          <Ionicons name={iconName} size={size} color={color} />
+        </View>
+      );
+    },
+    tabBarLabel: '', // This hides the label
+    tabBarActiveTintColor: 'white',
+    tabBarInactiveTintColor: 'gray',
+  })}
+>
+  <Tab.Screen name="HeartScreen" component={HeartScreen} options={{ headerShown: false }} />
+  <Tab.Screen name="Matches" component={Matches} options={{ headerShown: false }} />
+
+  {/* Add more Tab.Screen here for other screens */}
+</Tab.Navigator>
+    
+  );
+}

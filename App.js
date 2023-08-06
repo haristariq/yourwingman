@@ -9,6 +9,8 @@ import { auth } from './firebase';  // Import the auth object
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import SansFont from './SansFont';
+import PlacesToGo from './screens/PlacesToGo';
+import SpicyTime from './screens/SpicyTime';
 
 
 import HomeScreen from './screens/HomeScreen';
@@ -58,12 +60,13 @@ function TabNavigator() {
             </View>
           );
         },
+        tabBarLabel: '', // This hides the label
         tabBarActiveTintColor: 'white',
         tabBarInactiveTintColor: 'gray',
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-      <Tab.Screen name="Heart" component={HeartScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Heart" component={ChatScreen} options={{ headerShown: false }} />
       <Tab.Screen name="Chat" component={ChatScreen} options={{ headerShown: false }}/>
       <Tab.Screen name="Play" component={PlayScreen} options={{ headerShown: false }}/>
     </Tab.Navigator>
@@ -101,6 +104,10 @@ export default function App() {
           options={{ headerShown: false }}
           component={TabNavigator}
         />
+        <Stack.Screen name="PlacesToGo" component={PlacesToGo} options={{ headerShown: false }} />
+        <Stack.Screen name="SpicyTime" component={SpicyTime} options={{ headerShown: false }} />
+        <Stack.Screen name="HeartScreen" component={HeartScreen} options={{ headerShown: false }} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

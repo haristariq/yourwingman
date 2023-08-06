@@ -13,6 +13,10 @@ import PlacesToGo from './PlacesToGo';
 import SpicyTime from './SpicyTime';
 import HeartScreen from './HeartScreen';
 
+import places from '../assets/images/places.jpg';
+import food from '../assets/images/food.png';
+import heart from '../assets/images/heart.jpg';
+
 
 const Stack = createStackNavigator();
 
@@ -24,21 +28,7 @@ export default function App() {
         component={HomeScreen} 
         options={{ headerShown: false }} 
       />
-      <Stack.Screen 
-        name="Places To Go" 
-        component={PlacesToGo} 
-        options={{ headerShown: false }} 
-      />
-      <Stack.Screen 
-        name="Spicy Time" 
-        component={SpicyTime} 
-        options={{ headerShown: false }} 
-      />
-      <Stack.Screen 
-        name="HeartScreen" 
-        component={HeartScreen} 
-        options={{ headerShown: false }} 
-      />
+      
     </Stack.Navigator>
   );
 }
@@ -50,13 +40,13 @@ function HomeScreen({ navigation }) {
   const placeholderImage = "https://via.placeholder.com/100"; // Placeholder image URL
 
   const thumbnails = [
-    { key: '1', text: 'Food Spots', navigateTo: 'HeartScreen' },
-    { key: '2', text: 'Places to Go', navigateTo: 'PlacesToGo' },
-    { key: '3', text: 'Spicy Time', navigateTo: 'SpicyTime' },
+    { key: '1', text: 'Food Spots', navigateTo: 'HeartScreen', image: food},
+    { key: '2', text: 'Places to Go', navigateTo: 'PlacesToGo', image: places},
+    { key: '3', text: 'Spicy Time', navigateTo: 'SpicyTime' ,image: heart},
   ];
 
   const buttonSets = [
-    { key: '1', thumbnail: thumbnail1 , thumbnailWidth: '40%', buttons: ['Button 1', 'Button 2', 'Button 3'], showButtons: true },
+    { key: '1', thumbnail: thumbnail1 , thumbnailWidth: '40%', buttons: ['I love you', 'Im sad', 'Im horny'], showButtons: true },
     { key: '2', thumbnail: action2 , thumbnailWidth: '100%', showButtons: false }, // increased size
     { key: '3', thumbnail: thumbnail3, thumbnailWidth: '100%', showButtons: false }, // increased size
   ];
@@ -112,7 +102,7 @@ function HomeScreen({ navigation }) {
   renderItem={({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate(item.navigateTo)}>
       <View style={styles.thumbnailContainer}>
-        <Image source={{ uri: placeholderImage }} style={styles.middleThumbnail} />
+        <Image source={item.image} style={styles.middleThumbnail} />
         <SansFont style={styles.thumbnailText}>{item.text}</SansFont>
       </View>
     </TouchableOpacity>
@@ -278,5 +268,7 @@ const styles = StyleSheet.create({
   shadowOpacity: 0.23,
   shadowRadius: 2,
   elevation: 4,
+  marginRight: 20,
+  alignItems: 'center',
   },
 });
