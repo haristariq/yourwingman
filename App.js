@@ -39,7 +39,7 @@ function TabNavigator() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === 'Home') {
+          if (route.name === 'insideHome') {
             iconName = 'home-outline';
           } else if (route.name === 'Heart') {
             iconName = 'heart-outline';
