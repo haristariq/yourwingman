@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, FlatList, StyleSheet } from 'react-native';
-import { logout } from '../firebase';
+import { logout , getIdToken} from '../firebase';
 import Swiper from 'react-native-swiper';
 import thumbnail1 from '../assets/images/thumbnail.png';
 import action2 from '../assets/images/compatibility-quiz.png';
@@ -34,21 +34,38 @@ export default function App() {
 
 function HomeScreen({ navigation }) {
   const header = "Explore";
-  const [name, setName] = useState('');
+  const [userData, setUserData] = useState('');
+  const [idToken, setIdToken] = useState(null);
 
+
+  useEffect(() => {
+    getIdToken()
+      .then(token => {
+        console.log('HomeScreen');
+        setIdToken(token);
+      })
+      .catch(error => {
+        console.error('Error getting ID token:', error);
+      });
+  }, []);
+  
   const fetchUserData = async () => {
     try {
-      const firebaseToken = 'your-firebase-token';
-      const response = await getUser(firebaseToken);
-      setName(response.data.name);
+      if (idToken) {
+        const response = await getUser(idToken);
+        setUserData(response);
+        
+      }
     } catch (error) {
       console.error('Error fetching user data:', error.message);
     }
   };
 
+
+
   useEffect(() => {
-    fetchUserData();
-  }, []);
+    fetchUserData(); // Call the fetchUserData function to update the userData state
+  }, [idToken]);
 
   const thumbnails = [
     { key: '1', text: 'Food Spots', navigateTo: 'HeartScreen', image: food},
@@ -62,8 +79,11 @@ function HomeScreen({ navigation }) {
     { key: '3', thumbnail: thumbnail3, thumbnailWidth: '100%', showButtons: false },
   ];
 
+  const userName = userData ? userData.name : '';
+
+
   const users = [
-    { key: '1', name: 'User1', image: 'https://via.placeholder.com/100' },
+    { key: '1', name: userName , image: 'https://via.placeholder.com/100' },
     { key: '2', name: 'User2', image: 'https://via.placeholder.com/100' },
   ];
 

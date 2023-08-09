@@ -46,13 +46,23 @@ async function getUser(firebaseToken) {
         Authorization: `${firebaseToken}`
       }
     });
-    console.log(response.data);
+
+    // Assuming the response.data contains the user information
+    const user = response.data;
+
+    // Handle the user data as needed
+    console.log('User data:', user); 
+
+    // You can also directly return the user object if needed
+    return user;
   } catch (error) {
     console.error('Error getting user info:', error.message);
     if (error.response) {
       console.error('Response:', error.response.data);
     }
+    // Handle the error as needed
   }
 }
+
 
 export { updateUser, initializeUser, getUser };
