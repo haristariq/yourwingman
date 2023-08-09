@@ -24,14 +24,20 @@ export default function NameScreen({ route, navigation }) {
       const submitName = async () => {
         if (idToken) {
           const userData = { name, birthday: '', preferences: [], phone_number: phoneNumber, partner_number: '' };
-          const newUser = await initializeUser(userData, idToken);
-          if (newUser) {
-            navigation.navigate('Main');
-          } else {
-            console.log('nosir');
+          
+          try {
+            const response = await initializeUser(userData, idToken);
+
+              navigation.navigate('Main');
+            
+          } catch (error) {
+            console.error('An error occurred:', error);
           }
         }
       };
+      
+      
+      
       
   
 

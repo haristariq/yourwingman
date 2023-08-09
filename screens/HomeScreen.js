@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, FlatList, StyleSheet } from 'react-native';
-import { logout } from '../firebase';  // Import the logout function
+import { logout } from '../firebase';
 import Swiper from 'react-native-swiper';
 import thumbnail1 from '../assets/images/thumbnail.png';
 import action2 from '../assets/images/compatibility-quiz.png';
@@ -18,21 +18,7 @@ import places from '../assets/images/places.jpg';
 import food from '../assets/images/food.png';
 import heart from '../assets/images/heart.jpg';
 
-
 const Stack = createStackNavigator();
-
-const [name, setName] = useState('');
-
-useEffect(() => {
-  const fetchUserData = async () => {
-    try {
-      const firebaseToken = 'your-firebase-token'; // Replace with the actual Firebase token
-      const response = await getUser(firebaseToken);
-      setName(response.data.name);
-    } catch (error) {
-      console.error('Error fetching user data:', error.message);
-    }
-  };
 
 export default function App() {
   return (
@@ -42,41 +28,38 @@ export default function App() {
         component={HomeScreen} 
         options={{ headerShown: false }} 
       />
-      
     </Stack.Navigator>
   );
 }
 
-
 function HomeScreen({ navigation }) {
-
-  const header = "Explore"; // Replace this with your actual user data
-
-  
+  const header = "Explore";
   const [name, setName] = useState('');
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const firebaseToken = 'your-firebase-token'; // Replace with the actual Firebase token
-        const response = await getUser(firebaseToken);
-        setName(response.data.name);
-      } catch (error) {
-        console.error('Error fetching user data:', error.message);
-      }
-    };
+  const fetchUserData = async () => {
+    try {
+      const firebaseToken = 'your-firebase-token';
+      const response = await getUser(firebaseToken);
+      setName(response.data.name);
+    } catch (error) {
+      console.error('Error fetching user data:', error.message);
+    }
+  };
 
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   const thumbnails = [
     { key: '1', text: 'Food Spots', navigateTo: 'HeartScreen', image: food},
     { key: '2', text: 'Places to Go', navigateTo: 'PlacesToGo', image: places},
-    { key: '3', text: 'Spicy Time', navigateTo: 'SpicyTime' ,image: heart},
+    { key: '3', text: 'Spicy Time', navigateTo: 'SpicyTime', image: heart},
   ];
 
   const buttonSets = [
     { key: '1', thumbnail: thumbnail1 , thumbnailWidth: '40%', buttons: ['I love you', 'Im sad', 'Im horny'], showButtons: true },
-    { key: '2', thumbnail: action2 , thumbnailWidth: '100%', showButtons: false }, // increased size
-    { key: '3', thumbnail: thumbnail3, thumbnailWidth: '100%', showButtons: false }, // increased size
+    { key: '2', thumbnail: action2 , thumbnailWidth: '100%', showButtons: false },
+    { key: '3', thumbnail: thumbnail3, thumbnailWidth: '100%', showButtons: false },
   ];
 
   const users = [
@@ -85,8 +68,6 @@ function HomeScreen({ navigation }) {
   ];
 
   return (
-    
-    
     <LinearGradient 
       start={{ x: 0, y: 0 }} 
       end={{ x: 1, y: 0 }} 
@@ -95,15 +76,15 @@ function HomeScreen({ navigation }) {
     >
       <View style={styles.topPart}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => {/* Code to select location */}}>
+          <TouchableOpacity onPress={() => {}}>
             <SansFont style={styles.buttonText}>Select Location</SansFont>
           </TouchableOpacity>
           <TouchableOpacity onPress={async () => {
-  await logout();
-  navigation.navigate('Login');
-}}>
-  <SansFont style={styles.buttonText}>Logout</SansFont>
-</TouchableOpacity>
+              await logout();
+              navigation.navigate('Login');
+            }}>
+            <SansFont style={styles.buttonText}>Logout</SansFont>
+          </TouchableOpacity>
         </View>
         <SansFont style={styles.headerName}>{header}</SansFont>
 
@@ -115,27 +96,26 @@ function HomeScreen({ navigation }) {
             </View>
           ))}
         </View>
-
       </View>
-
 
       <View style={styles.whiteContainer}>
         <SansFont style={styles.title}>Easy Date</SansFont>
 
         <FlatList
-  style={styles.middlePart}
-  data={thumbnails}
-  horizontal
-  showsHorizontalScrollIndicator={false}
-  renderItem={({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate(item.navigateTo)}>
-      <View style={styles.thumbnailContainer}>
-        <Image source={item.image} style={styles.middleThumbnail} />
-        <SansFont style={styles.thumbnailText}>{item.text}</SansFont>
-      </View>
-    </TouchableOpacity>
-  )}
-/>
+          style={styles.middlePart}
+          data={thumbnails}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => navigation.navigate(item.navigateTo)}>
+              <View style={styles.thumbnailContainer}>
+                <Image source={item.image} style={styles.middleThumbnail} />
+                <SansFont style={styles.thumbnailText}>{item.text}</SansFont>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
+
         <SansFont style={styles.secondTitle}>Actions</SansFont>
 
         <Swiper showsPagination loop={false} paginationStyle={{ bottom: -5 }} style={{ marginTop: 30 }}>
