@@ -80,6 +80,7 @@ function HomeScreen({ navigation }) {
   ];
 
   const userName = userData ? userData.name : '';
+  console.log(userData);
 
 
   const users = [
