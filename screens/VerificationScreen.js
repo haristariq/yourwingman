@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
 import { TextInput, View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
-import { app } from '../firebase';
-import { getAuth, signInWithPhoneNumber } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
+import { getIdToken, app } from '../firebase';
 
 export default function VerificationScreen({ route, navigation }) {
-  const { verificationId } = route.params;
+  const { verificationId, phoneNumber } = route.params;
   const [verificationCode, setVerificationCode] = useState('');
 
   const confirmVerification = async () => {
     try {
       const auth = getAuth(app);
+
       await verificationId.confirm(verificationCode);
       console.log('Phone authentication successful 👍');
-  
-      // Reset the navigation stack after successful authentication
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Main' }],
+
+      getIdToken().then(idToken => {
+        console.log(idToken + ' yessir');
+      }).catch(error => {
+        console.error('Error getting ID token:', error);
       });
+      // send phoneNumber instead of uid
+      navigation.navigate('Name', { phoneNumber: phoneNumber }); 
     } catch (err) {
       console.log(err);
     }

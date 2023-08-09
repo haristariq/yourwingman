@@ -25,11 +25,12 @@ export default function LoginScreen({ navigation }) {
         recaptchaVerifier.current
       );
       console.log('Verification ID:', verificationId);
-      navigation.navigate('Verify', { verificationId });
+      // pass phoneNumber with verificationId
+      navigation.navigate('Verify', { verificationId: verificationId, phoneNumber: phoneNumber });
     } catch (err) {
       console.log('Error in sendVerification:', err);
     }
-  };
+};
 
   return (
     <KeyboardAvoidingView

@@ -20,6 +20,7 @@ import ChatScreen from './screens/ChatScreen';
 import PlayScreen from './screens/PlayScreen';
 import LoginScreen from './screens/LoginScreen';
 import VerificationScreen from './screens/VerificationScreen';
+import NameScreen from './screens/NameScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -101,6 +102,7 @@ export default function App() {
       <Stack.Navigator initialRouteName={user ? "Main" : "Login"}>
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Verify" component={VerificationScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Name" component={NameScreen} options={{ headerShown: false }} /> 
         <Stack.Screen
           name="Main"
           options={{ headerShown: false }}

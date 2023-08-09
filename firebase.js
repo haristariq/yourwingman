@@ -26,4 +26,9 @@ const logout = () => {
   });
 };
 
-export { app, auth, logout };
+// Function to get ID token
+const getIdToken = () => {
+  return auth.currentUser.getIdToken();
+};
+
+export { app, auth, logout, getIdToken };

@@ -12,6 +12,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import PlacesToGo from './PlacesToGo';
 import SpicyTime from './SpicyTime';
 import HeartScreen from './HeartScreen';
+import { getUser } from '../backend';
 
 import places from '../assets/images/places.jpg';
 import food from '../assets/images/food.png';
@@ -19,6 +20,19 @@ import heart from '../assets/images/heart.jpg';
 
 
 const Stack = createStackNavigator();
+
+const [name, setName] = useState('');
+
+useEffect(() => {
+  const fetchUserData = async () => {
+    try {
+      const firebaseToken = 'your-firebase-token'; // Replace with the actual Firebase token
+      const response = await getUser(firebaseToken);
+      setName(response.data.name);
+    } catch (error) {
+      console.error('Error fetching user data:', error.message);
+    }
+  };
 
 export default function App() {
   return (
@@ -37,6 +51,21 @@ export default function App() {
 function HomeScreen({ navigation }) {
 
   const header = "Explore"; // Replace this with your actual user data
+
+  
+  const [name, setName] = useState('');
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const firebaseToken = 'your-firebase-token'; // Replace with the actual Firebase token
+        const response = await getUser(firebaseToken);
+        setName(response.data.name);
+      } catch (error) {
+        console.error('Error fetching user data:', error.message);
+      }
+    };
+
 
   const thumbnails = [
     { key: '1', text: 'Food Spots', navigateTo: 'HeartScreen', image: food},
@@ -61,7 +90,7 @@ function HomeScreen({ navigation }) {
     <LinearGradient 
       start={{ x: 0, y: 0 }} 
       end={{ x: 1, y: 0 }} 
-      colors={['#C56AF0', '#F578C9']} 
+      colors={['#C56AF0', '#F578C9']}  
       style={styles.container}
     >
       <View style={styles.topPart}>
