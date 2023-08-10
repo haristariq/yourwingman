@@ -110,4 +110,25 @@ async function checkUserExists(firebaseToken) {
 }
 
 
-export { updateUser, initializeUser, getUser, getRestaurantRecommendations, checkUserExists };
+// Function to add favorite restaurant
+async function addFavoriteRestaurant(restaurantData, firebaseToken) {
+  try {
+    const response = await axios.post(`${API_URL}/addFavoriteRestaurant`, restaurantData, {
+      headers: {
+        Authorization: `${firebaseToken}`
+      }
+    });
+    console.log(response.data);
+    return response.data; 
+  } catch (error) {
+    console.error('Error adding favorite restaurant:', error.message);
+    if (error.response) {
+      console.error('Response:', error.response.data);
+    }
+    throw error;
+  }
+}
+
+// ... [your other functions]
+
+export { updateUser, initializeUser, getUser, getRestaurantRecommendations, checkUserExists, addFavoriteRestaurant };

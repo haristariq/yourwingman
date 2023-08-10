@@ -10,6 +10,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getIdToken } from '../firebase';
 import { useUserData } from '../UserContext';
 import Matches from './Matches';
+import { addFavoriteRestaurant } from '../backend'; // Adjust the path accordingly.
+
 
 // Assuming the function is exported from backend.js
 import { getRestaurantRecommendations } from '../backend';
@@ -51,9 +53,19 @@ const HeartScreen = () => {
     console.log("Swiped left on restaurant: ", restaurants[index].name);
   };
 
-  const onSwipeRight = (index) => {
+  const onSwipeRight = async (index) => {
     console.log("Swiped right on restaurant: ", restaurants[index].name);
+    
+    if (idToken) {
+      try {
+        const response = await addFavoriteRestaurant(restaurants[index], idToken);
+        console.log('Successfully added to favorites:', response.message);
+      } catch (error) {
+        console.error('Failed to add to favorites:', error.message);
+      }
+    }
   };
+  
 
   const onBook = (index) => {
     console.log("Booked restaurant: ", restaurants[index].name);
@@ -77,7 +89,13 @@ const HeartScreen = () => {
                 <SansFont style={styles.cardText}>{card.name}</SansFont>
                 <View style={styles.buttons}>
                   <Icon.Button name="times" backgroundColor="white" color="#A833E1" size={30} onPress={() => swiperRef.current.swipeLeft()} />
-                  <Icon.Button name="heart" backgroundColor="white" color="#A833E1" size={30} onPress={() => swiperRef.current.swipeRight()} />
+                  <Icon.Button 
+  name="heart" 
+  backgroundColor="white" 
+  color="#A833E1" 
+  size={30} 
+  onPress={() => onSwipeRight(swiperRef.current.state.index)}
+/>
                   <Icon.Button name="phone" backgroundColor="white" color="#A833E1" size={30} onPress={() => onBook(swiperRef.current.state.index)} />
                 </View>
               </View>
