@@ -1,18 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Image, StyleSheet, Dimensions } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
 import SansFont from '../SansFont';
 import placeholderImage from '../assets/images/restaurant.png';
-import Matches from './Matches';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getIdToken } from '../firebase';
 import { useUserData } from '../UserContext';
-
-
-
+import Matches from './Matches';
 
 // Assuming the function is exported from backend.js
 import { getRestaurantRecommendations } from '../backend';
@@ -25,7 +22,6 @@ const HeartScreen = () => {
   const { userData, setUserData } = useUserData();
 
   useEffect(() => {
-    // Fetch the ID token first
     getIdToken()
       .then(token => {
         console.log('ID token fetched:', token);
@@ -37,7 +33,6 @@ const HeartScreen = () => {
   }, []);
 
   useEffect(() => {
-    // Only fetch restaurants if idToken is available
     if (idToken) {
       fetchRestaurants();
     }
@@ -80,8 +75,6 @@ const HeartScreen = () => {
               <View style={styles.card}>
                 <Image source={{ uri: card.photoUrl || placeholderImage }} style={styles.image} />
                 <SansFont style={styles.cardText}>{card.name}</SansFont>
-                <Text style={styles.description}>{card.description}</Text>
-                <Text style={styles.address}>{card.address}</Text>
                 <View style={styles.buttons}>
                   <Icon.Button name="times" backgroundColor="white" color="#A833E1" size={30} onPress={() => swiperRef.current.swipeLeft()} />
                   <Icon.Button name="heart" backgroundColor="white" color="#A833E1" size={30} onPress={() => swiperRef.current.swipeRight()} />
@@ -124,7 +117,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 24,
-    fontWeight: 500,
+    fontWeight: '500',
     marginTop: 10,
   },
   card: {
@@ -153,37 +146,23 @@ const styles = StyleSheet.create({
   },
   cardText: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 80,
     left: 10,
-    fontSize: 18,
+    fontSize: 30,
     fontWeight: 'bold',
     color: 'white',
     textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: {width: -1, height: 1},
+    textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 10,
   },
-buttons: {
-flexDirection: 'row',
-justifyContent: 'space-between',
-position: 'absolute',
-bottom: 10,
-width: '100%',
-paddingHorizontal: 20,
-},
-description: {
-  position: 'absolute',
-  bottom: 90, // adjust as necessary
-  left: 10,
-  fontSize: 16,
-  color: 'white',
-},
-address: {
-  position: 'absolute',
-  bottom: 70, // adjust as necessary
-  left: 10,
-  fontSize: 16,
-  color: 'white',
-},
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    position: 'absolute',
+    bottom: 10,
+    width: '100%',
+    paddingHorizontal: 20,
+  },
 });
 
 const Tab = createBottomTabNavigator();
@@ -191,39 +170,36 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <Tab.Navigator
-  screenOptions={({ route }) => ({
-    tabBarIcon: ({ focused, color, size }) => {
-      let iconName;
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
 
-      if (route.name === 'insideHeartScreen') {
-        iconName = 'home-outline';
-      
-      } else if (route.name === 'Matches') {
-        iconName = 'play-circle-outline';
-      }
+          if (route.name === 'insideHeartScreen') {
+            iconName = 'home-outline';
 
-      return (
-        <View 
-          style={{
-            padding: 2,
-            borderRadius: 5,
-            backgroundColor: focused ? '#A333E5' : 'transparent',
-          }}
-        >
-          <Ionicons name={iconName} size={size} color={color} />
-        </View>
-      );
-    },
-    tabBarLabel: '', // This hides the label
-    tabBarActiveTintColor: 'white',
-    tabBarInactiveTintColor: 'gray',
-  })}
->
-  <Tab.Screen name="insideHeartScreen" component={HeartScreen} options={{ headerShown: false }} />
-  <Tab.Screen name="Matches" component={Matches} options={{ headerShown: false }} />
+          } else if (route.name === 'Matches') {
+            iconName = 'play-circle-outline';
+          }
 
-  {/* Add more Tab.Screen here for other screens */}
-</Tab.Navigator>
-    
+          return (
+            <View
+              style={{
+                padding: 2,
+                borderRadius: 5,
+                backgroundColor: focused ? '#A333E5' : 'transparent',
+              }}
+            >
+              <Ionicons name={iconName} size={size} color={color} />
+            </View>
+          );
+        },
+        tabBarLabel: '',
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: 'gray',
+      })}
+    >
+      <Tab.Screen name="insideHeartScreen" component={HeartScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Matches" component={Matches} options={{ headerShown: false }} />
+    </Tab.Navigator>
   );
 }
