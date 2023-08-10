@@ -12,7 +12,7 @@ import SansFont from './SansFont';
 import { UserDataProvider } from './UserContext';
 
 
-
+import LocationScreen from './screens/Location';
 import BirthdateScreen from './screens/BirthdateScreen'
 import PlacesToGo from './screens/PlacesToGo';
 import SpicyTime from './screens/SpicyTime';
@@ -112,7 +112,9 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Verify" component={VerificationScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Name" component={NameScreen} options={{ headerShown: false }} /> 
+        <Stack.Screen name="Location" component={LocationScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Birthday" component={BirthdateScreen} options={{ headerShown: false }} />
+
 
         <Stack.Screen
           name="Main"

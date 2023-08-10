@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, FlatList, StyleSheet } from 'react-native';
-import { logout , getIdToken} from '../firebase';
+import { getIdToken} from '../firebase';
 import Swiper from 'react-native-swiper';
 import thumbnail1 from '../assets/images/thumbnail.png';
 import action2 from '../assets/images/compatibility-quiz.png';
@@ -98,12 +98,6 @@ function HomeScreen({ navigation }) {
         <View style={styles.header}>
           <TouchableOpacity onPress={() => {}}>
             <SansFont style={styles.buttonText}>Select Location</SansFont>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={async () => {
-              await logout();
-              navigation.navigate('Login');
-            }}>
-            <SansFont style={styles.buttonText}>Logout</SansFont>
           </TouchableOpacity>
         </View>
         <SansFont style={styles.headerName}>{header}</SansFont>

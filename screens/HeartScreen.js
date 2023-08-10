@@ -24,23 +24,32 @@ const HeartScreen = () => {
   const [idToken, setIdToken] = useState(null);
   const { userData, setUserData } = useUserData();
 
-
-
   useEffect(() => {
-    fetchRestaurants();
+    // Fetch the ID token first
+    getIdToken()
+      .then(token => {
+        console.log('ID token fetched:', token);
+        setIdToken(token);
+      })
+      .catch(error => {
+        console.error('Error getting ID token:', error);
+      });
   }, []);
 
   useEffect(() => {
-    getIdToken().then(token => {
-      console.log('Settingsnosir');
-      setIdToken(token);
-    }).catch(error => {
-      console.error('Error getting ID token:', error);
-    });
-  }, []);
+    // Only fetch restaurants if idToken is available
+    if (idToken) {
+      fetchRestaurants();
+    }
+  }, [idToken]);
+
   const fetchRestaurants = async () => {
-    const recommendedRestaurants = await getRestaurantRecommendations(userData, idToken);
-    setRestaurants(recommendedRestaurants);
+    try {
+      const recommendedRestaurants = await getRestaurantRecommendations(userData, idToken);
+      setRestaurants(recommendedRestaurants);
+    } catch (error) {
+      console.error('Error fetching restaurants:', error);
+    }
   };
 
   const onSwipeLeft = (index) => {

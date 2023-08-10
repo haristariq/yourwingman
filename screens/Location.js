@@ -3,28 +3,30 @@ import { TextInput, TouchableOpacity, View, Text, StyleSheet, KeyboardAvoidingVi
 import { LinearGradient } from 'expo-linear-gradient';
 import SansFont from '../SansFont';
 import { getIdToken } from '../firebase';
-import BirthdateScreen from './BirthdateScreen';
 
-export default function NameScreen({ route, navigation }) {
-    const { phoneNumber } = route.params;
-    const [name, setName] = useState('');
-    const [idToken, setIdToken] = useState(null);
+export default function LocationScreen({ route, navigation }) {
+    const { phoneNumber, name, idToken: routeIdToken } = route.params; // Assuming you will pass these parameters
+    const [location, setLocation] = useState('');
+    const [idToken, setIdToken] = useState(routeIdToken);
 
     useEffect(() => {
-        getIdToken().then(token => {
-            console.log(token + ' nosir');
-            setIdToken(token);
-        }).catch(error => {
-            console.error('Error getting ID token:', error);
-        });
+        if (!idToken) {
+            getIdToken().then(token => {
+                console.log(token + ' nosir');
+                setIdToken(token);
+            }).catch(error => {
+                console.error('Error getting ID token:', error);
+            });
+        }
     }, []);
 
-    const navigateToBirthdateScreen = () => {
-        if (name && idToken) {
-            navigation.navigate('Location', {
+    const navigateToNextScreen = () => {
+        if (location && idToken) {
+            navigation.navigate('Birthday', { // Replace with your next screen's name
                 phoneNumber: phoneNumber,
                 name: name,
-                idToken: idToken
+                idToken: idToken,
+                location: location
             });
         }
     };
@@ -36,15 +38,15 @@ export default function NameScreen({ route, navigation }) {
         >
             <LinearGradient colors={['#A833E1', '#EC32A3']} style={styles.container}>
                 <SansFont style={styles.title}>YourWingMan</SansFont>
-                <SansFont style={styles.phone}>Please enter your name</SansFont>
+                <SansFont style={styles.subtitle}>Please enter your location</SansFont>
 
                 <TextInput
                     style={styles.input}
-                    placeholder="Your name"
-                    value={name}
-                    onChangeText={setName}
+                    placeholder="Your location"
+                    value={location}
+                    onChangeText={setLocation}
                 />
-                <TouchableOpacity style={styles.button} onPress={navigateToBirthdateScreen}>
+                <TouchableOpacity style={styles.button} onPress={navigateToNextScreen}>
                     <SansFont style={styles.buttonText}>Next</SansFont>
                 </TouchableOpacity>
             </LinearGradient>
@@ -65,7 +67,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         marginBottom: 30,
     },
-    phone: {
+    subtitle: {
         fontSize: 15,
         color: '#fff',
         marginBottom: 10,

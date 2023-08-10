@@ -63,18 +63,18 @@ async function getUser(firebaseToken) {
 }
 
 // Function to get restaurant recommendations
+// Function to get restaurant recommendations
 async function getRestaurantRecommendations(userData, firebaseToken) {
   try {
     console.log(firebaseToken);
-    const response = await axios.get(`${API_URL}/restaurantRecommendations?location=${userData.location}`, {
+    const response = await axios.get(`${API_URL}/restaurantRecommendations`,{
       headers: {
         Authorization: `${firebaseToken}`
       }
-   });
-   
-
+    });
+    
     const recommendedRestaurants = response.data;
-    console.log('Recommended restaurants:', recommendedRestaurants); 
+    console.log('Recommended restaurants:', recommendedRestaurants);
     return recommendedRestaurants;
   } catch (error) {
     console.error('Error getting restaurant recommendations:', error.message);
@@ -84,6 +84,7 @@ async function getRestaurantRecommendations(userData, firebaseToken) {
     throw error;
   }
 }
+
 
 // Function to check if user exists
 async function checkUserExists(firebaseToken) {
