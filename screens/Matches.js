@@ -3,26 +3,22 @@ import { View, Text, ScrollView, Image, StyleSheet, Dimensions } from 'react-nat
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SansFont from '../SansFont';
+import { getFavoriteRestaurants } from '../backend'; // Adjust the import path accordingly
+import { getIdToken } from '../firebase'; // Import getIdToken for fetching the token
 
 const Matches = () => {
   const navigation = useNavigation();
   const [matches, setMatches] = useState([]);
 
   useEffect(() => {
-    const fetchedMatches = [
-      { 
-        id: 1,
-        name: "Sushi Place",
-        image: "https://picsum.photos/id/1/200"  
-      },
-      {
-        id: 2, 
-        name: "Pizza Joint",
-        image: "https://picsum.photos/id/2/200"
-      }
-    ];
-    
-    setMatches(fetchedMatches);
+    // Fetch the favorite restaurants
+    const fetchFavorites = async () => {
+      const token = await getIdToken();  // Fetch the Firebase token
+      const favoriteRestaurants = await getFavoriteRestaurants(token);
+      setMatches(favoriteRestaurants);
+    };
+
+    fetchFavorites();
   }, []);
 
   return (
@@ -32,15 +28,16 @@ const Matches = () => {
         <SansFont style={styles.headerText}>Your Matches</SansFont>
       </View>
       <ScrollView>
-        {matches.map(match => (
-          <View key={match.id} style={styles.card}>
-            <Image 
-              source={{uri: match.image}}
-              style={styles.image}
-            />
-            <SansFont style={styles.nameInsideImage}>{match.name}</SansFont>
-          </View>
-        ))}
+      {matches.map(match => (
+    <View key={match.place_id} style={styles.card}>
+        <Image 
+            source={{uri: match.photoUrl}}
+            style={styles.image}
+        />
+        <SansFont style={styles.nameInsideImage}>{match.name}</SansFont>
+    </View>
+))}
+
       </ScrollView>
     </View>
   );
@@ -72,7 +69,7 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: 'white',
     borderRadius: 10,
-    overflow: 'hidden' 
+    overflow: 'hidden'
   },
   image: {
     width: width * 0.9,
