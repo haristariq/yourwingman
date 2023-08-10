@@ -9,11 +9,14 @@ import { auth } from './firebase';  // Import the auth object
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import SansFont from './SansFont';
+import { UserDataProvider } from './UserContext';
+
+
+
+import BirthdateScreen from './screens/BirthdateScreen'
 import PlacesToGo from './screens/PlacesToGo';
 import SpicyTime from './screens/SpicyTime';
 import Matches from './screens/Matches';
-
-
 import HomeScreen from './screens/HomeScreen';
 import HeartScreen from './screens/HeartScreen';
 import ChatScreen from './screens/ChatScreen';
@@ -21,6 +24,7 @@ import PlayScreen from './screens/PlayScreen';
 import LoginScreen from './screens/LoginScreen';
 import VerificationScreen from './screens/VerificationScreen';
 import NameScreen from './screens/NameScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -48,7 +52,9 @@ function TabNavigator() {
           } else if (route.name === 'Chat') {
             iconName = 'chatbubbles-outline';
           } else if (route.name === 'Play') {
-            iconName = 'play-circle-outline';
+            iconName = 'play-outline';
+          } else if (route.name === 'Settings') {
+            iconName = 'settings-outline';
           }
 
           return (
@@ -72,6 +78,8 @@ function TabNavigator() {
       <Tab.Screen name="Heart" component={Matches} options={{ headerShown: false }} />
       <Tab.Screen name="Chat" component={ChatScreen} options={{ headerShown: false }}/>
       <Tab.Screen name="Play" component={PlayScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }}/>
+
     </Tab.Navigator>
   );
 }
@@ -98,11 +106,14 @@ export default function App() {
   }
 
   return (
+    <UserDataProvider>
     <NavigationContainer>
       <Stack.Navigator initialRouteName={user ? "Main" : "Login"}>
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Verify" component={VerificationScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Name" component={NameScreen} options={{ headerShown: false }} /> 
+        <Stack.Screen name="Birthday" component={BirthdateScreen} options={{ headerShown: false }} />
+
         <Stack.Screen
           name="Main"
           options={{ headerShown: false }}
@@ -114,5 +125,7 @@ export default function App() {
 
       </Stack.Navigator>
     </NavigationContainer>
+    </UserDataProvider>
+
   );
 }

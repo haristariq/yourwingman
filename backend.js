@@ -3,38 +3,40 @@ import axios from 'axios';
 const API_URL = 'https://yourwingman.uc.r.appspot.com/api';
 
 // Function to update user info
-async function updateUser(userInfo, firebaseToken) {
+async function updateUser(userData, firebaseToken) {
   try {
-    const response = await axios.post(`${API_URL}/updateUserInfo`, userInfo, {
+    const response = await axios.post(`${API_URL}/updateUser`, userData, {
       headers: {
         Authorization: `${firebaseToken}`
       }
     });
     console.log(response.data);
+    return response.data; // return the fetched data
   } catch (error) {
     console.error('Error updating user info:', error.message);
     if (error.response) {
       console.error('Response:', error.response.data);
     }
+    throw error;
   }
 }
 
 // Function to initialize a user
 async function initializeUser(userData, firebaseToken) {
   try {
-
-    console.log(userData, `Bearer ${firebaseToken}`)
     const response = await axios.post(`${API_URL}/initializeUser`, userData, {
       headers: {
         Authorization: `${firebaseToken}`
       }
     });
     console.log(response.data);
+    return response.data; // return the fetched data
   } catch (error) {
     console.error('Error initializing user info:', error.message);
     if (error.response) {
       console.error('Response:', error.response.data);
     }
+    throw error;
   }
 }
 
