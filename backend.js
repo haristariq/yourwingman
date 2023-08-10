@@ -11,7 +11,7 @@ async function updateUser(userData, firebaseToken) {
       }
     });
     console.log(response.data);
-    return response.data; // return the fetched data
+    return response.data; 
   } catch (error) {
     console.error('Error updating user info:', error.message);
     if (error.response) {
@@ -30,7 +30,7 @@ async function initializeUser(userData, firebaseToken) {
       }
     });
     console.log(response.data);
-    return response.data; // return the fetched data
+    return response.data; 
   } catch (error) {
     console.error('Error initializing user info:', error.message);
     if (error.response) {
@@ -49,22 +49,40 @@ async function getUser(firebaseToken) {
       }
     });
 
-    // Assuming the response.data contains the user information
     const user = response.data;
 
-    // Handle the user data as needed
     console.log('User data:', user); 
-
-    // You can also directly return the user object if needed
     return user;
   } catch (error) {
     console.error('Error getting user info:', error.message);
     if (error.response) {
       console.error('Response:', error.response.data);
     }
-    // Handle the error as needed
+    throw error; 
   }
 }
 
+// Function to get restaurant recommendations
+async function getRestaurantRecommendations(userData, firebaseToken) {
+  try {
+    console.log(firebaseToken);
+    const response = await axios.get(`${API_URL}/restaurantRecommendations?location=${userData.location}`, {
+      headers: {
+        Authorization: `${firebaseToken}`
+      }
+   });
+   
 
-export { updateUser, initializeUser, getUser };
+    const recommendedRestaurants = response.data;
+    console.log('Recommended restaurants:', recommendedRestaurants); 
+    return recommendedRestaurants;
+  } catch (error) {
+    console.error('Error getting restaurant recommendations:', error.message);
+    if (error.response) {
+      console.error('Response:', error.response.data);
+    }
+    throw error;
+  }
+}
+
+export { updateUser, initializeUser, getUser, getRestaurantRecommendations };

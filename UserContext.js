@@ -13,7 +13,8 @@ export const UserDataProvider = ({ children }) => {
       activities: 'Any'
     },
     phone_number: '+12223456789',
-    partner_number: '+12223456789'
+    partner_number: '+12223456789',
+    location: 'LA'
   });
 
   // Fetch user data when the component is mounted

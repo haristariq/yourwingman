@@ -1,27 +1,46 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
-import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SansFont from '../SansFont';
 import placeholderImage from '../assets/images/restaurant.png';
 import Matches from './Matches';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getIdToken } from '../firebase';
+import { useUserData } from '../UserContext';
+
+
+
+
+// Assuming the function is exported from backend.js
+import { getRestaurantRecommendations } from '../backend';
 
 const HeartScreen = () => {
   const navigation = useNavigation();
   const [restaurants, setRestaurants] = useState([]);
   const swiperRef = useRef(null);
+  const [idToken, setIdToken] = useState(null);
+  const { userData, setUserData } = useUserData();
+
+
 
   useEffect(() => {
     fetchRestaurants();
   }, []);
 
+  useEffect(() => {
+    getIdToken().then(token => {
+      console.log('Settingsnosir');
+      setIdToken(token);
+    }).catch(error => {
+      console.error('Error getting ID token:', error);
+    });
+  }, []);
   const fetchRestaurants = async () => {
-    const response = await axios.get("https://my-api.com/restaurants");
-    setRestaurants(response.data);
+    const recommendedRestaurants = await getRestaurantRecommendations(userData, idToken);
+    setRestaurants(recommendedRestaurants);
   };
 
   const onSwipeLeft = (index) => {
@@ -37,37 +56,39 @@ const HeartScreen = () => {
   };
 
   return (
-  <View style={styles.container}>
-    <View style={styles.header}>
-      <Icon.Button name="close" backgroundColor="white" color="black" size={30} onPress={() => navigation.goBack()} />
-      <SansFont style={styles.headerText}>Explore</SansFont>
-    </View>
-    <View style={styles.swiperContainer}>
-      {restaurants.length > 0 ? (
-        <Swiper
-          ref={swiperRef}
-          cards={restaurants}
-          backgroundColor={'white'}
-          renderCard={(card) => (
-            <View style={styles.card}>
-              <Image source={placeholderImage} style={styles.image} />
-              <SansFont style={styles.cardText}>{card.name}</SansFont>
-              <View style={styles.buttons}>
-                <Icon.Button name="times" backgroundColor="white" color="#A833E1" size={30} onPress={() => swiperRef.current.swipeLeft()} />
-                <Icon.Button name="heart" backgroundColor="white" color="#A833E1" size={30} onPress={() => swiperRef.current.swipeRight()} />
-                <Icon.Button name="phone" backgroundColor="white" color="#A833E1" size={30} onPress={() => onBook(swiperRef.current.state.index)} />
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Icon.Button name="close" backgroundColor="white" color="black" size={30} onPress={() => navigation.goBack()} />
+        <SansFont style={styles.headerText}>Explore</SansFont>
+      </View>
+      <View style={styles.swiperContainer}>
+        {restaurants.length > 0 ? (
+          <Swiper
+            ref={swiperRef}
+            cards={restaurants}
+            backgroundColor={'white'}
+            renderCard={(card) => (
+              <View style={styles.card}>
+                <Image source={{ uri: card.photoUrl || placeholderImage }} style={styles.image} />
+                <SansFont style={styles.cardText}>{card.name}</SansFont>
+                <Text style={styles.description}>{card.description}</Text>
+                <Text style={styles.address}>{card.address}</Text>
+                <View style={styles.buttons}>
+                  <Icon.Button name="times" backgroundColor="white" color="#A833E1" size={30} onPress={() => swiperRef.current.swipeLeft()} />
+                  <Icon.Button name="heart" backgroundColor="white" color="#A833E1" size={30} onPress={() => swiperRef.current.swipeRight()} />
+                  <Icon.Button name="phone" backgroundColor="white" color="#A833E1" size={30} onPress={() => onBook(swiperRef.current.state.index)} />
+                </View>
               </View>
-            </View>
-          )}
-          onSwipedLeft={onSwipeLeft}
-          onSwipedRight={onSwipeRight}
-        />
-      ) : (
-        <SansFont>Loading...</SansFont>
-      )}
+            )}
+            onSwipedLeft={onSwipeLeft}
+            onSwipedRight={onSwipeRight}
+          />
+        ) : (
+          <SansFont>Loading...</SansFont>
+        )}
+      </View>
     </View>
-  </View>
-);
+  );
 };
 
 const { width, height } = Dimensions.get('window');
@@ -139,7 +160,21 @@ position: 'absolute',
 bottom: 10,
 width: '100%',
 paddingHorizontal: 20,
-}
+},
+description: {
+  position: 'absolute',
+  bottom: 90, // adjust as necessary
+  left: 10,
+  fontSize: 16,
+  color: 'white',
+},
+address: {
+  position: 'absolute',
+  bottom: 70, // adjust as necessary
+  left: 10,
+  fontSize: 16,
+  color: 'white',
+},
 });
 
 const Tab = createBottomTabNavigator();
