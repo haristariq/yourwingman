@@ -85,4 +85,28 @@ async function getRestaurantRecommendations(userData, firebaseToken) {
   }
 }
 
-export { updateUser, initializeUser, getUser, getRestaurantRecommendations };
+// Function to check if user exists
+async function checkUserExists(firebaseToken) {
+  try {
+    const response = await axios.get(`${API_URL}/userExists`, {
+      headers: {
+        Authorization: `${firebaseToken}`
+      }
+    });
+
+    const { exists } = response.data; // Destructure the result from the response
+
+    console.log('User existence:', exists);
+    return exists;
+
+  } catch (error) {
+    console.error('Error checking user existence:', error.message);
+    if (error.response) {
+      console.error('Response:', error.response.data);
+    }
+    throw error;
+  }
+}
+
+
+export { updateUser, initializeUser, getUser, getRestaurantRecommendations, checkUserExists };

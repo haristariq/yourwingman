@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextInput, View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import { getAuth } from 'firebase/auth';
 import { getIdToken, app } from '../firebase';
+import { checkUserExists } from '../backend';  // Import the checkUserExists function
 
 export default function VerificationScreen({ route, navigation }) {
   const { verificationId, phoneNumber } = route.params;
@@ -10,17 +11,22 @@ export default function VerificationScreen({ route, navigation }) {
   const confirmVerification = async () => {
     try {
       const auth = getAuth(app);
-
       await verificationId.confirm(verificationCode);
       console.log('Phone authentication successful 👍');
 
-      getIdToken().then(idToken => {
-        console.log(idToken + ' yessir');
-      }).catch(error => {
-        console.error('Error getting ID token:', error);
-      });
-      // send phoneNumber instead of uid
-      navigation.navigate('Name', { phoneNumber: phoneNumber }); 
+      const idToken = await getIdToken();
+      console.log(idToken + ' yessir');
+
+      // Check if the user exists
+      const userExists = await checkUserExists(idToken);
+
+      // Navigate based on the result of checkUserExists
+      if (userExists) {
+        navigation.navigate('Main', { phoneNumber: phoneNumber });
+      } else {
+        navigation.navigate('Name', { phoneNumber: phoneNumber });
+      }
+
     } catch (err) {
       console.log(err);
     }
