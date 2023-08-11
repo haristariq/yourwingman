@@ -3,18 +3,31 @@ import { View, Image, StyleSheet, Dimensions } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Ionicons } from '@expo/vector-icons';
 import SansFont from '../SansFont';
 import placeholderImage from '../assets/images/restaurant.png';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getIdToken } from '../firebase';
 import { useUserData } from '../UserContext';
-import { addFavoriteRestaurant } from '../backend';
+import Matches from './Matches';
+import { addFavoriteRestaurant } from '../backend'; 
 
 const HeartScreen = () => {
   const navigation = useNavigation();
-  const { restaurants, setRestaurants, userData } = useUserData(); // Access restaurants, setRestaurants, and userData from the context
+  const { restaurants, userData } = useUserData();
   const swiperRef = useRef(null);
   const [idToken, setIdToken] = useState(null);
 
+  useEffect(() => {
+    getIdToken()
+      .then(token => {
+        console.log('ID token fetched:', token);
+        setIdToken(token);
+      })
+      .catch(error => {
+        console.error('Error getting ID token:', error);
+      });
+  }, []);
 
 
   const onSwipeLeft = (index) => {
@@ -57,12 +70,12 @@ const HeartScreen = () => {
                 <View style={styles.buttons}>
                   <Icon.Button name="times" backgroundColor="white" color="#A833E1" size={30} onPress={() => swiperRef.current.swipeLeft()} />
                   <Icon.Button 
-                    name="heart" 
-                    backgroundColor="white" 
-                    color="#A833E1" 
-                    size={30} 
-                    onPress={() => onSwipeRight(swiperRef.current.state.index)}
-                  />
+  name="heart" 
+  backgroundColor="white" 
+  color="#A833E1" 
+  size={30} 
+  onPress={() => onSwipeRight(swiperRef.current.state.index)}
+/>
                   <Icon.Button name="phone" backgroundColor="white" color="#A833E1" size={30} onPress={() => onBook(swiperRef.current.state.index)} />
                 </View>
               </View>
@@ -150,4 +163,42 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HeartScreen;
+const Tab = createBottomTabNavigator();
+
+const HeartStack = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === 'insideHeartScreen') {
+            iconName = 'home-outline';
+          } else if (route.name === 'Matches') {
+            iconName = 'play-circle-outline';
+          }
+
+          return (
+            <View
+              style={{
+                padding: 2,
+                borderRadius: 5,
+                backgroundColor: focused ? '#A333E5' : 'transparent',
+              }}
+            >
+              <Ionicons name={iconName} size={size} color={color} />
+            </View>
+          );
+        },
+        tabBarLabel: '',
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: 'gray',
+      })}
+    >
+      <Tab.Screen name="insideHeartScreen" component={HeartScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Matches" component={Matches} options={{ headerShown: false }} />
+    </Tab.Navigator>
+  );
+}
+
+export default HeartStack;
