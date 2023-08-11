@@ -17,6 +17,8 @@ export const UserDataProvider = ({ children }) => {
     location: 'LA'
   });
 
+  const [restaurants, setRestaurants] = useState([]); // Added state for restaurants
+
   // Fetch user data when the component is mounted
   useEffect(() => {
     const fetchData = async () => {
@@ -36,7 +38,7 @@ export const UserDataProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserDataContext.Provider value={{ userData, setUserData }}>
+    <UserDataContext.Provider value={{ userData, setUserData, restaurants, setRestaurants }}>
       {children}
     </UserDataContext.Provider>
   );

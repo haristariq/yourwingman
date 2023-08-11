@@ -13,6 +13,9 @@ import PlacesToGo from './PlacesToGo';
 import SpicyTime from './SpicyTime';
 import HeartScreen from './HeartScreen';
 import { getUser } from '../backend';
+import { useUserData } from '../UserContext';  // Import the context hook
+import { getRestaurantRecommendations } from '../backend'; // Assuming this function fetches the restaurants
+
 
 import places from '../assets/images/places.jpg';
 import food from '../assets/images/food.png';
@@ -36,6 +39,8 @@ function HomeScreen({ navigation }) {
   const header = "Explore";
   const [userData, setUserData] = useState('');
   const [idToken, setIdToken] = useState(null);
+  const { setRestaurants } = useUserData(); // Access setRestaurants from the context
+
 
 
   useEffect(() => {
@@ -66,6 +71,22 @@ function HomeScreen({ navigation }) {
   useEffect(() => {
     fetchUserData(); // Call the fetchUserData function to update the userData state
   }, [idToken]);
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const recommendedRestaurants = await getRestaurantRecommendations(userData, idToken);
+        setRestaurants(recommendedRestaurants);
+      } catch (error) {
+        console.error('Error fetching restaurants:', error);
+      }
+    };
+    
+    if(idToken) {
+      fetchRestaurants();
+    }
+  }, [idToken]);
+
 
   const thumbnails = [
     { key: '1', text: 'Food Spots', navigateTo: 'HeartScreen', image: food},
