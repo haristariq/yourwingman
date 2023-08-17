@@ -25,6 +25,8 @@ import LoginScreen from './screens/LoginScreen';
 import VerificationScreen from './screens/VerificationScreen';
 import NameScreen from './screens/NameScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import RestaurantDetailScreen from './screens/RestaurantDetailsScreen.js';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -115,7 +117,6 @@ export default function App() {
         <Stack.Screen name="Location" component={LocationScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Birthday" component={BirthdateScreen} options={{ headerShown: false }} />
 
-
         <Stack.Screen
           name="Main"
           options={{ headerShown: false }}
@@ -124,6 +125,8 @@ export default function App() {
         <Stack.Screen name="PlacesToGo" component={PlacesToGo} options={{ headerShown: false }} />
         <Stack.Screen name="SpicyTime" component={SpicyTime} options={{ headerShown: false }} />
         <Stack.Screen name="HeartScreen" component={HeartScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="RestaurantDetail" component={RestaurantDetailScreen} options={{ headerShown: false }} />
+
 
       </Stack.Navigator>
     </NavigationContainer>

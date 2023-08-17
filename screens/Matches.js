@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, ScrollView, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SansFont from '../SansFont';
@@ -28,16 +28,17 @@ const Matches = () => {
         <SansFont style={styles.headerText}>Your Matches</SansFont>
       </View>
       <ScrollView>
-      {matches.map(match => (
-    <View key={match.place_id} style={styles.card}>
-        <Image 
-            source={{uri: match.photoUrl}}
-            style={styles.image}
-        />
-        <SansFont style={styles.nameInsideImage}>{match.name}</SansFont>
-    </View>
-))}
-
+        {matches.map(match => (
+          <TouchableOpacity key={match.place_id} onPress={() => navigation.navigate('RestaurantDetail', { restaurant: match })}>
+            <View style={styles.card}>
+              <Image 
+                  source={{uri: match.photoUrl}}
+                  style={styles.image}
+              />
+              <SansFont style={styles.nameInsideImage}>{match.name}</SansFont>
+            </View>
+          </TouchableOpacity>
+        ))}
       </ScrollView>
     </View>
   );
