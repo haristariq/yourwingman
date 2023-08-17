@@ -1,168 +1,173 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Ionicons } from '@expo/vector-icons';
 import SansFont from '../SansFont';
-import placeholderImage from '../assets/images/restaurant.png';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getIdToken } from '../firebase';
 import { useUserData } from '../UserContext';
-import Matches from './Matches';
-import { addFavoriteRestaurant } from '../backend'; 
+import { GetSpicyQuestions, AnswerSpicyQuestion } from '../backend';
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 const SpicyTime = () => {
-  const navigation = useNavigation();
-  const { restaurants, userData } = useUserData();
-  const swiperRef = useRef(null);
-  const [idToken, setIdToken] = useState(null);
+    const navigation = useNavigation();
+    const { userData } = useUserData();
+    const swiperRef = useRef(null);
+    const [idToken, setIdToken] = useState(null);
+    const [questions, setQuestions] = useState([]);
 
-  useEffect(() => {
-    getIdToken()
-      .then(token => {
-        console.log('ID token fetched:', token);
-        setIdToken(token);
-      })
-      .catch(error => {
-        console.error('Error getting ID token:', error);
-      });
+
+    useEffect(() => {
+      getIdToken()
+          .then(token => {
+              console.log('ID token fetched:', token);
+              setIdToken(token);
+  
+              // Fetch spicy questions using the idToken
+              return GetSpicyQuestions(token);
+          })
+          .then(response => {
+            console.log('Spicy Questions fetched:', response.questions);
+            setQuestions(response.questions);
+        })        
+          .catch(error => {
+              console.error('Error:', error);
+          });
   }, []);
-
-
+  
   const onSwipeLeft = (index) => {
-    console.log("Swiped left on restaurant: ", restaurants[index].name);
+      console.log("Answered No");
+      AnswerSpicyQuestion(questions[index], 'No', idToken)
+          .then(response => {
+              console.log('Answer recorded:', response);
+          })
+          .catch(error => {
+              console.error('Error recording answer:', error);
+          });
+  };
+  
+  const onSwipeRight = (index) => {
+      console.log("Answered Yes");
+      AnswerSpicyQuestion(questions[index], 'Yes', idToken)
+          .then(response => {
+              console.log('Answer recorded:', response);
+          })
+          .catch(error => {
+              console.error('Error recording answer:', error);
+          });
   };
 
-  const onSwipeRight = async (index) => {
-    console.log("Swiped right on restaurant: ", restaurants[index].name);
-    
-    if (idToken) {
-      try {
-        const response = await addFavoriteRestaurant(restaurants[index], idToken);
-        console.log('Successfully added to favorites:', response.message);
-      } catch (error) {
-        console.error('Failed to add to favorites:', error.message);
-      }
-    }
-  };
-
-  const onBook = (index) => {
-    console.log("Booked restaurant: ", restaurants[index].name);
-  };
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Icon.Button name="close" backgroundColor="white" color="gray" borderRadius= {39} size={30} onPress={() => navigation.goBack()} />
-        <SansFont style={styles.headerText}>Play Time 💔😈</SansFont>
-      </View>
-      <View style={styles.swiperContainer}>
-        {restaurants.length > 0 ? (
-          <Swiper
-            ref={swiperRef}
-            cards={restaurants}
-            backgroundColor={'#1A212B'}
-            renderCard={(card) => (
-              <View style={styles.card}>
-                <Image source={{ uri: card.photoUrl || placeholderImage }} style={styles.image} />
-                <SansFont style={styles.cardText}>{card.name}</SansFont>
-                <View style={styles.buttons}>
-                  <Icon.Button name="times" backgroundColor="white" color="#A833E1" size={30} onPress={() => swiperRef.current.swipeLeft()} />
-                  <Icon.Button 
-  name="heart" 
-  backgroundColor="white" 
-  color="#A833E1" 
-  size={30} 
-  onPress={() => onSwipeRight(swiperRef.current.state.index)}
-/>
-                  <Icon.Button name="phone" backgroundColor="white" color="#A833E1" size={30} onPress={() => onBook(swiperRef.current.state.index)} />
-                </View>
-              </View>
-            )}
-            onSwipedLeft={onSwipeLeft}
-            onSwipedRight={onSwipeRight}
-          />
-        ) : (
-          <SansFont>Loading...</SansFont>
-        )}
-      </View>
-    </View>
-  );
+    return (
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <Icon.Button name="close" backgroundColor="white" color="gray" borderRadius={39} size={30} onPress={() => navigation.goBack()} />
+                <SansFont style={styles.headerText}>  Play Time 😈</SansFont>
+            </View>
+            <View style={styles.swiperContainer}>
+                {questions.length > 0 ? (
+                    <Swiper
+                        ref={swiperRef}
+                        cards={questions}
+                        backgroundColor={'#1A212B'}
+                        renderCard={(card) => (
+                            // Inside the renderCard function
+                            <LinearGradient
+                                colors={['#A833E0', '#E832A7']}
+                                start={[0, 0]}
+                                end={[1, 0]}
+                                style={styles.card}
+                            >
+                                <SansFont style={styles.questionText}>{card}</SansFont>
+                                <View style={styles.buttons}>
+                                    <View style={styles.iconContainer}>
+                                        <Icon.Button name="times" backgroundColor="white" color="#A833E1" size={30} onPress={() => swiperRef.current.swipeLeft()} />
+                                    </View>
+                                    <View style={styles.iconContainer}>
+                                        <Icon.Button
+                                            name="heart"
+                                            backgroundColor="white"
+                                            color="#A833E1"
+                                            size={30}
+                                            onPress={() => swiperRef.current.swipeRight()}
+                                        />
+                                    </View>
+                                </View>
+                            </LinearGradient>
+                        )}
+                        onSwipedLeft={onSwipeLeft}
+                        onSwipedRight={onSwipeRight}
+                    />
+                ) : (
+                    <SansFont>Loading...</SansFont>
+                )}
+            </View>
+        </View>
+    );
 };
-
-const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#1A212B',
+      flex: 1,
+      justifyContent: 'center',
+      backgroundColor: '#1A212B',
   },
   swiperContainer: {
-    flex: 1,
+      flex: 1,
   },
   header: {
-    marginTop: 50,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignSelf: 'flex-start',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    zIndex: 1000,
-    backgroundColor: '#1A212B',
-    marginBottom: -60,
+      marginTop: 50,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignSelf: 'flex-start',
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      zIndex: 1000,
+      backgroundColor: '#1A212B',
+      marginBottom: -60,
   },
   headerText: {
-    fontSize: 24,
-    fontWeight: '500',
-    marginTop: 10,
-    color: 'white',
+      fontSize: 24,
+      fontWeight: '500',
+      marginTop: 10,
+      color: 'white',
   },
   card: {
-    marginTop: 50,
-    width: width * 0.9,
-    height: height * 0.6,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4,
+      marginTop: 50,
+      width: '100%',
+      height: '60%',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'white',
+      borderRadius: 20,
+      shadowColor: "#000",
+      shadowOffset: {
+          width: 0,
+          height: 2,
+      },
+      shadowOpacity: 0.23,
+      shadowRadius: 2.62,
+      elevation: 4,
   },
-  image: {
-    width: '100%',
-    height: '85%',
-    position: 'absolute',
-    top: 0,
-    borderRadius: 15,
-  },
-  cardText: {
-    position: 'absolute',
-    bottom: 80,
-    left: 10,
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: 'white',
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10,
+  questionText: {
+      fontSize: 24,
+      fontWeight: '500',
+      marginTop: 10,
+      color: 'white',
   },
   buttons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    position: 'absolute',
-    bottom: 10,
-    width: '100%',
-    paddingHorizontal: 20,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      position: 'absolute',
+      bottom: 10,
+      width: '100%',
+      paddingHorizontal: 20,
+  },
+  iconContainer: {
+      backgroundColor: 'white',
+      borderRadius: 60,
+      padding: 10,
   },
 });
-
 
 export default SpicyTime;

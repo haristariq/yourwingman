@@ -151,6 +151,76 @@ async function getFavoriteRestaurants(firebaseToken) {
   }
 }
 
+// ...
+
+const GetSpicyQuestions = async (firebaseToken) => {
+  try {
+      const response = await axios.get(`${API_URL}/getSpicyQuestions`, {
+        headers: {
+          Authorization: `${firebaseToken}`
+        }
+      });
+      return response.data;
+  } catch (error) {
+      console.error("Error fetching spicy questions:", error);
+      if (error.response) {
+        console.error('Response:', error.response.data);
+      }
+      throw error;
+  }
+}
+
+const AnswerSpicyQuestion = async (question, answer, firebaseToken) => {
+  try {
+      const response = await axios.post(`${API_URL}/answerSpicyQuestion`, { question, answer }, {
+        headers: {
+          Authorization: `${firebaseToken}`
+        }
+      });
+      return response.data;
+  } catch (error) {
+      console.error("Error answering spicy question:", error);
+      if (error.response) {
+        console.error('Response:', error.response.data);
+      }
+      throw error;
+  }
+}
+
+const GetSpicyAnswers = async (firebaseToken) => {
+  try {
+      const response = await axios.get(`${API_URL}/getSpicyAnswers`, {
+        headers: {
+          Authorization: `${firebaseToken}`
+        }
+      });
+      return response.data;
+  } catch (error) {
+      console.error("Error fetching spicy answers:", error);
+      if (error.response) {
+        console.error('Response:', error.response.data);
+      }
+      throw error;
+  }
+}
+
+const GetPartnerSpicyAnswers = async (firebaseToken) => {
+  try {
+      const response = await axios.get(`${API_URL}/getPartnerSpicyAnswers`, {
+        headers: {
+          Authorization: `${firebaseToken}`
+        }
+      });
+      return response.data;
+  } catch (error) {
+      console.error("Error fetching partner's spicy answers:", error);
+      if (error.response) {
+        console.error('Response:', error.response.data);
+      }
+      throw error;
+  }
+}
+
 // ... [your other functions]
 
-export { updateUser, initializeUser, getUser, getRestaurantRecommendations, checkUserExists, addFavoriteRestaurant, getFavoriteRestaurants };
+export { updateUser, initializeUser, getUser, getRestaurantRecommendations, checkUserExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions };

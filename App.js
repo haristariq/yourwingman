@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
-import { View } from 'react-native';
+import { AppRegistry, View } from 'react-native';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';  // Import the auth object
 import * as Font from 'expo-font';
