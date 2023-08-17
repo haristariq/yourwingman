@@ -34,6 +34,13 @@ const RestaurantDetailsScreen = ({ route }) => {
         source={{uri: restaurant.photoUrl}}
         style={styles.image}
       />
+      <Ionicons 
+        name="close" 
+        size={50}
+        color="white"
+        style={styles.closeIcon}
+        onPress={() => navigation.goBack()} 
+      />
       <View style={styles.textContainer}>
         <SansFont style={styles.restaurantName}>{restaurant.name}</SansFont>
         <SansFont style={styles.description}>{restaurant.description}</SansFont>
@@ -48,13 +55,6 @@ const RestaurantDetailsScreen = ({ route }) => {
           <Text style={styles.buttonText}>Map</Text>
         </TouchableOpacity>
       </View>
-      <Ionicons 
-        name="close" 
-        size={30}
-        color="white"
-        style={styles.closeIcon}
-        onPress={() => navigation.goBack()} 
-      />
     </View>
   );
 }
@@ -107,9 +107,23 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   closeIcon: {
-    position: 'absolute',
-    top: 40,
-    right: 20,
+      position: 'absolute',
+      top: 40,
+      left: 20,
+    
+      // For iOS
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+    
+      // For Android
+      elevation: 5,
+
+
   },
 });
 
