@@ -7,15 +7,12 @@ import SansFont from '../SansFont';
 import { getIdToken } from '../firebase';
 import { useUserData } from '../UserContext';
 
-
 export default function SettingsScreen() {
-  
   const navigation = useNavigation();
   const [username, setUsername] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [idToken, setIdToken] = useState(null);
   const { userData, setUserData } = useUserData();
-
 
   useEffect(() => {
     getIdToken().then(token => {
@@ -36,14 +33,13 @@ export default function SettingsScreen() {
   };
 
   const handleSave = async () => {
-    console.log(username);
     if (username) {
       // Step 1: Fetch and modify existing user data
       let updatedUserInfo = { ...userData, name: username };
-  
+
       // Step 2: Update UserDataContext
       setUserData(updatedUserInfo);
-      
+
       try {
         // Step 3: Update the user info using the backend function
         await updateUser(updatedUserInfo, idToken);
@@ -56,31 +52,18 @@ export default function SettingsScreen() {
       Alert.alert('Error', 'Please enter a username.');
     }
   };
-  
 
   return (
     <View style={styles.container}>
       <SansFont style={styles.header}>Settings</SansFont>
-      <Button title="Change Username" onPress={() => setModalVisible(true)} />
+      {/* Commenting out the "Change Username" button */}
+      {/* <Button title="Change Username" onPress={() => setModalVisible(true)} /> */}
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
       >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <TextInput
-              value={username}
-              onChangeText={setUsername}
-              placeholder="Enter new username"
-              style={styles.input}
-              placeholderTextColor="rgba(121, 181, 227, 0.8)"
-              fontFamily="DM Sans Bold"
-            />
-            <Button title="Save" onPress={handleSave} />
-            <Button title="Close" onPress={() => setModalVisible(false)} />
-          </View>
-        </View>
+        {/* Rest of the modal content */}
       </Modal>
       <Button title="Logout" onPress={handleLogout} color="red" />
     </View>
