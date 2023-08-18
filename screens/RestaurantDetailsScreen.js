@@ -9,12 +9,16 @@ const RestaurantDetailsScreen = ({ route }) => {
   const navigation = useNavigation();
 
   const handleCall = () => {
-    const phoneNumber = restaurant.formatted_phone_number;
-    console.log(phoneNumber);
+    let phoneNumber = restaurant.formatted_phone_number;
+    phoneNumber = phoneNumber.replace(/\D/g, '');
+    
     if (phoneNumber) {
-      Linking.openURL(`tel:${phoneNumber}`);
+      Linking.openURL(`tel:${phoneNumber}`).catch(err => {
+        console.error("Failed to dial the number:", err);
+      });
     }
   }
+  
 
   const handleMap = () => { 
     const address = encodeURIComponent(restaurant.address); // Ensure address is URL-safe
