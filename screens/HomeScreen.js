@@ -101,6 +101,8 @@ function HomeScreen({ navigation }) {
   ];
 
   const userName = userData ? userData.name : '';
+  const locationed = userData ? userData.location : '';
+
 
 
   const users = [
@@ -118,7 +120,7 @@ function HomeScreen({ navigation }) {
       <View style={styles.topPart}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => {}}>
-            <SansFont style={styles.buttonText}>Select Location</SansFont>
+            <SansFont style={styles.buttonText}>{locationed}</SansFont>
           </TouchableOpacity>
         </View>
         <SansFont style={styles.headerName}>{header}</SansFont>

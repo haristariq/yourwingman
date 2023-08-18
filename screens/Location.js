@@ -2,34 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { TextInput, TouchableOpacity, View, Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import SansFont from '../SansFont';
-import { getIdToken } from '../firebase';
 
 export default function LocationScreen({ route, navigation }) {
-    const { phoneNumber, name, idToken: routeIdToken } = route.params; // Including partnerPhoneNumber
+    const { phoneNumber, name} = route.params;
     const [location, setLocation] = useState('');
-    const [idToken, setIdToken] = useState(routeIdToken);
     const [partnerPhoneNumber, setPartnerPhoneNumber] = useState('');
 
-
-    useEffect(() => {
-        if (!idToken) {
-            getIdToken().then(token => {
-                console.log(token + ' nosir');
-                setIdToken(token);
-            }).catch(error => {
-                console.error('Error getting ID token:', error);
-            });
-        }
-    }, []);
+    
 
     const navigateToNextScreen = () => {
-        if (location && idToken) {
-            navigation.navigate('Birthday', {
+        if (location) {
+            navigation.navigate('Preferences', {
                 phoneNumber: phoneNumber,
                 name: name,
-                idToken: idToken,
                 location: location,
-                partnerPhoneNumber: partnerPhoneNumber // Sending partnerPhoneNumber as a route parameter
+                partnerPhoneNumber: `+${partnerPhoneNumber}` // Preceding '+' symbol
             });
         }
     };
@@ -50,15 +37,14 @@ export default function LocationScreen({ route, navigation }) {
                     onChangeText={setLocation}
                 />
 
-<SansFont style={styles.subtitle}>Please enter your Partner's phone number</SansFont>
-
-                {/* Adding partner's phone number input */}
+                <SansFont style={styles.subtitle}>Please enter your Partner's phone number</SansFont>
                 <TextInput
                     style={styles.input}
-                    placeholder="Partner's phone number"
+                    placeholder="+1(650)-234-8080"
                     value={partnerPhoneNumber}
                     onChangeText={setPartnerPhoneNumber}
                 />
+
                 <TouchableOpacity style={styles.button} onPress={navigateToNextScreen}>
                     <SansFont style={styles.buttonText}>Next</SansFont>
                 </TouchableOpacity>

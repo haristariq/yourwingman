@@ -6,7 +6,7 @@ import SansFont from '../SansFont';
 import { initializeUser } from '../backend';
 
 export default function BirthdateScreen({ route, navigation }) {
-    const { phoneNumber, name, idToken , location, partnerPhoneNumber} = route.params;
+    const { phoneNumber, name, idToken , location, partnerPhoneNumber, preferences} = route.params;
 
     const [birthdate, setBirthdate] = useState(new Date());
 
@@ -14,10 +14,10 @@ export default function BirthdateScreen({ route, navigation }) {
         const userData = {
             name: name,
             birthday: birthdate.toISOString().split('T')[0], // Convert to ISO date string
-            phone_number: phoneNumber,
             preferences: [],
+            phone_number: phoneNumber,
             partner_number: partnerPhoneNumber, 
-            location: location
+            location: location,
         };
 
         try {

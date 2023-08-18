@@ -27,6 +27,7 @@ import NameScreen from './screens/NameScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import RestaurantDetailScreen from './screens/RestaurantDetailsScreen.js';
 import SpicyAnswers from './screens/SpicyAnswers'
+import PreferencesScreen from './screens/PreferencesScreen';
 
 
 const Tab = createBottomTabNavigator();
@@ -35,7 +36,6 @@ const Stack = createStackNavigator();
 const fetchFonts = () => {
   return Font.loadAsync({
     'DM Sans Bold': require('./assets/fonts/DM_Sans/static/DMSans-Bold.ttf'),
-
   });
 };
 
@@ -91,33 +91,34 @@ export default function App() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState(null);
   const [fontLoaded, setFontLoaded] = useState(false);
-
+  
   // Handle user state changes
   function onAuthStateChange(user) {
-    setUser(user);
-    if (initializing) setInitializing(false);
+      setUser(user);
+      if (initializing) setInitializing(false);
   }
-
+  
   useEffect(() => {
-    const subscriber = onAuthStateChanged(auth, onAuthStateChange);
-    fetchFonts().then(() => setFontLoaded(true));
-    return subscriber; // unsubscribe on unmount
+      const subscriber = onAuthStateChanged(auth, onAuthStateChange);
+      fetchFonts().then(() => setFontLoaded(true));
+      return subscriber; // unsubscribe on unmount
   }, []);
-
+  
   if (initializing || !fontLoaded) {
-    return <AppLoading />;
+      return <AppLoading />;
   }
-
+  
   return (
-    <UserDataProvider>
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={user ? "Main" : "Login"}>
-        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="Verify" component={VerificationScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Name" component={NameScreen} options={{ headerShown: false }} /> 
-        <Stack.Screen name="Location" component={LocationScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Birthday" component={BirthdateScreen} options={{ headerShown: false }} />
-
+      <UserDataProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName={user ? "Main" : "Login"}>
+          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
+          <Stack.Screen name="Verify" component={VerificationScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Name" component={NameScreen} options={{ headerShown: false }} /> 
+          <Stack.Screen name="Location" component={LocationScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Preferences" component={PreferencesScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Birthday" component={BirthdateScreen} options={{ headerShown: false }} />
+  
         <Stack.Screen
           name="Main"
           options={{ headerShown: false }}
