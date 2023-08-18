@@ -1,53 +1,50 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native'; 
-import Swiper from 'react-native-deck-swiper';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native'; 
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SansFont from '../SansFont';
 import { getIdToken } from '../firebase';
 import { useUserData } from '../UserContext';
-import { GetSpicyQuestions, AnswerSpicyQuestion } from '../backend';
+import { GetSpicyAnswers } from '../backend';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const SpicyAnswers = () => {
   const navigation = useNavigation();
   const { userData } = useUserData();
-  const swiperRef = useRef(null);
   const [idToken, setIdToken] = useState(null);
-  const [questions, setQuestions] = useState([]);
+  const [answers, setAnswers] = useState([]);
 
   useEffect(() => {
     getIdToken()
       .then(token => {
         setIdToken(token);
-        return GetSpicyQuestions(token);
+        return GetSpicyAnswers(token);
       })
       .then(response => {
-        setQuestions(response.questions);
-      })        
+        console.log('Raw response from backend:', response);
+        const answersList = Object.entries(response.answers).map(([question, answer]) => ({ question, answer }));
+        setAnswers(answersList);
+      })
       .catch(error => {
         console.error('Error:', error);
       });
   }, []);
 
-  const onSwipeLeft = (index) => {
-    AnswerSpicyQuestion(questions[index], 'No', idToken)
-      .then(response => {
-        console.log('Answer recorded:', response);
-      })
-      .catch(error => {
-        console.error('Error recording answer:', error);
-      });
-  };
+  const AnswerCard = ({ item }) => {
+    const [showAnswer, setShowAnswer] = useState(false);
 
-  const onSwipeRight = (index) => {
-    AnswerSpicyQuestion(questions[index], 'Yes', idToken)
-      .then(response => {
-        console.log('Answer recorded:', response);
-      })
-      .catch(error => {
-        console.error('Error recording answer:', error);
-      });
+    return (
+      <TouchableOpacity onPress={() => setShowAnswer(!showAnswer)} style={styles.card}>
+        <LinearGradient
+          colors={['#A833E0', '#E832A7']}
+          start={[0, 0]}
+          end={[1, 0]}
+          style={styles.gradient}
+        >
+          <SansFont style={styles.cardText}>{showAnswer ? item.answer : item.question}</SansFont>
+        </LinearGradient>
+      </TouchableOpacity>
+    );
   };
 
   return (
@@ -80,52 +77,15 @@ const SpicyAnswers = () => {
         </TouchableOpacity>
       </View>
       
-      <SansFont style={styles.questionsTitle}>Questions</SansFont>
+      <SansFont style={styles.questionsTitle}>Matches</SansFont>
 
       <View style={styles.swiperContainer}>
-        {questions.length > 0 ? (
-          <Swiper
-            ref={swiperRef}
-            cards={questions}
-            backgroundColor={'#1A212B'}
-            renderCard={(card) => (
-              <LinearGradient 
-                colors={['#A833E0', '#E832A7']}
-                start={[0, 0]}
-                end={[1, 0]}
-                style={styles.card}
-              >
-                <SansFont style={styles.questionText}>{card}</SansFont>
-
-                <View style={styles.buttons}>
-                  <View style={styles.iconContainer}>
-                    <Icon.Button 
-                      name="times" 
-                      backgroundColor="white" 
-                      color="#A833E1" 
-                      size={30} 
-                      onPress={() => swiperRef.current.swipeLeft()} 
-                    />
-                  </View>
-                  
-                  <View style={styles.iconContainer}>
-                    <Icon.Button
-                      name="heart"
-                      backgroundColor="white"
-                      color="#A833E1"
-                      size={30}
-                      onPress={() => swiperRef.current.swipeRight()}
-                    />
-                  </View>
-                </View>
-              </LinearGradient>
-            )}
-            onSwipedLeft={onSwipeLeft}
-            onSwipedRight={onSwipeRight}
-          />
-        ) : (
-          <SansFont>Loading...</SansFont>  
-        )}
+        <FlatList 
+          horizontal={true}
+          data={answers}
+          renderItem={({ item }) => <AnswerCard item={item} />}
+          keyExtractor={(item, index) => index.toString()}
+        />
       </View>
     </View>
   );
@@ -139,7 +99,7 @@ const styles = StyleSheet.create({
   },
   swiperContainer: {
     flex: 1,
-    marginTop: 0,
+    marginTop: 10,
   },
   header: {
     marginTop: 50,
@@ -159,9 +119,8 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   card: {
-    marginTop: '-15%',
-    width: '100%',
-    height: '50%',
+    width: 350,
+    height: 300,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
@@ -174,26 +133,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
+    marginHorizontal: 10,
+    overflow: 'hidden', // This ensures the gradient won't overflow.
   },
-  questionText: {
-    fontSize: 24,
-    fontWeight: '500',
-    marginTop: 10,
+  gradient: {
+    ...StyleSheet.absoluteFillObject, // This will make the gradient cover the entire card.
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+  },
+  cardText: {
+    flexShrink: 1,
     color: 'white',
-  },
-  buttons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    position: 'absolute',
-    bottom: 10,
-    width: '100%',
+    fontSize: 20,
+    textAlign: 'center',
     paddingHorizontal: 20,
-    
-  },
-  iconContainer: {
-    backgroundColor: 'white',
-    borderRadius: 60,
-    padding: 10,
   },
   questionsTitle: {
     fontSize: 30,
@@ -208,7 +162,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginTop: '10%',
     marginBottom: '-12%',
-    
   },
   leftButton: {
     marginRight: 10,
@@ -224,22 +177,6 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     paddingVertical: 10,
     paddingHorizontal: 60,  
-  },
-
-  overlapButton: {
-    marginLeft: -10,
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
-    borderColor: 'white',
-    borderWidth: 2,
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    color: 'white',
-
-  },
-  overlapButtonText: {
-    color: 'white',
-    fontSize: 16,
   },
   customButton: {
     paddingVertical: 10,

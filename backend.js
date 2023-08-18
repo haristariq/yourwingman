@@ -189,18 +189,19 @@ const AnswerSpicyQuestion = async (question, answer, firebaseToken) => {
 
 const GetSpicyAnswers = async (firebaseToken) => {
   try {
-      const response = await axios.get(`${API_URL}/getSpicyAnswers`, {
-        headers: {
-          Authorization: `${firebaseToken}`
-        }
-      });
-      return response.data;
-  } catch (error) {
-      console.error("Error fetching spicy answers:", error);
-      if (error.response) {
-        console.error('Response:', error.response.data);
+    const response = await axios.get(`${API_URL}/getSpicyAnswers`, {
+      headers: {
+        Authorization: `${firebaseToken}`
       }
-      throw error;
+    });
+    console.log(response.data);
+    return response.data;  // Assuming the API returns a dictionary with questions as keys and answers as values
+  } catch (error) {
+    console.error('Error fetching spicy answers:', error.message);
+    if (error.response) {
+      console.error('Response:', error.response.data);
+    }
+    throw error;
   }
 }
 
