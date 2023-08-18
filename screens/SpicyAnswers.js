@@ -8,9 +8,8 @@ import { getIdToken } from '../firebase';
 import { useUserData } from '../UserContext';
 import { GetSpicyQuestions, AnswerSpicyQuestion } from '../backend';
 import { LinearGradient } from 'expo-linear-gradient';
-import SpicyAnswers from './SpicyAnswers';
 
-const SpicyTime = () => {
+const SpicyAnswers = () => {
   const navigation = useNavigation();
   const { userData } = useUserData();
   const swiperRef = useRef(null);
@@ -213,18 +212,18 @@ const styles = StyleSheet.create({
   },
   leftButton: {
     marginRight: 10,
-    backgroundColor: '#B333D8',
     borderWidth: 2,
     borderColor: 'white',
     paddingVertical: 10,
-    paddingHorizontal: 70,
+    paddingHorizontal: 40,
   },
   rightButton: {
     marginRight: 10,
     borderWidth: 2,
+    backgroundColor: '#B333D8',
     borderColor: 'white',
     paddingVertical: 10,
-    paddingHorizontal: 30,  
+    paddingHorizontal: 60,  
   },
 
   overlapButton: {
@@ -256,4 +255,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SpicyTime;
+export default SpicyAnswers;

@@ -26,6 +26,7 @@ import VerificationScreen from './screens/VerificationScreen';
 import NameScreen from './screens/NameScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import RestaurantDetailScreen from './screens/RestaurantDetailsScreen.js';
+import SpicyAnswers from './screens/SpicyAnswers'
 
 
 const Tab = createBottomTabNavigator();
@@ -124,6 +125,8 @@ export default function App() {
         />
         <Stack.Screen name="PlacesToGo" component={PlacesToGo} options={{ headerShown: false }} />
         <Stack.Screen name="SpicyTime" component={SpicyTime} options={{ headerShown: false }} />
+        <Stack.Screen name="SpicyAnswers" component={SpicyAnswers} options={{ headerShown: false }} />
+
         <Stack.Screen name="HeartScreen" component={HeartScreen} options={{ headerShown: false }} />
         <Stack.Screen name="RestaurantDetail" component={RestaurantDetailScreen} options={{ headerShown: false }} />
 
