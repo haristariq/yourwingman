@@ -14,7 +14,7 @@ export default function BirthdateScreen({ route, navigation }) {
         const userData = {
             name: name,
             birthday: birthdate.toISOString().split('T')[0], // Convert to ISO date string
-            preferences: [],
+            preferences: preferences,
             phone_number: phoneNumber,
             partner_number: partnerPhoneNumber, 
             location: location,

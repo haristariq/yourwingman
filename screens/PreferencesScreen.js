@@ -49,6 +49,7 @@ export default function PreferencesScreen({ route, navigation }) {
         navigation.navigate('Birthday', {
             cuisines: preferences.cuisines,
             activities: preferences.activities,
+            preferences:preferences,
             phoneNumber: phoneNumber,
                 name: name,
                 idToken: idToken,
