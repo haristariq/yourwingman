@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import SansFont from '../SansFont';
 import { getIdToken } from '../firebase';
 import { useUserData } from '../UserContext';
-import { GetSpicyAnswers } from '../backend';
+import { GetSpicyAnswers, GetPartnerSpicyAnswers } from '../backend';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const SpicyAnswers = () => {
@@ -13,6 +13,8 @@ const SpicyAnswers = () => {
   const { userData } = useUserData();
   const [idToken, setIdToken] = useState(null);
   const [answers, setAnswers] = useState([]);
+  const [partnerAnswers, setPartnerAnswers] = useState([]);
+
 
   useEffect(() => {
     getIdToken()
@@ -24,6 +26,22 @@ const SpicyAnswers = () => {
         console.log('Raw response from backend:', response);
         const answersList = Object.entries(response.answers).map(([question, answer]) => ({ question, answer }));
         setAnswers(answersList);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }, []);
+
+  useEffect(() => {
+    getIdToken()
+      .then(token => {
+        setIdToken(token);
+        return GetPartnerSpicyAnswers(token);
+      })
+      .then(response => {
+        console.log('Raw response from backend:', response);
+        const answersList = Object.entries(response.answers).map(([question, answer]) => ({ question, answer }));
+        setPartnerAnswers(answersList);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -112,7 +130,7 @@ const SpicyAnswers = () => {
       <View style={styles.swiperContainer}>
         <FlatList 
           horizontal={true}
-          data={answers}
+          data={partnerAnswers}
           renderItem={({ item }) => <PartnerAnswerCard item={item} />}
           keyExtractor={(item, index) => 'duplicate_' + index.toString()}
         />

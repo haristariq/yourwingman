@@ -9,7 +9,8 @@ const RestaurantDetailsScreen = ({ route }) => {
   const navigation = useNavigation();
 
   const handleCall = () => {
-    const phoneNumber = restaurant.phoneNumber;
+    const phoneNumber = restaurant.formatted_phone_number;
+    console.log(phoneNumber);
     if (phoneNumber) {
       Linking.openURL(`tel:${phoneNumber}`);
     }
