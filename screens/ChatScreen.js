@@ -22,7 +22,7 @@ const ChatBotScreen = () => {
         messages: newMessages
     }, {
         headers: {
-            'Authorization': `Bearer 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`,
+            'Authorization': `Missing`,
             'Content-Type': 'application/json'
         }
     });

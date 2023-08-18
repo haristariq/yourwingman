@@ -1,12 +1,20 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import SansFont from '../SansFont';
+import { useNavigation } from '@react-navigation/native';
+
 
 const PlayScreen = () => {
+    const navigation = useNavigation();
+
 
     const handlePress = (gameName) => {
         console.log(`${gameName} clicked`);
         // Perform your action here
+        if (gameName === 'Play Time') {
+            navigation.navigate('SpicyTime');
+        }
+    
     };
 
     return (
