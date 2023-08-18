@@ -47,6 +47,23 @@ const SpicyAnswers = () => {
     );
   };
 
+  const PartnerAnswerCard = ({ item }) => {
+    const [showAnswer, setShowAnswer] = useState(false);
+
+    return (
+      <TouchableOpacity onPress={() => setShowAnswer(!showAnswer)} style={styles.LowerCard}>
+        <LinearGradient
+          colors={['#A833E0', '#E832A7']}
+          start={[0, 0]}
+          end={[1, 0]}
+          style={styles.gradient}
+        >
+          <SansFont style={styles.cardText}>{showAnswer ? item.answer : item.question}</SansFont>
+        </LinearGradient>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -77,7 +94,7 @@ const SpicyAnswers = () => {
         </TouchableOpacity>
       </View>
       
-      <SansFont style={styles.questionsTitle}>Matches</SansFont>
+      <SansFont style={styles.questionsTitle}>Answers</SansFont>
 
       <View style={styles.swiperContainer}>
         <FlatList 
@@ -85,6 +102,19 @@ const SpicyAnswers = () => {
           data={answers}
           renderItem={({ item }) => <AnswerCard item={item} />}
           keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
+
+      <SansFont style={styles.PartnerTitle}>Your Partner's Answers</SansFont>
+
+
+      {/* Duplicated FlatList */}
+      <View style={styles.swiperContainer}>
+        <FlatList 
+          horizontal={true}
+          data={answers}
+          renderItem={({ item }) => <PartnerAnswerCard item={item} />}
+          keyExtractor={(item, index) => 'duplicate_' + index.toString()}
         />
       </View>
     </View>
@@ -120,7 +150,26 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 350,
-    height: 300,
+    height: 250,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+    marginHorizontal: 10,
+    overflow: 'hidden', // This ensures the gradient won't overflow.
+  },
+
+  LowerCard: {
+    width: 350,
+    height: 120,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
@@ -156,6 +205,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: '20%',
   },
+
+  PartnerTitle: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: 'white',
+    alignSelf: 'center',
+    marginTop: '10%',
+  },
+
   titleButtonsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',

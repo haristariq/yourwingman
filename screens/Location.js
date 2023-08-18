@@ -5,9 +5,11 @@ import SansFont from '../SansFont';
 import { getIdToken } from '../firebase';
 
 export default function LocationScreen({ route, navigation }) {
-    const { phoneNumber, name, idToken: routeIdToken } = route.params; // Assuming you will pass these parameters
+    const { phoneNumber, name, idToken: routeIdToken } = route.params; // Including partnerPhoneNumber
     const [location, setLocation] = useState('');
     const [idToken, setIdToken] = useState(routeIdToken);
+    const [partnerPhoneNumber, setPartnerPhoneNumber] = useState('');
+
 
     useEffect(() => {
         if (!idToken) {
@@ -22,11 +24,12 @@ export default function LocationScreen({ route, navigation }) {
 
     const navigateToNextScreen = () => {
         if (location && idToken) {
-            navigation.navigate('Birthday', { // Replace with your next screen's name
+            navigation.navigate('Birthday', {
                 phoneNumber: phoneNumber,
                 name: name,
                 idToken: idToken,
-                location: location
+                location: location,
+                partnerPhoneNumber: partnerPhoneNumber // Sending partnerPhoneNumber as a route parameter
             });
         }
     };
@@ -45,6 +48,16 @@ export default function LocationScreen({ route, navigation }) {
                     placeholder="Your location"
                     value={location}
                     onChangeText={setLocation}
+                />
+
+<SansFont style={styles.subtitle}>Please enter your Partner's phone number</SansFont>
+
+                {/* Adding partner's phone number input */}
+                <TextInput
+                    style={styles.input}
+                    placeholder="Partner's phone number"
+                    value={partnerPhoneNumber}
+                    onChangeText={setPartnerPhoneNumber}
                 />
                 <TouchableOpacity style={styles.button} onPress={navigateToNextScreen}>
                     <SansFont style={styles.buttonText}>Next</SansFont>
