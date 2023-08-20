@@ -16,6 +16,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+console.log('[firebase.js] Firebase auth instance obtained.');
 
 // Function to handle logout
 const logout = () => {
@@ -31,4 +32,5 @@ const getIdToken = () => {
   return auth.currentUser.getIdToken();
 };
 
+console.log('[firebase.js] Firebase module setup complete.');
 export { app, auth, logout, getIdToken };

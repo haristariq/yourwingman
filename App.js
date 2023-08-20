@@ -42,7 +42,8 @@ const fetchFonts = () => {
 
 // Define the TabNavigator component
 function TabNavigator() {
-  return (
+  console.log('[App.js] Rendering App component...');
+return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
@@ -60,7 +61,8 @@ function TabNavigator() {
             iconName = 'settings-outline';
           }
 
-          return (
+          console.log('[App.js] Rendering App component...');
+return (
             <View 
               style={{
                 padding: 2,
@@ -108,7 +110,8 @@ export default function App() {
       return <AppLoading />;
   }
   
-  return (
+  console.log('[App.js] Rendering App component...');
+return (
       <UserDataProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName={user ? "Main" : "Login"}>
