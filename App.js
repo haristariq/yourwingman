@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -7,10 +7,11 @@ import { AppRegistry, View } from 'react-native';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';  // Import the auth object
 import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
-import SansFont from './SansFont';
-import { UserDataProvider } from './UserContext';
+import * as SplashScreen from 'expo-splash-screen';
+import Entypo from '@expo/vector-icons/Entypo';
 
+import SansFont from './SansFont'
+import { UserDataProvider } from './UserContext';
 
 import LocationScreen from './screens/Location';
 import BirthdateScreen from './screens/BirthdateScreen'
@@ -35,9 +36,12 @@ const Stack = createStackNavigator();
 
 const fetchFonts = () => {
   return Font.loadAsync({
-    'DM Sans Bold': require('./assets/fonts/DM_Sans/static/DMSans-Bold.ttf'),
+    'DM Sans Bold': require('./assets/fonts/DM_Sans/static/DMSans-Bold.ttf')
   });
 };
+
+
+
 
 
 // Define the TabNavigator component
@@ -89,26 +93,47 @@ return (
   );
 }
 
+
 export default function App() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState(null);
   const [fontLoaded, setFontLoaded] = useState(false);
-  
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await fetchFonts();
+        setFontLoaded(true); // Set the fontLoaded state here
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
+    }
+    prepare();
+}, []);
+
+
   // Handle user state changes
   function onAuthStateChange(user) {
-      setUser(user);
-      if (initializing) setInitializing(false);
+    setUser(user);
+    if (initializing) setInitializing(false);
   }
-  
+
   useEffect(() => {
-      const subscriber = onAuthStateChanged(auth, onAuthStateChange);
-      fetchFonts().then(() => setFontLoaded(true));
-      return subscriber; // unsubscribe on unmount
-  }, []);
-  
-  if (initializing || !fontLoaded) {
-      return <AppLoading />;
+    const subscriber = onAuthStateChanged(auth, onAuthStateChange);
+    return subscriber; // unsubscribe on unmount
+  }, [initializing]);
+
+  console.log('appIsReady:', appIsReady);
+  console.log('initializing:', initializing);
+  console.log('fontLoaded:', fontLoaded);
+
+  if (!appIsReady || initializing || !fontLoaded) {
+    return null;
   }
+
   
   console.log('[App.js] Rendering App component...');
 return (
