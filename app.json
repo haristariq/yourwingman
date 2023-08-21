@@ -2,7 +2,7 @@
   "expo": {
     "name": "yourwingman",
     "slug": "yourwingman",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -29,7 +29,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "de950c80-3544-45f5-85a4-43bd36f835aa"
+        "projectId": "4cdb3ec0-3771-4c77-b701-a0c9bddebe53"
       }
     },
     "plugins": [
