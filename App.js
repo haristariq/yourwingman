@@ -1,14 +1,13 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
-import { AppRegistry, View } from 'react-native';
+import { View } from 'react-native';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './firebase';  // Import the auth object
+import { auth } from './firebase';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import Entypo from '@expo/vector-icons/Entypo';
 
 import SansFont from './SansFont'
 import { UserDataProvider } from './UserContext';
@@ -98,27 +97,36 @@ export default function App() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState(null);
   const [fontLoaded, setFontLoaded] = useState(false);
-  const [appIsReady, setAppIsReady] = useState(false);
+
+  // Prevent native splash screen from autohiding before App component is ready
+  SplashScreen.preventAutoHideAsync()
+    .catch(() => { /* reloading the app might trigger some race conditions, so just ignore them */ });
 
   useEffect(() => {
     async function prepare() {
       try {
         await fetchFonts();
-        setFontLoaded(true); // Set the fontLoaded state here
+        setFontLoaded(true);
       } catch (e) {
         console.warn(e);
       } finally {
-        setAppIsReady(true);
+        // Only hide the splash screen when fonts are loaded and user is initialized
+        if (fontLoaded && !initializing) {
+          SplashScreen.hideAsync();
+        }
       }
     }
     prepare();
-}, []);
+  }, [fontLoaded, initializing]);
 
-
-  // Handle user state changes
   function onAuthStateChange(user) {
     setUser(user);
-    if (initializing) setInitializing(false);
+    if (initializing) {
+      setInitializing(false);
+      if (fontLoaded) {
+        SplashScreen.hideAsync();
+      }
+    }
   }
 
   useEffect(() => {
@@ -126,11 +134,7 @@ export default function App() {
     return subscriber; // unsubscribe on unmount
   }, [initializing]);
 
-  console.log('appIsReady:', appIsReady);
-  console.log('initializing:', initializing);
-  console.log('fontLoaded:', fontLoaded);
-
-  if (!appIsReady || initializing || !fontLoaded) {
+  if (!fontLoaded || initializing) {
     return null;
   }
 
