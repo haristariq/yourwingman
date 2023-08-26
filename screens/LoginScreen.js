@@ -5,9 +5,11 @@ import { app } from '../firebase';
 import { getAuth, signInWithPhoneNumber } from 'firebase/auth';
 import { LinearGradient } from 'expo-linear-gradient';
 import SansFont from '../SansFont';
+import { useUserData } from '../UserContext';
 
 
 export default function LoginScreen({ navigation }) {
+  const { setConfirmationResult } = useUserData();
   const [phoneNumber, setPhoneNumber] = useState('');
   const recaptchaVerifier = useRef(null);
 
@@ -19,14 +21,19 @@ export default function LoginScreen({ navigation }) {
     }
     try {
       const auth = getAuth(app);
-      const verificationId = await signInWithPhoneNumber(
-        auth,
-        phoneNumber,
-        recaptchaVerifier.current
-      );
-      console.log('Verification ID:', verificationId);
-      // pass phoneNumber with verificationId
-      navigation.navigate('Verify', { verificationId: verificationId, phoneNumber: phoneNumber });
+  const confirmationResult = await signInWithPhoneNumber(
+    auth, 
+    phoneNumber,
+    recaptchaVerifier.current
+  );
+
+  setConfirmationResult(confirmationResult); // Set confirmation result
+
+  navigation.navigate('Verify', { 
+    isConfirmationPending: true, 
+    phoneNumber: phoneNumber 
+  });
+    
     } catch (err) {
       console.log('Error in sendVerification:', err);
     }

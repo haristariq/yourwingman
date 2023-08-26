@@ -1,35 +1,46 @@
 import React, { useState } from 'react';
 import { TextInput, View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import { getAuth } from 'firebase/auth';
+import { useUserData } from '../UserContext';
 import { getIdToken, app } from '../firebase';
 import { checkUserExists } from '../backend';  // Import the checkUserExists function
 
-export default function VerificationScreen({ route, navigation }) {
-  const { verificationId, phoneNumber } = route.params;
+export default function VerificationScreen({route, navigation}) {
+
+  const { confirmationResult } = useUserData();
+  const { phoneNumber } = route.params;
+
   const [verificationCode, setVerificationCode] = useState('');
 
   const confirmVerification = async () => {
-    try {
-      const auth = getAuth(app);
-      await verificationId.confirm(verificationCode);
-      console.log('Phone authentication successful 👍');
 
-      const idToken = await getIdToken();
-      console.log(idToken + ' yessir');
+    if (confirmationResult) {
+      
+      try {
+        
+        await confirmationResult.confirm(verificationCode);
+        console.log('Phone authentication successful');
+          
+        const idToken = await getIdToken();
+        console.log(idToken + ' yessir');
 
-      // Check if the user exists
-      const userExists = await checkUserExists(idToken);
+        // Check if user exists and navigate
+        const userExists = await checkUserExists(idToken);
+        
+        if (userExists) {
+          navigation.navigate('Main', { phoneNumber }); 
+        } else {
+          navigation.navigate('Name', { phoneNumber });
+        }
 
-      // Navigate based on the result of checkUserExists
-      if (userExists) {
-        navigation.navigate('Main', { phoneNumber: phoneNumber });
-      } else {
-        navigation.navigate('Name', { phoneNumber: phoneNumber });
+      } catch (err) {
+        console.log(err);
       }
 
-    } catch (err) {
-      console.log(err);
+    } else {
+      console.log('Confirmation result is null'); 
     }
+
   };
 
   return (
