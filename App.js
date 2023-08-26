@@ -45,7 +45,7 @@ const fetchFonts = () => {
 
 // Define the TabNavigator component
 function TabNavigator() {
-  console.log('[App.js] Rendering App component...');
+  console.log('Logged in [App.js] Rendering App component...');
 return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -64,7 +64,7 @@ return (
             iconName = 'settings-outline';
           }
 
-          console.log('[App.js] Rendering App component...');
+          console.log('Changed Tab [App.js] Rendering App component...');
 return (
             <View 
               style={{
@@ -139,7 +139,7 @@ export default function App() {
   }
 
   
-  console.log('[App.js] Rendering App component...');
+  console.log('After useEffect [App.js] Rendering App component...');
 return (
       <UserDataProvider>
       <NavigationContainer>

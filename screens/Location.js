@@ -16,7 +16,7 @@ export default function LocationScreen({ route, navigation }) {
                 phoneNumber: phoneNumber,
                 name: name,
                 location: location,
-                partnerPhoneNumber: `+${partnerPhoneNumber}` // Preceding '+' symbol
+                partnerPhoneNumber: partnerPhoneNumber // Preceding '+' symbol
             });
         }
     };
@@ -40,7 +40,7 @@ export default function LocationScreen({ route, navigation }) {
                 <SansFont style={styles.subtitle}>Please enter your Partner's phone number</SansFont>
                 <TextInput
                     style={styles.input}
-                    placeholder="+1(650)-234-8080"
+                    placeholder="1(650)-234-8080"
                     value={partnerPhoneNumber}
                     onChangeText={setPartnerPhoneNumber}
                 />
