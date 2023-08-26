@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import {KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native';
-import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
+import { FirebaseRecaptchaVerifierModal } from '../firebase-recaptcha/modal';
 import { app } from '../firebase';
 import { getAuth, signInWithPhoneNumber } from 'firebase/auth';
 import { LinearGradient } from 'expo-linear-gradient';
