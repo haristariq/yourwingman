@@ -21,12 +21,8 @@ export default function LocationScreen({ route, navigation }) {
                 phoneNumber: phoneNumber,
                 name: name,
                 location: location,
-<<<<<<< Updated upstream
-                partnerPhoneNumber: `+${partnerPhoneNumber}` // Preceding '+' symbol
-=======
                 partnerPhoneNumber: partnerPhoneNumber,
                 birthday: new Date(selectedYear, selectedMonth - 1, selectedDay).toISOString().split('T')[0]
->>>>>>> Stashed changes
             });
         }
     };
@@ -88,11 +84,7 @@ export default function LocationScreen({ route, navigation }) {
                 <SansFont style={styles.subtitle}>Enter your Partner's phone number</SansFont>
                 <TextInput
                     style={styles.input}
-<<<<<<< Updated upstream
-                    placeholder="+1(650)-234-8080"
-=======
                     placeholder="+1 (650) 234-8080"
->>>>>>> Stashed changes
                     value={partnerPhoneNumber}
                     onChangeText={setPartnerPhoneNumber}
                 />
