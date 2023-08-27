@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { TextInput, TouchableOpacity, View, Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { TextInput, TouchableOpacity, View, Text, StyleSheet, KeyboardAvoidingView, Platform, Image } from 'react-native'; // Import Image
 import { LinearGradient } from 'expo-linear-gradient';
 import SansFont from '../SansFont';
 import { getIdToken } from '../firebase';
-import BirthdateScreen from './BirthdateScreen';
+
+// Import your logo image
+import LogoImage from '../assets/images/White-Heart.png';
 
 export default function NameScreen({ route, navigation }) {
     const { phoneNumber } = route.params;
@@ -35,8 +37,13 @@ export default function NameScreen({ route, navigation }) {
             style={{ flex: 1 }}
         >
             <LinearGradient colors={['#A833E1', '#EC32A3']} style={styles.container}>
-                <SansFont style={styles.title}>YourWingMan</SansFont>
-                <SansFont style={styles.phone}>Please enter your name</SansFont>
+                {/* Logo */}
+                <Image source={LogoImage} style={styles.logo} />
+
+                {/* Adjusted title positioning */}
+                <SansFont style={styles.title}>Your WingMan</SansFont>
+
+                <SansFont style={styles.phone}>What's your name?</SansFont>
 
                 <TextInput
                     style={styles.input}
@@ -58,17 +65,23 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    logo: {
+        width: '50%',
+        height: 100,
+        marginTop: '-70%'
+
+    },
     title: {
-        top: '-2%',
         fontSize: 40,
         fontWeight: 'semibold',
         color: '#fff',
-        marginBottom: 30,
+        marginBottom: '30%', // Adjusted margin
+        
     },
     phone: {
-        fontSize: 15,
+        fontSize: 20,
         color: '#fff',
-        marginBottom: 10,
+        marginBottom: 30,
         textAlign: 'center',
     },
     input: {
