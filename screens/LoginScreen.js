@@ -43,11 +43,11 @@ export default function LoginScreen({ navigation }) {
           firebaseConfig={app.options}
         />
         <Image style={styles.logo} source={require('../assets/images/White-Heart.png')} />
-        <SansFont style={styles.title}>YourWingMan</SansFont>
+        <SansFont style={styles.title}>Your Wingman</SansFont>
         <Image style={styles.image} source={require('../assets/images/landingpager.png')} />
-        <SansFont style={styles.relationship}>Your new relationship wingman!</SansFont>
-        <SansFont style={styles.welcome}>Welcome!</SansFont>
-        <SansFont style={styles.phone}>Please enter your phone number to start</SansFont>
+        <SansFont style={styles.relationship}>Your new relationship wingman</SansFont>
+        <SansFont style={styles.welcome}>Welcome</SansFont>
+        <SansFont style={styles.phone}>Let’s get your phone number first</SansFont>
 
         <TextInput
   style={styles.input}

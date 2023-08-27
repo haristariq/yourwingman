@@ -1,22 +1,27 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, View, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { LinearGradient } from 'expo-linear-gradient';
 import SansFont from '../SansFont';
 import { initializeUser } from '../backend';
+import { Picker } from '@react-native-picker/picker'; // Import Picker component
 
 export default function BirthdateScreen({ route, navigation }) {
-    const { phoneNumber, name, idToken , location, partnerPhoneNumber, preferences} = route.params;
+    const { phoneNumber, name, idToken, location, partnerPhoneNumber, preferences } = route.params;
 
-    const [birthdate, setBirthdate] = useState(new Date());
+    const birthYear = new Date().getFullYear();
+    const [selectedYear, setSelectedYear] = useState(birthYear);
+    const [selectedMonth, setSelectedMonth] = useState(1);
+    const [selectedDay, setSelectedDay] = useState(1);
 
     const initializeUserWithDetails = async () => {
+        const selectedDate = new Date(selectedYear, selectedMonth - 1, selectedDay);
+
         const userData = {
             name: name,
-            birthday: birthdate.toISOString().split('T')[0], // Convert to ISO date string
+            birthday: selectedDate.toISOString().split('T')[0], // Convert to ISO date string
             preferences: preferences,
             phone_number: phoneNumber,
-            partner_number: partnerPhoneNumber, 
+            partner_number: partnerPhoneNumber,
             location: location,
         };
 
@@ -38,17 +43,37 @@ export default function BirthdateScreen({ route, navigation }) {
                 <SansFont style={styles.phone}>Please select your birthdate</SansFont>
 
                 <View style={styles.datePickerContainer}>
-                    <DateTimePicker
-                        value={birthdate}
-                        mode={'date'}
-                        display='default'
-                        style={styles.datePicker} // Add this style
-                        onChange={(event, selectedDate) => {
-                            if (selectedDate) {
-                                setBirthdate(selectedDate);
-                            }
-                        }}
-                    />
+                    <Picker
+                        selectedValue={selectedMonth}
+                        onValueChange={(itemValue) => setSelectedMonth(itemValue)}
+                        style={styles.picker}
+                    >
+                        {Array.from({ length: 12 }).map((_, index) => (
+                            <Picker.Item key={index} label={(index + 1).toString()} value={index + 1} />
+                        ))}
+                    </Picker>
+                    <Picker
+                        selectedValue={selectedDay}
+                        onValueChange={(itemValue) => setSelectedDay(itemValue)}
+                        style={styles.picker}
+                    >
+                        {Array.from({ length: 31 }).map((_, index) => (
+                            <Picker.Item key={index} label={(index + 1).toString()} value={index + 1} />
+                        ))}
+                    </Picker>
+                    <Picker
+                        selectedValue={selectedYear}
+                        onValueChange={(itemValue) => setSelectedYear(itemValue)}
+                        style={styles.picker}
+                    >
+                        {Array.from({ length: 100 }).map((_, index) => (
+                            <Picker.Item
+                                key={index}
+                                label={(birthYear - index).toString()}
+                                value={birthYear - index}
+                            />
+                        ))}
+                    </Picker>
                 </View>
 
                 <TouchableOpacity style={styles.button} onPress={initializeUserWithDetails}>
@@ -79,13 +104,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     datePickerContainer: {
+        flexDirection: 'row',
         backgroundColor: 'white',
         borderRadius: 10,
         overflow: 'hidden',
         marginBottom: 20,
     },
-    datePicker: {
-        width: '100%',
+    picker: {
+        flex: 1,
     },
     button: {
         backgroundColor: 'white',

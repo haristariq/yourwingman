@@ -145,7 +145,7 @@ return (
           <Stack.Screen name="Name" component={NameScreen} options={{ headerShown: false }} /> 
           <Stack.Screen name="Location" component={LocationScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Preferences" component={PreferencesScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="Birthday" component={BirthdateScreen} options={{ headerShown: false }} />
+          
   
         <Stack.Screen
           name="Main"

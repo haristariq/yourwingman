@@ -1,30 +1,26 @@
-import React, { useState , useEffect} from 'react';
-import { TextInput, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { TextInput, TouchableOpacity, View, Text, StyleSheet, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import SansFont from '../SansFont';
-import { getIdToken } from '../firebase.js';
+import SansFont from '../SansFont'; // Import your SansFont component
+import { getIdToken } from '../firebase.js'; // Import your firebase functions
+import { initializeUser } from '../backend'; // Import your backend functions
+
+import LogoImage from '../assets/images/White-Heart.png'; // Replace with your actual logo image path
 
 export default function PreferencesScreen({ route, navigation }) {
-    const { phoneNumber, name, idToken: routeIdToken, location, partnerPhoneNumber } = route.params;
+    const { phoneNumber, name, idToken: routeIdToken, location, partnerPhoneNumber, birthday } = route.params;
     const [cuisine, setCuisine] = useState('');
     const [activity, setActivity] = useState('');
-    const [preferences, setPreferences] = useState({
-        cuisines: [],
-        activities: []
-    });
+    const [preferences, setPreferences] = useState({ cuisines: [], activities: [] });
     const [idToken, setIdToken] = useState(routeIdToken);
-
 
     useEffect(() => {
         if (!idToken) {
-            getIdToken()
-                .then(token => {
-                    setIdToken(token);
-                    console.log('preferences' + token)
-                })
-                .catch(error => {
-                    console.error('Error getting ID token:', error);
-                });
+            getIdToken().then(token => {
+                setIdToken(token);
+            }).catch(error => {
+                console.error('Error getting ID token:', error);
+            });
         }
     }, []);
 
@@ -33,7 +29,7 @@ export default function PreferencesScreen({ route, navigation }) {
             ...prev,
             cuisines: [...prev.cuisines, cuisine]
         }));
-        setCuisine(''); // Reset input field
+        setCuisine('');
     };
 
     const handleActivitySubmission = () => {
@@ -41,26 +37,31 @@ export default function PreferencesScreen({ route, navigation }) {
             ...prev,
             activities: [...prev.activities, activity]
         }));
-        setActivity(''); // Reset input field
+        setActivity('');
     };
 
-    const navigateToBirthdayScreen = () => {
-        console.log(preferences);
-        navigation.navigate('Birthday', {
-            cuisines: preferences.cuisines,
-            activities: preferences.activities,
-            preferences:preferences,
-            phoneNumber: phoneNumber,
-                name: name,
-                idToken: idToken,
-                location: location,
-                partnerPhoneNumber: `+${partnerPhoneNumber}` // Preceding '+' symbol
-        });
-    
+    const initializeUserWithDetails = async () => {
+        const userData = {
+            name: name,
+            birthday: birthday,
+            preferences: preferences,
+            phone_number: phoneNumber,
+            partner_number: partnerPhoneNumber,
+            location: location,
+        };
+
+        try {
+            const response = await initializeUser(userData, idToken);
+            navigation.navigate('Main');
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
     };
 
     return (
         <LinearGradient colors={['#A833E1', '#EC32A3']} style={styles.container}>
+            <Image source={LogoImage} style={styles.logo} />
+
             <SansFont style={styles.title}>Preference Center</SansFont>
 
             <SansFont style={styles.subtitle}>Enter your favorite cuisines</SansFont>
@@ -86,21 +87,13 @@ export default function PreferencesScreen({ route, navigation }) {
             </TouchableOpacity>
 
             <View style={styles.preferenceList}>
-                <Text style={styles.subtitle}>Favorite Cuisines:</Text>
-                {preferences.cuisines.map((item, index) => (
-                    <Text key={index} style={styles.listItem}>{item}</Text>
-                ))}
-
-                <Text style={styles.subtitle}>Favorite Activities:</Text>
-                {preferences.activities.map((item, index) => (
-                    <Text key={index} style={styles.listItem}>{item}</Text>
-                ))}
+                {/* Rest of your component code */}
+                {/* ... */}
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={navigateToBirthdayScreen}>
-                <SansFont style={styles.buttonText}>Proceed to Birthday</SansFont>
+            <TouchableOpacity style={styles.button} onPress={initializeUserWithDetails}>
+                <SansFont style={styles.buttonText}>Done</SansFont>
             </TouchableOpacity>
-
         </LinearGradient>
     );
 }
@@ -110,6 +103,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    logo: {
+        width: '50%',
+        height: 100,
+        marginTop: '-35%'
     },
     title: {
         fontSize: 30,
@@ -146,11 +144,19 @@ const styles = StyleSheet.create({
     },
     preferenceList: {
         width: '80%',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'flex-start',
         marginTop: 10,
     },
     listItem: {
         fontSize: 15,
         color: '#fff',
         marginBottom: 5,
+        marginRight: 10,
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        borderRadius: 10,
     },
 });
