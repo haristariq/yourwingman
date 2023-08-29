@@ -58,6 +58,10 @@ const SpicyTime = () => {
           name="close" 
           backgroundColor="white" 
           color="gray" 
+          marginRight = {-7}
+          marginLeft = {2}
+          marginTop = {-3}
+          marginBottom = {-5}
           borderRadius={39} 
           size={30} 
           onPress={() => navigation.goBack()} 
@@ -105,6 +109,12 @@ const SpicyTime = () => {
                       backgroundColor="white" 
                       color="#A833E1" 
                       size={30} 
+                      borderRadius= {60}
+
+                      marginRight = {-7}
+                      marginLeft = {2}
+                      paddingHorizontal = {11}
+                      marginBottom = {2}
                       onPress={() => swiperRef.current.swipeLeft()} 
                     />
                   </View>
@@ -114,7 +124,13 @@ const SpicyTime = () => {
                       name="heart"
                       backgroundColor="white"
                       color="#A833E1"
-                      size={30}
+                      size={25}
+                      borderRadius= {60}
+                      marginRight = {-7}
+                      marginLeft = {2}
+                      paddingHorizontal = {11}
+                      marginBottom = {-1}
+                      paddingVertical = {12}
                       onPress={() => swiperRef.current.swipeRight()}
                     />
                   </View>
@@ -164,8 +180,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '50%',
     alignItems: 'center',
+    backgroundColor: '#1A212B',
+
     justifyContent: 'center',
-    backgroundColor: 'white',
     borderRadius: 20,
     shadowColor: "#000",
     shadowOffset: {
@@ -191,11 +208,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     
   },
-  iconContainer: {
-    backgroundColor: 'white',
-    borderRadius: 60,
-    padding: 10,
-  },
+ 
   questionsTitle: {
     fontSize: 30,
     fontWeight: 'bold',

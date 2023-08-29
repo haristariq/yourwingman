@@ -95,7 +95,7 @@ function HomeScreen({ navigation }) {
   ];
 
   const buttonSets = [
-    { key: '1', thumbnail: thumbnail1 , thumbnailWidth: '40%', buttons: ['I love you', 'Im sad', 'Im horny'], showButtons: true },
+    { key: '1', thumbnail: thumbnail1 , thumbnailWidth: '40%', buttons: ['I love you', "I'm sad", "I'm horny"], showButtons: true },
     { key: '2', thumbnail: action2 , thumbnailWidth: '100%', showButtons: false },
     { key: '3', thumbnail: thumbnail3, thumbnailWidth: '100%', showButtons: false },
   ];

@@ -35,7 +35,7 @@ const ChatBotScreen = () => {
 const renderItem = ({ item }) => (
   <Card style={item.role === 'user' ? styles.userMessage : styles.botMessage}>
       <Card.Content>
-          <Title style={item.role === 'user' ? styles.userTitle : styles.botTitle}>{item.role === 'user' ? 'You' : 'Your WingMan'}</Title>
+          <Title style={item.role === 'user' ? styles.userTitle : styles.botTitle}>{item.role === 'user' ? 'You' : 'YourWingman'}</Title>
           <Paragraph style={item.role === 'user' ? styles.userContent : styles.botContent}>{item.content}</Paragraph>
       </Card.Content>
   </Card>

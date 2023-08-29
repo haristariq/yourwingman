@@ -41,7 +41,7 @@ export default function NameScreen({ route, navigation }) {
                 <Image source={LogoImage} style={styles.logo} />
 
                 {/* Adjusted title positioning */}
-                <SansFont style={styles.title}>Your WingMan</SansFont>
+                <SansFont style={styles.title}>YourWingman</SansFont>
 
                 <SansFont style={styles.phone}>What's your name?</SansFont>
 

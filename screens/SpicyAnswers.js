@@ -85,10 +85,14 @@ const SpicyAnswers = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Icon.Button 
+      <Icon.Button 
           name="close" 
           backgroundColor="white" 
           color="gray" 
+          marginRight = {-7}
+          marginLeft = {2}
+          marginTop = {-3}
+          marginBottom = {-5}
           borderRadius={39} 
           size={30} 
           onPress={() => navigation.goBack()} 

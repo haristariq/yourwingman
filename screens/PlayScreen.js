@@ -30,7 +30,7 @@ const PlayScreen = () => {
                             <View style={styles.circle}/>
                             <Image style={styles.gameIcon} source={require('../assets/devil-heart.png')} />
                         </TouchableOpacity>
-                        <SansFont style={styles.gameName}>Play Time</SansFont>
+                        <SansFont style={styles.gameName}>Spicy Time</SansFont>
                     </View>
                     <View style={styles.gameWrapper}>
                         <TouchableOpacity style={styles.iconButton} onPress={() => handlePress('Partner Quiz')}>
