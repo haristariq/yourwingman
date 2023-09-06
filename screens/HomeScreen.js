@@ -89,17 +89,6 @@ function HomeScreen({navigation}) {
     { key: '2', name: 'User2', image: 'https://via.placeholder.com/100' },
   ];
 
-  if (loading) {
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
-        <LottieView 
-          source={require('../assets/loading.json')} 
-          autoPlay 
-          loop 
-        />
-      </View>
-    );
-  }
   
   
 
@@ -132,19 +121,30 @@ function HomeScreen({navigation}) {
         <SansFont style={styles.title}>Easy Date</SansFont>
 
         <FlatList
-          style={styles.middlePart}
-          data={thumbnails}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => navigation.navigate(item.navigateTo)}>
-              <View style={styles.thumbnailContainer}>
-                <Image source={item.image} style={styles.middleThumbnail} />
-                <SansFont style={styles.thumbnailText}>{item.text}</SansFont>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
+  style={styles.middlePart}
+  data={thumbnails}
+  horizontal
+  showsHorizontalScrollIndicator={false}
+  renderItem={({ item }) => (
+    <TouchableOpacity onPress={() => navigation.navigate(item.navigateTo)}>
+      <View style={styles.thumbnailContainer}>
+        <Image source={item.image} style={styles.middleThumbnail} />
+        {item.key === '1' && loading && (
+          <View style={styles.lottieContainer}>
+            <LottieView 
+              source={require('../assets/loading3.json')} 
+              autoPlay 
+              loop 
+              style={styles.lottieStyle}
+            />
+          </View>
+        )}
+        <SansFont style={styles.thumbnailText}>{item.text}</SansFont>
+      </View>
+    </TouchableOpacity>
+  )}
+/>
+
 
         <SansFont style={styles.secondTitle}>Actions</SansFont>
 
@@ -313,4 +313,21 @@ const styles = StyleSheet.create({
   marginRight: 20,
   alignItems: 'center',
   },
+
+  lottieContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: semi-transparent background
+  },
+  
+  lottieStyle: {
+    width: '97%', // Adjust as needed
+    height: '97%', // Adjust as needed
+  },
+  
 });
