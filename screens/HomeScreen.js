@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import { getIdToken} from '../firebase';
 import Swiper from 'react-native-swiper';
 import notificationPurple from '../assets/images/notificationPurple.png';
@@ -13,8 +13,9 @@ import PlacesToGo from './PlacesToGo';
 import SpicyTime from './SpicyTime';
 import HeartScreen from './HeartScreen';
 import { getUser } from '../backend';
-import { useUserData } from '../UserContext';  // Import the context hook
-import { getRestaurantRecommendations } from '../backend'; // Assuming this function fetches the restaurants
+import { useUserData } from '../UserContext';
+import { getRestaurantRecommendations } from '../backend';
+import LottieView from 'lottie-react-native';
 
 
 import places from '../assets/images/places.jpg';
@@ -24,68 +25,46 @@ import heart from '../assets/images/heart.jpg';
 const Stack = createStackNavigator();
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
+
   return (
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen 
-        name="Home" 
-        component={HomeScreen} 
-        options={{ headerShown: false }} 
+        name="Home"
+        component={HomeScreen}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
 }
 
-function HomeScreen({ navigation }) {
+function HomeScreen({navigation}) {
+  const [loading, setLoading] = useState(true);
+
   const header = "Explore";
   const [userData, setUserData] = useState('');
   const [idToken, setIdToken] = useState(null);
-  const { setRestaurants } = useUserData(); // Access setRestaurants from the context
-
-
-
+  const { setRestaurants } = useUserData();
+  
   useEffect(() => {
-    getIdToken()
-      .then(token => {
+    async function fetchData() {
+      try {
+        const token = await getIdToken();
         console.log('HomeScreen');
         setIdToken(token);
-      })
-      .catch(error => {
-        console.error('Error getting ID token:', error);
-      });
-  }, []);
-  
-  const fetchUserData = async () => {
-    try {
-      if (idToken) {
-        const response = await getUser(idToken);
-        setUserData(response);
-        
-      }
-    } catch (error) {
-      console.error('Error fetching user data:', error.message);
-    }
-  };
-
-
-
-  useEffect(() => {
-    fetchUserData(); // Call the fetchUserData function to update the userData state
-  }, [idToken]);
-
-  useEffect(() => {
-    const fetchRestaurants = async () => {
-      try {
-        const recommendedRestaurants = await getRestaurantRecommendations(userData, idToken);
-        setRestaurants(recommendedRestaurants);
+        if (token) {
+          const user = await getUser(token);
+          setUserData(user);
+          const restaurants = await getRestaurantRecommendations(user, token);
+          setRestaurants(restaurants);
+        }
+        setLoading(false);
       } catch (error) {
-        console.error('Error fetching restaurants:', error);
+        console.error(error);
       }
-    };
-    
-    if(idToken) {
-      fetchRestaurants();
     }
-  }, [idToken]);
+    fetchData();
+  }, []);
 
 
   const thumbnails = [
@@ -109,6 +88,20 @@ function HomeScreen({ navigation }) {
     { key: '1', name: userName , image: 'https://via.placeholder.com/100' },
     { key: '2', name: 'User2', image: 'https://via.placeholder.com/100' },
   ];
+
+  if (loading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
+        <LottieView 
+          source={require('../assets/loading.json')} 
+          autoPlay 
+          loop 
+        />
+      </View>
+    );
+  }
+  
+  
 
   return (
     <LinearGradient 
