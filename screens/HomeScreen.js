@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, FlatList, StyleSheet } from 'react-native';
 import { getIdToken} from '../firebase';
 import Swiper from 'react-native-swiper';
-import thumbnail1 from '../assets/images/thumbnail.png';
-import action2 from '../assets/images/compatibility-quiz.png';
-import thumbnail3 from '../assets/images/new-feature.png';
+import notificationPurple from '../assets/images/notificationPurple.png';
+import wingmanChat from '../assets/images/wingmanChat.png';
+import FeatureSoon from '../assets/images/FeatureSoon.png';
 import { LinearGradient } from 'expo-linear-gradient';
 import SansFont from '../SansFont';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -95,9 +95,9 @@ function HomeScreen({ navigation }) {
   ];
 
   const buttonSets = [
-    { key: '1', thumbnail: thumbnail1 , thumbnailWidth: '40%', buttons: ['I love you', "I'm sad", "I'm horny"], showButtons: true },
-    { key: '2', thumbnail: action2 , thumbnailWidth: '100%', showButtons: false },
-    { key: '3', thumbnail: thumbnail3, thumbnailWidth: '100%', showButtons: false },
+    { key: '1', thumbnail: notificationPurple , thumbnailWidth: '40%', buttons: ['I love you', "I'm sad", "I'm horny"], showButtons: true },
+    { key: '2', thumbnail: wingmanChat , thumbnailWidth: '100%', showButtons: false },
+    { key: '3', thumbnail: FeatureSoon, thumbnailWidth: '100%', showButtons: false },
   ];
 
   const userName = userData ? userData.name : '';
