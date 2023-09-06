@@ -151,8 +151,6 @@ async function getFavoriteRestaurants(firebaseToken) {
   }
 }
 
-// ...
-
 const GetSpicyQuestions = async (firebaseToken) => {
   try {
       const response = await axios.get(`${API_URL}/getSpicyQuestions`, {
@@ -222,6 +220,22 @@ const GetPartnerSpicyAnswers = async (firebaseToken) => {
   }
 }
 
-// ... [your other functions]
+async function deleteUser(firebaseToken) {
+  try {
+      const response = await axios.delete(`${API_URL}/deleteUser`, {
+          headers: {
+              Authorization: `${firebaseToken}`
+          }
+      });
+      console.log(response.data);
+      return response.data;
+  } catch (error) {
+      console.error('Error deleting user:', error.message);
+      if (error.response) {
+          console.error('Response:', error.response.data);
+      }
+      throw error;
+  }
+}
 
-export { updateUser, initializeUser, getUser, getRestaurantRecommendations, checkUserExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions };
+export { updateUser, initializeUser, getUser, deleteUser, getRestaurantRecommendations, checkUserExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions };

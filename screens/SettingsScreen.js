@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Button, Text, Alert, StyleSheet, TextInput, Modal, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { logout } from '../firebase';
-import { updateUser } from '../backend'; // Import the updateUser function
+import { updateUser, deleteUser } from '../backend'; // Import the updateUser function
 import SansFont from '../SansFont';
 import { getIdToken } from '../firebase';
 import { useUserData } from '../UserContext';
@@ -31,6 +31,37 @@ export default function SettingsScreen() {
       Alert.alert('Logout Error', 'There was an error logging out. Please try again.');
     }
   };
+
+  const handleDeleteUser = async () => {
+    try {
+      // Confirm with the user
+      Alert.alert(
+        'Delete Account',
+        'Are you sure you want to delete your account? This action cannot be undone.',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => {},
+            style: 'cancel',
+          },
+          {
+            text: 'Delete',
+            onPress: async () => {
+              await deleteUser(idToken);
+              // Log the user out and navigate to a login or landing page after deletion
+              logout();
+              navigation.navigate('Login'); // Assuming there's a 'Login' route
+            }
+          }
+        ]
+      );
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      Alert.alert('Error', 'There was an error deleting your account. Please try again later.');
+    }
+  };
+
+
 
   const handleSave = async () => {
     if (username) {
@@ -65,8 +96,12 @@ export default function SettingsScreen() {
       >
         {/* Rest of the modal content */}
       </Modal>
+
+      <Button title="Delete User" onPress={handleDeleteUser} color={'black'} />
+
       <Button title="Logout" onPress={handleLogout} color="red" />
-    </View>
+    
+</View>
   );
 }
 
