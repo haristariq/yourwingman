@@ -96,7 +96,7 @@ function HomeScreen({ navigation }) {
 
   const buttonSets = [
     { key: '1', thumbnail: notificationPurple , thumbnailWidth: '40%', buttons: ['I love you', "I'm sad", "I'm horny"], showButtons: true },
-    { key: '2', thumbnail: wingmanChat , thumbnailWidth: '100%', showButtons: false },
+    { key: '2', thumbnail: wingmanChat, thumbnailWidth: '100%', showButtons: false, navigateTo: 'Chat' },
     { key: '3', thumbnail: FeatureSoon, thumbnailWidth: '100%', showButtons: false },
   ];
 
@@ -156,19 +156,26 @@ function HomeScreen({ navigation }) {
         <SansFont style={styles.secondTitle}>Actions</SansFont>
 
         <Swiper showsPagination loop={false} paginationStyle={{ bottom: -5 }} style={{ marginTop: 30 }}>
-          {buttonSets.map(set => (
-            <View key={set.key} style={styles.actions}>
-              <Image source={set.thumbnail} style={[styles.bottomThumbnail, { width: set.thumbnailWidth }]} />
-              {set.showButtons && (
-                <View style={styles.buttons}>
-                  {set.buttons.map(button => (
-                    <TouchableOpacity key={button} style={styles.button}><SansFont>{button}</SansFont></TouchableOpacity>
-                  ))}
-                </View>
-              )}
+    {buttonSets.map(set => (
+        <TouchableOpacity 
+            key={set.key} 
+            onPress={() => set.navigateTo && navigation.navigate(set.navigateTo)}
+            activeOpacity={set.navigateTo ? 0.7 : 1}
+        >
+            <View style={styles.actions}>
+                <Image source={set.thumbnail} style={[styles.bottomThumbnail, { width: set.thumbnailWidth }]} />
+                {set.showButtons && (
+                    <View style={styles.buttons}>
+                        {set.buttons.map(button => (
+                            <TouchableOpacity key={button} style={styles.button}><SansFont>{button}</SansFont></TouchableOpacity>
+                        ))}
+                    </View>
+                )}
             </View>
-          ))}
-        </Swiper>
+        </TouchableOpacity>
+    ))}
+</Swiper>
+
       </View>
     </LinearGradient>
   );
