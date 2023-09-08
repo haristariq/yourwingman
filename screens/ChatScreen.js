@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, FlatList, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import { Button, TextInput, Card, Title, Paragraph } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -14,6 +14,8 @@ const ChatBotScreen = () => {
   const [messages, setMessages] = useState([{role: 'system', content: 'Your helpful assistant.'}]);
   const [isTyping, setIsTyping] = useState(false);
   const [idToken, setIdToken] = useState(null); 
+  const flatListRef = useRef(null);
+
 
   useEffect(() => {
     async function fetchToken() {
@@ -44,6 +46,9 @@ const ChatBotScreen = () => {
       
       // Update the messages state to include the bot's response
       setMessages(prevMessages => [...prevMessages, { role: 'bot', content: botResponse }]);
+      if (flatListRef.current) {
+          flatListRef.current.scrollToEnd({ animated: true });
+      }
     } catch (error) {
       console.error("Error while communicating with the bot:", error);
       // Optionally, you can update the messages state to show an error message to the user
@@ -54,8 +59,8 @@ const ChatBotScreen = () => {
     setIsTyping(false);
   
     // Clear the message state to reset the input field
-    setMessage('');
-  };
+};
+
   
 
   const renderItem = ({ item }) => (
@@ -74,6 +79,7 @@ const ChatBotScreen = () => {
     >
       <View style={styles.container}>
         <FlatList
+        ref={flatListRef}
             data={messages}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
