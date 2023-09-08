@@ -38,7 +38,7 @@ export default function NameScreen({ route, navigation }) {
 
         console.log(result);
 
-        if (!result.cancelled) {
+        if (!result.canceled) {
             setImage(result.uri);
             try {
                 // Call the API to upload the photo

@@ -259,12 +259,10 @@ async function chatWithBot(userMessage, firebaseToken) {
 
 async function uploadUserPhoto(file, firebaseToken) {
   try {
-      // Create a FormData instance to hold the file
-      const formData = new FormData();
-      formData.append('file', file);
+      
 
       // Make the API call to upload the file
-      const response = await axios.post(`${API_URL}/uploadUserPhoto`, formData, {
+      const response = await axios.post(`${API_URL}/uploadUserPhoto`, file, {
           headers: {
               'Authorization': `${firebaseToken}`,
               'Content-Type': 'multipart/form-data'
