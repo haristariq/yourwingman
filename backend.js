@@ -238,4 +238,24 @@ async function deleteUser(firebaseToken) {
   }
 }
 
-export { updateUser, initializeUser, getUser, deleteUser, getRestaurantRecommendations, checkUserExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions };
+// Function to communicate with the chatbot
+async function chatWithBot(userMessage, firebaseToken) {
+  try {
+    const response = await axios.post(`${API_URL}/chat`, { message: userMessage }, {
+      headers: {
+        Authorization: `${firebaseToken}`
+      }
+    });
+    return response.data.message; 
+  } catch (error) {
+    console.error('Error communicating with chatbot:', error.message);
+    if (error.response) {
+      console.error('Response:', error.response.data);
+    }
+    throw error;
+  }
+}
+
+
+
+export { updateUser, initializeUser, getUser, deleteUser, getRestaurantRecommendations, checkUserExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions, chatWithBot };
