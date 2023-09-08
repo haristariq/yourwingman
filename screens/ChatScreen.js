@@ -42,6 +42,7 @@ const ChatBotScreen = () => {
   
     try {
       // Use the chatWithBot function to get the bot's response
+      console.log(message);
       const botResponse = await chatWithBot(message, idToken);
       
       // Update the messages state to include the bot's response
@@ -59,6 +60,7 @@ const ChatBotScreen = () => {
     setIsTyping(false);
   
     // Clear the message state to reset the input field
+    setMessage('');
 };
 
   
