@@ -257,5 +257,30 @@ async function chatWithBot(userMessage, firebaseToken) {
 }
 
 
+async function uploadUserPhoto(file, firebaseToken) {
+  try {
+      // Create a FormData instance to hold the file
+      const formData = new FormData();
+      formData.append('file', file);
 
-export { updateUser, initializeUser, getUser, deleteUser, getRestaurantRecommendations, checkUserExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions, chatWithBot };
+      // Make the API call to upload the file
+      const response = await axios.post(`${API_URL}/uploadUserPhoto`, formData, {
+          headers: {
+              'Authorization': `${firebaseToken}`,
+              'Content-Type': 'multipart/form-data'
+          }
+      });
+
+      console.log(response.data);
+      return response.data;  // This should return the image URL if successful
+  } catch (error) {
+      console.error('Error uploading profile photo:', error.message);
+      if (error.response) {
+          console.error('Response:', error.response.data);
+      }
+      throw error;
+  }
+}
+
+
+export { uploadUserPhoto ,updateUser, initializeUser, getUser, deleteUser, getRestaurantRecommendations, checkUserExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions, chatWithBot };

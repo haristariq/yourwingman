@@ -3,14 +3,21 @@ import { TextInput, TouchableOpacity, View, Text, StyleSheet, KeyboardAvoidingVi
 import { LinearGradient } from 'expo-linear-gradient';
 import SansFont from '../SansFont';
 import { getIdToken } from '../firebase';
+import { uploadUserPhoto } from '../backend';
+import * as ImagePicker from 'expo-image-picker';
 
-// Import your logo image
+
+// Function to handle photo upload
+    
 import LogoImage from '../assets/images/White-Heart.png';
 
 export default function NameScreen({ route, navigation }) {
     const { phoneNumber } = route.params;
     const [name, setName] = useState('');
     const [idToken, setIdToken] = useState(null);
+    const [image, setImage] = useState(null);
+    const [uploadSuccess, setUploadSuccess] = useState(false);
+
 
     useEffect(() => {
         getIdToken().then(token => {
@@ -20,6 +27,31 @@ export default function NameScreen({ route, navigation }) {
             console.error('Error getting ID token:', error);
         });
     }, []);
+
+    const handleUploadPhoto = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.cancelled) {
+            setImage(result.uri);
+            try {
+                // Call the API to upload the photo
+                const response = await uploadUserPhoto(result.uri, idToken);
+                console.log('Uploaded Image URL:', response.imageUrl);
+                setUploadSuccess(true);
+            } catch (error) {
+                console.error('Error uploading photo:', error);
+            }
+        }
+    };
+    
+
 
     const navigateToBirthdateScreen = () => {
         if (name && idToken) {
@@ -36,7 +68,10 @@ export default function NameScreen({ route, navigation }) {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={{ flex: 1 }}
         >
-            <LinearGradient colors={['#A833E1', '#EC32A3']} style={styles.container}>
+            
+
+
+<LinearGradient colors={['#A833E1', '#EC32A3']} style={styles.container}>
                 {/* Logo */}
                 <Image source={LogoImage} style={styles.logo} />
 
@@ -44,6 +79,10 @@ export default function NameScreen({ route, navigation }) {
                 <SansFont style={styles.title}>YourWingman</SansFont>
 
                 <SansFont style={styles.phone}>What's your name?</SansFont>
+                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+{uploadSuccess && <Text>Photo uploaded successfully!</Text>}
+
+
 
                 <TextInput
                     style={styles.input}
@@ -51,6 +90,11 @@ export default function NameScreen({ route, navigation }) {
                     value={name}
                     onChangeText={setName}
                 />
+                
+                <TouchableOpacity style={styles.button} onPress={handleUploadPhoto}>
+                <SansFont style={styles.buttonText}>Upload Photo</SansFont>
+</TouchableOpacity>
+
                 <TouchableOpacity style={styles.button} onPress={navigateToBirthdateScreen}>
                     <SansFont style={styles.buttonText}>Next</SansFont>
                 </TouchableOpacity>
