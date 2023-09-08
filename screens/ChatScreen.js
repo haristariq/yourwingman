@@ -7,7 +7,6 @@ import axios from 'axios';
 import SansFont from '../SansFont';
 import { chatWithBot } from '../backend';
 import { getIdToken } from '../firebase';
-import LottieView from 'lottie-react-native';
 
 
 const ChatBotScreen = () => {
@@ -81,7 +80,7 @@ const ChatBotScreen = () => {
             contentContainerStyle={styles.chatBox}
         />
 
-        {isTyping && <ActivityIndicator size="large" color="#0000ff" />}
+        {isTyping && <ActivityIndicator size="large" color="purple" />}
 
         <View style={styles.inputContainer}>
           <TextInput 
