@@ -42,7 +42,7 @@ export default function NameScreen({ route, navigation }) {
             setImage(result.uri);
             try {
                 // Call the API to upload the photo
-                const response = await uploadUserPhoto(result.uri, idToken);
+                const response = await uploadUserPhoto(result, idToken);
                 console.log('Uploaded Image URL:', response.imageUrl);
                 setUploadSuccess(true);
             } catch (error) {
