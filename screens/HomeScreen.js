@@ -12,7 +12,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import PlacesToGo from './PlacesToGo';
 import SpicyTime from './SpicyTime';
 import HeartScreen from './HeartScreen';
-import { getUser } from '../backend';
+import { getUser, getUserPhoto } from '../backend';
 import { useUserData } from '../UserContext';
 import { getRestaurantRecommendations } from '../backend';
 import LottieView from 'lottie-react-native';
@@ -42,6 +42,7 @@ function HomeScreen({navigation}) {
   const [loading, setLoading] = useState(true);
 
   const header = "Explore";
+
   const [userData, setUserData] = useState('');
   const [idToken, setIdToken] = useState(null);
   const { setRestaurants } = useUserData();
@@ -54,6 +55,11 @@ function HomeScreen({navigation}) {
         setIdToken(token);
         if (token) {
           const user = await getUser(token);
+
+        // Fetch user photo
+        const photoData = await getUserPhoto(token);
+        setUserData(prevData => ({ ...prevData, profilePhotoUrl: photoData.imageUrl }));
+
           setUserData(user);
           const restaurants = await getRestaurantRecommendations(user, token);
           setRestaurants(restaurants);
@@ -85,7 +91,7 @@ function HomeScreen({navigation}) {
 
 
   const users = [
-    { key: '1', name: userName , image: 'https://via.placeholder.com/100' },
+    { key: '1', name: userName , image: userData.profilePhotoUrl ? userData.profilePhotoUrl : 'https://via.placeholder.com/100' },
     { key: '2', name: 'User2', image: 'https://via.placeholder.com/100' },
   ];
 

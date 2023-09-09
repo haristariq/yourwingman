@@ -301,5 +301,26 @@ async function uploadUserPhoto(imageUri, firebaseToken) {
 }
 
 
+async function getUserPhoto(firebaseToken) {
+  try {
+    const response = await axios.get(`${API_URL}/getUserPhoto`, {
+      headers: {
+        Authorization: `${firebaseToken}`
+      }
+    });
 
-export { uploadUserPhoto ,updateUser, initializeUser, getUser, deleteUser, getRestaurantRecommendations, checkUserExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions, chatWithBot };
+    const userPhoto = response.data;
+
+    console.log('User photo data:', userPhoto); 
+    return userPhoto;
+  } catch (error) {
+    console.error('Error getting user photo:', error.message);
+    if (error.response) {
+      console.error('Response:', error.response.data);
+    }
+    throw error; 
+  }
+}
+
+
+export { uploadUserPhoto , getUserPhoto ,updateUser, initializeUser, getUser, deleteUser, getRestaurantRecommendations, checkUserExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions, chatWithBot };
