@@ -16,6 +16,8 @@ import { getUser, getUserPhoto } from '../backend';
 import { useUserData } from '../UserContext';
 import { getRestaurantRecommendations } from '../backend';
 import LottieView from 'lottie-react-native';
+import { uploadUserPhoto } from '../backend';
+import * as ImagePicker from 'expo-image-picker';
 
 
 import places from '../assets/images/places.jpg';
@@ -46,6 +48,34 @@ function HomeScreen({navigation}) {
   const [userData, setUserData] = useState('');
   const [idToken, setIdToken] = useState(null);
   const { setRestaurants } = useUserData();
+  
+    const handleUploadPhoto = async () => {
+        if (!idToken) {
+            console.error('ID token is not available.');
+            return;
+        }
+    
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImage(result.uri);
+    
+            try {
+                const uploadResponse = await uploadUserPhoto(result.uri, idToken);
+                if (uploadResponse && uploadResponse.imageUrl) {
+                    setUserData(prevData => ({ ...prevData, profilePhotoUrl: uploadResponse.imageUrl }));
+                }
+            } catch (error) {
+                console.error('Error uploading photo:', error);
+            }
+        }
+    };
+
   
   useEffect(() => {
     async function fetchData() {

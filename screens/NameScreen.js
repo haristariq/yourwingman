@@ -29,38 +29,6 @@ export default function NameScreen({ route, navigation }) {
     }, []);
 
     
-    const handleUploadPhoto = async () => {
-        if (!idToken) {
-            console.error('ID token is not available.');
-            return;
-        }
-    
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        console.log(result);
-    
-        if (!result.canceled) {
-            setImage(result.uri);
-            console.log(result.uri);
-    
-            try {
-                console.log('calling call');
-
-                const uploadResponse = await uploadUserPhoto(result.uri, idToken);
-                if (uploadResponse && uploadResponse.imageUrl) {
-                    setUploadSuccess(true);
-                }
-            } catch (error) {
-                console.error('Error uploading the photo:', error.message);
-            }
-        }
-    };
-
 
     const navigateToBirthdateScreen = () => {
         if (name && idToken) {
@@ -88,8 +56,6 @@ export default function NameScreen({ route, navigation }) {
                 <SansFont style={styles.title}>YourWingman</SansFont>
 
                 <SansFont style={styles.phone}>What's your name?</SansFont>
-                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-{uploadSuccess && <Text>Photo uploaded successfully!</Text>}
 
 
 
@@ -99,10 +65,6 @@ export default function NameScreen({ route, navigation }) {
                     value={name}
                     onChangeText={setName}
                 />
-                
-                <TouchableOpacity style={styles.button} onPress={handleUploadPhoto}>
-                <SansFont style={styles.buttonText}>Upload Photo</SansFont>
-</TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} onPress={navigateToBirthdateScreen}>
                     <SansFont style={styles.buttonText}>Next</SansFont>
