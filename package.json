@@ -41,7 +41,8 @@
     "react-native-screens": "~3.22.0",
     "react-native-swiper": "^1.6.0-rc.3",
     "react-native-webview": "13.2.2",
-    "expo-image-picker": "~14.3.2"
+    "expo-image-picker": "~14.3.2",
+    "expo-file-system": "~15.4.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

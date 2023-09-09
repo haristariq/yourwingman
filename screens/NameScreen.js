@@ -28,29 +28,33 @@ export default function NameScreen({ route, navigation }) {
         });
     }, []);
 
+    
     const handleUploadPhoto = async () => {
+        if (!idToken) {
+            console.error('ID token is not available.');
+            return;
+        }
+    
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
         });
-
-        console.log(result);
-
-        if (!result.canceled) {
+    
+        if (!result.cancelled) {
             setImage(result.uri);
+    
             try {
-                // Call the API to upload the photo
-                const response = await uploadUserPhoto(result, idToken);
-                console.log('Uploaded Image URL:', response.imageUrl);
-                setUploadSuccess(true);
+                const uploadResponse = await uploadUserPhoto(result.uri, idToken);
+                if (uploadResponse && uploadResponse.imageUrl) {
+                    setUploadSuccess(true);
+                }
             } catch (error) {
-                console.error('Error uploading photo:', error);
+                console.error('Error uploading the photo:', error.message);
             }
         }
     };
-    
 
 
     const navigateToBirthdateScreen = () => {

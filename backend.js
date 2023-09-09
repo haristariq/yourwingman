@@ -257,28 +257,39 @@ async function chatWithBot(userMessage, firebaseToken) {
 }
 
 
-async function uploadUserPhoto(file, firebaseToken) {
-  try {
-      
+async function uploadUserPhoto(imageUri, firebaseToken) {
+  const formData = new FormData();
 
-      // Make the API call to upload the file
-      const response = await axios.post(`${API_URL}/uploadUserPhoto`, file, {
+  // Convert the image URI to a blob which can be sent as FormData
+  console.log('backend.js');
+  console.log(imageUri);
+  const response = await fetch(imageUri);
+  console.log(response);
+  const blob = await response.blob();
+  console.log(blob);
+  formData.append('image', blob);
+  console.log(formData);
+
+  try {
+      const uploadResponse = await axios.post(`${API_URL}/uploadUserPhoto`, formData, {
           headers: {
               'Authorization': `${firebaseToken}`,
               'Content-Type': 'multipart/form-data'
           }
       });
 
-      console.log(response.data);
-      return response.data;  // This should return the image URL if successful
+      console.log('Upload photo response:', uploadResponse.data);
+      return uploadResponse.data;
+
   } catch (error) {
-      console.error('Error uploading profile photo:', error.message);
+      console.error('Error uploading user photo:', error.message);
       if (error.response) {
           console.error('Response:', error.response.data);
       }
       throw error;
   }
 }
+
 
 
 export { uploadUserPhoto ,updateUser, initializeUser, getUser, deleteUser, getRestaurantRecommendations, checkUserExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions, chatWithBot };
