@@ -260,31 +260,41 @@ async function chatWithBot(userMessage, firebaseToken) {
 async function uploadUserPhoto(imageUri, firebaseToken) {
   const formData = new FormData();
 
-  // Convert the image URI to a blob which can be sent as FormData
-  console.log('backend.js');
-  console.log(imageUri);
+  // Logging the imageUri received
+  console.log('backend.js - Received imageUri:', imageUri);
+
+  // Convert the image URI to a blob
   const response = await fetch(imageUri);
-  console.log(response);
+  console.log('backend.js - Fetch response:', response);
+  
   const blob = await response.blob();
-  console.log(blob);
-  formData.append('image', blob);
-  console.log(formData);
+  console.log('backend.js - Converted imageUri to blob:', blob);
+
+  // Convert blob to a File object
+  const imageFile = new File([blob], "uploadedImage.jpg", { type: blob.type });
+  console.log('backend.js - Converted blob to File:', imageFile);
+
+  // Append the File object to the FormData
+  formData.append('image', imageFile);
+  //formData.append('image', { name: 'photo.jpg', uri: imageUri, type: 'image/jpeg',}};
+
+  console.log('backend.js - Appended File to formData:', formData);
 
   try {
       const uploadResponse = await axios.post(`${API_URL}/uploadUserPhoto`, formData, {
           headers: {
-              'Authorization': `${firebaseToken}`,
+              Authorization: `${firebaseToken}`,
               'Content-Type': 'multipart/form-data'
           }
       });
 
-      console.log('Upload photo response:', uploadResponse.data);
+      console.log('backend.js - Upload photo response:', uploadResponse.data);
       return uploadResponse.data;
 
   } catch (error) {
-      console.error('Error uploading user photo:', error.message);
+      console.error('backend.js - Error uploading user photo:', error.message);
       if (error.response) {
-          console.error('Response:', error.response.data);
+          console.error('backend.js - Server response:', error.response.data);
       }
       throw error;
   }

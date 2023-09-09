@@ -41,11 +41,16 @@ export default function NameScreen({ route, navigation }) {
             aspect: [4, 3],
             quality: 1,
         });
+
+        console.log(result);
     
-        if (!result.cancelled) {
+        if (!result.canceled) {
             setImage(result.uri);
+            console.log(result.uri);
     
             try {
+                console.log('calling call');
+
                 const uploadResponse = await uploadUserPhoto(result.uri, idToken);
                 if (uploadResponse && uploadResponse.imageUrl) {
                     setUploadSuccess(true);
