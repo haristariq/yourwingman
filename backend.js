@@ -275,8 +275,9 @@ async function uploadUserPhoto(imageUri, firebaseToken) {
   console.log('backend.js - Converted blob to File:', imageFile);
 
   // Append the File object to the FormData
-  formData.append('image', imageFile);
-  //formData.append('image', { name: 'photo.jpg', uri: imageUri, type: 'image/jpeg',}};
+  //formData.append('image', imageFile);
+  formData.append('image', { name: 'photo.jpg', uri: imageUri, type: 'image/jpeg',
+});
 
   console.log('backend.js - Appended File to formData:', formData);
 
@@ -288,8 +289,7 @@ async function uploadUserPhoto(imageUri, firebaseToken) {
           }
       });
 
-      console.log('backend.js - Upload photo response:', uploadResponse.data);
-      return uploadResponse.data;
+      console.log('backend.js - Upload photo response:');
 
   } catch (error) {
       console.error('backend.js - Error uploading user photo:', error.message);
