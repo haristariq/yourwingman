@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
-import { getIdToken } from '../firebase';
+import { getIdToken, logout } from '../firebase';
 import Swiper from 'react-native-swiper';
 import notificationPurple from '../assets/images/notificationPurple.png';
 import wingmanChat from '../assets/images/wingmanChat.png';
@@ -16,7 +16,7 @@ import { getUser, getUserPhoto } from '../backend';
 import { useUserData } from '../UserContext';
 import { getRestaurantRecommendations } from '../backend';
 import LottieView from 'lottie-react-native';
-import { uploadUserPhoto } from '../backend';
+import { uploadUserPhoto, checkUserExists } from '../backend';
 import * as ImagePicker from 'expo-image-picker';
 
 import places from '../assets/images/places.jpg';
@@ -48,6 +48,7 @@ function HomeScreen({ navigation }) {
   const [idToken, setIdToken] = useState(null);
   const { setRestaurants } = useUserData();
 
+
   const handleUploadPhoto = async () => {
     if (!idToken) {
       console.error('ID token is not available.');
@@ -76,29 +77,39 @@ function HomeScreen({ navigation }) {
   };
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const token = await getIdToken();
-        console.log('HomeScreen');
-        setIdToken(token);
-        if (token) {
-          const user = await getUser(token);
+    async function checkAndFetchData() {
+      // First, check user status
+      const token = await getIdToken();
+      const userExists = await checkUserExists(token);
 
-          // Fetch user photo
-          const photoData = await getUserPhoto(token);
-          setUserData(prevData => ({ ...prevData, profilePhotoUrl: photoData.imageUrl }));
-
-          setUserData(user);
-          const restaurants = await getRestaurantRecommendations(user, token);
-          setRestaurants(restaurants);
-        }
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
+      if (!userExists) {
+          logout();
+          navigation.navigate('Login'); // Assuming there's a 'Login' route
+          return; // Exit the function early if the user doesn't exist
       }
+
+      // If userExists is true, proceed to fetch data
+      console.log('HomeScreen');
+      setIdToken(token);
+
+      const user = await getUser(token);
+
+      // Fetch user photo
+      const photoData = await getUserPhoto(token);
+      if (photoData && photoData.imageUrl) {
+          setUserData(prevData => ({ ...prevData, profilePhotoUrl: photoData.imageUrl }));
+      }
+
+      setUserData(user);
+      const restaurants = await getRestaurantRecommendations(user, token);
+      setRestaurants(restaurants);
+
+      setLoading(false);
     }
-    fetchData();
-  }, []);
+    checkAndFetchData();
+}, []);
+
+
 
   const thumbnails = [
     { key: '1', text: 'Food Spots', navigateTo: 'HeartScreen', image: food },
@@ -116,8 +127,8 @@ function HomeScreen({ navigation }) {
   const locationed = userData ? userData.location : '';
 
   const users = [
-    { key: '1', name: userName, image: userData.profilePhotoUrl ? userData.profilePhotoUrl : 'https://via.placeholder.com/100' },
-    { key: '2', name: 'Partner', image: 'https://via.placeholder.com/100' },
+    { key: '1', name: userName, image: userData.profilePhotoUrl ? userData.profilePhotoUrl : 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/AmercianHeartMonth-1-300x300.jpg?alt=media&token=8d8b2e04-c203-48d5-bac0-4cd18e84e270' },
+    { key: '2', name: 'Partner', image: 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/AmercianHeartMonth-1-300x300.jpg?alt=media&token=8d8b2e04-c203-48d5-bac0-4cd18e84e270' },
   ];
 
   return (

@@ -3,11 +3,9 @@ import { TextInput, TouchableOpacity, View, Text, StyleSheet, KeyboardAvoidingVi
 import { LinearGradient } from 'expo-linear-gradient';
 import SansFont from '../SansFont';
 import { getIdToken } from '../firebase';
-import { uploadUserPhoto } from '../backend';
-import * as ImagePicker from 'expo-image-picker';
 
 
-// Function to handle photo upload
+
     
 import LogoImage from '../assets/images/White-Heart.png';
 
@@ -15,8 +13,7 @@ export default function NameScreen({ route, navigation }) {
     const { phoneNumber } = route.params;
     const [name, setName] = useState('');
     const [idToken, setIdToken] = useState(null);
-    const [image, setImage] = useState(null);
-    const [uploadSuccess, setUploadSuccess] = useState(false);
+
 
 
     useEffect(() => {

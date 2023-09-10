@@ -1,11 +1,12 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { getUser } from './backend';  // adjust path to your backend file
-import { getIdToken } from './firebase';  // adjust path to your firebase file
-import { auth } from './firebase';
+import { getIdToken, auth } from './firebase';  // adjust path to your firebase file
 
 const UserDataContext = createContext();
 
 export const UserDataProvider = ({ children }) => {
+  console.log("[UserDataContext] Initializing state...");
+
   const [userData, setUserData] = useState({
     username: 'Name',
     birthday: 'yyyy-dd-mm',
@@ -17,29 +18,36 @@ export const UserDataProvider = ({ children }) => {
     partner_number: '+12223456789',
     location: 'LA'
   });
-
   const [restaurants, setRestaurants] = useState([]);
-  const [confirmationResult, setConfirmationResult] = useState(null); // Added state for restaurants
+  const [confirmationResult, setConfirmationResult] = useState(null);
 
   // Fetch user data when the component is mounted
   useEffect(() => {
     const fetchData = async () => {
-      // Check if user is authenticated before proceeding
-      if (auth.currentUser) {
-        try {
-          const token = await getIdToken();
-          const fetchedData = await getUser(token);
-          console.log("Fetched User Data:", fetchedData);
-          setUserData(fetchedData);
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        }
+      console.log("[UserDataContext] Checking authentication status...");
+
+      if (!auth.currentUser) {
+        console.log("[UserDataContext] No authenticated user found.");
+        return; 
+      }
+
+      console.log("[UserDataContext] User is authenticated. Fetching token...");
+
+      try {
+        const token = await getIdToken();
+        console.log("[UserDataContext] Token fetched:", token);
+
+        console.log("[UserDataContext] Fetching user data...");
+
+      } catch (error) {
+        console.error("[UserDataContext] Error:", error);
       }
     };
 
     fetchData();
-}, []);
+  }, []);
 
+  console.log("[UserDataContext] Rendering Provider...");
 
   return (
     <UserDataContext.Provider value={{ userData, setUserData, restaurants, setRestaurants, confirmationResult, setConfirmationResult }}>
@@ -49,5 +57,6 @@ export const UserDataProvider = ({ children }) => {
 }
 
 export const useUserData = () => {
+  console.log("[UserDataContext] useUserData hook called.");
   return useContext(UserDataContext);
 }
