@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, Linking, Dimensions, P
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import SansFont from '../SansFont';
+import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient from expo-linear-gradient
 
 const RestaurantDetailsScreen = ({ route }) => {
   const { restaurant } = route.params;
@@ -19,7 +20,6 @@ const RestaurantDetailsScreen = ({ route }) => {
     }
   }
   
-
   const handleMap = () => { 
     const address = encodeURIComponent(restaurant.address); // Ensure address is URL-safe
   
@@ -32,7 +32,6 @@ const RestaurantDetailsScreen = ({ route }) => {
     Linking.openURL(url);
   }
   
-
   return (
     <View style={styles.container}>
       <Image 
@@ -52,12 +51,22 @@ const RestaurantDetailsScreen = ({ route }) => {
       </View>
       <View style={styles.buttonsContainer}>
         <TouchableOpacity onPress={handleCall} style={styles.lilacButton}>
-          <Ionicons name="call" size={30} color="white" />
-          <Text style={styles.buttonText}>Call {restaurant.phoneNumber}</Text>
+          <LinearGradient // Add LinearGradient here
+            colors={['#F63199', '#A333E5']} // Define your gradient colors
+            style={styles.iconBackground}
+          >
+            <Ionicons name="call" size={30} color="white" />
+          </LinearGradient>
+          <SansFont style={styles.buttonText}>Call {restaurant.phoneNumber}</SansFont>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleMap} style={styles.lilacButton}>
-          <Ionicons name="map" size={30} color="white" />
-          <Text style={styles.buttonText}>Map</Text>
+          <LinearGradient // Add LinearGradient here
+            colors={['#F63199', '#A333E5']} // Define your gradient colors
+            style={styles.iconBackground}
+          >
+            <Ionicons name="map" size={30} color="white" />
+          </LinearGradient>
+          <SansFont style={styles.buttonText}>Map</SansFont>
         </TouchableOpacity>
       </View>
     </View>
@@ -99,7 +108,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   lilacButton: {
-    backgroundColor: '#8A2BE2',
+    backgroundColor: 'transparent', // Remove background color
     borderRadius: 10,
     flexDirection: 'row',
     alignItems: 'center',
@@ -107,28 +116,33 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   buttonText: {
-    color: 'white',
+    color: '#A333E5', // Change text color
     marginLeft: 10,
     fontWeight: 'bold',
   },
   closeIcon: {
-      position: 'absolute',
-      top: 40,
-      left: 20,
-    
-      // For iOS
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-    
-      // For Android
-      elevation: 5,
+    position: 'absolute',
+    top: 40,
+    left: 20,
 
+    // For iOS
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
 
+    // For Android
+    elevation: 5,
+  },
+  iconBackground: {
+    width: 50, // Adjust the width and height as needed
+    height: 50,
+    borderRadius: 15, // Make it circular
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
