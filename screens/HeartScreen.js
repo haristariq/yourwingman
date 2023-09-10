@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Image, StyleSheet, Dimensions, Linking } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -10,7 +10,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getIdToken } from '../firebase';
 import { useUserData } from '../UserContext';
 import Matches from './Matches';
-import { addFavoriteRestaurant } from '../backend'; 
+import { addFavoriteRestaurant } from '../backend';
 
 const HeartScreen = () => {
   const navigation = useNavigation();
@@ -29,26 +29,46 @@ const HeartScreen = () => {
       });
   }, []);
 
-
   const onSwipeLeft = (index) => {
-    console.log("Swiped left on restaurant: ", restaurants[index].name);
+    console.log("Swiped left index:", index);
+    console.log("Swiped left on restaurant: ", restaurants[index] ? restaurants[index].name : "Restaurant not found");
   };
 
   const onSwipeRight = async (index) => {
-    console.log("Swiped right on restaurant: ", restaurants[index].name);
-    
-    if (idToken) {
-      try {
-        const response = await addFavoriteRestaurant(restaurants[index], idToken);
-        console.log('Successfully added to favorites:', response.message);
-      } catch (error) {
-        console.error('Failed to add to favorites:', error.message);
+    console.log("Swiped right index:", index);
+    console.log("Restaurants:", restaurants);
+    if (restaurants && restaurants[index]) {
+      console.log("Swiped right on restaurant: ", restaurants[index].name);
+
+      if (idToken) {
+        try {
+          const response = await addFavoriteRestaurant(restaurants[index], idToken);
+          console.log('Successfully added to favorites:', response.message);
+        } catch (error) {
+          console.error('Failed to add to favorites:', error.message);
+        }
       }
+    } else {
+      console.log("No restaurant at this index.");
     }
   };
 
-  const onBook = (index) => {
-    console.log("Booked restaurant: ", restaurants[index].name);
+  const onBook = async (index) => {
+    console.log("Booked index:", index);
+    console.log("Restaurants:", restaurants);
+    if (restaurants && restaurants[index]) {
+      console.log("Booked restaurant: ", restaurants[index].name);
+      let phoneNumber = restaurants[index].formatted_phone_number;
+      phoneNumber = phoneNumber.replace(/\D/g, '');
+    
+      if (phoneNumber) {
+        Linking.openURL(`tel:${phoneNumber}`).catch(err => {
+          console.error("Failed to dial the number:", err);
+        });
+      }
+    } else {
+      console.log("No restaurant at this index.");
+    }
   };
 
   return (
@@ -74,9 +94,9 @@ const HeartScreen = () => {
   backgroundColor="white" 
   color="#A833E1" 
   size={30} 
-  onPress={() => onSwipeRight(swiperRef.current.state.index)}
+  onPress={() => swiperRef.current.swipeRight()}
 />
-                  <Icon.Button name="phone" backgroundColor="white" color="#A833E1" size={30} onPress={() => onBook(swiperRef.current.state.index)} />
+                  <Icon.Button name="phone" backgroundColor="white" color="#A833E1" size={30} onPress={() => onBook(swiperRef.current.state.firstCardIndex)} />
                 </View>
               </View>
             )}
