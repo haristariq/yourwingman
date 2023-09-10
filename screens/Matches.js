@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   image: {
-    width: width * 0.9,
+    width: width * 0.95,
     height: 150,
     borderRadius: 20,
   },

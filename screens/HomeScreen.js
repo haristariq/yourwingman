@@ -117,7 +117,7 @@ function HomeScreen({ navigation }) {
 
   const users = [
     { key: '1', name: userName, image: userData.profilePhotoUrl ? userData.profilePhotoUrl : 'https://via.placeholder.com/100' },
-    { key: '2', name: 'User2', image: 'https://via.placeholder.com/100' },
+    { key: '2', name: 'Partner', image: 'https://via.placeholder.com/100' },
   ];
 
   return (
