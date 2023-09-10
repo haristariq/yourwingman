@@ -105,8 +105,9 @@ function HomeScreen({navigation}) {
 
   const thumbnails = [
     { key: '1', text: 'Food Spots', navigateTo: 'HeartScreen', image: food},
-    { key: '2', text: 'Places to Go', navigateTo: 'PlacesToGo', image: places},
     { key: '3', text: 'Spicy Time', navigateTo: 'SpicyTime', image: heart},
+    { key: '2', text: 'Places to Go', navigateTo: 'PlacesToGo', image: places},
+
   ];
 
   const buttonSets = [

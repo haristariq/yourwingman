@@ -129,7 +129,7 @@ const handleScreenshot = async () => {
          
 <MaterialCommunityIcons 
     name="paperclip" 
-    size={24} 
+    size={34} 
     color="black" 
     onPress={handleScreenshot}
 />
