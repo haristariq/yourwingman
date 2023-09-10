@@ -57,7 +57,7 @@ const RestaurantDetailsScreen = ({ route }) => {
           >
             <Ionicons name="call" size={30} color="white" />
           </LinearGradient>
-          <SansFont style={styles.buttonText}>Call {restaurant.phoneNumber}</SansFont>
+          <Text style={styles.buttonText}>Call</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleMap} style={styles.lilacButton}>
           <LinearGradient // Add LinearGradient here
@@ -66,9 +66,10 @@ const RestaurantDetailsScreen = ({ route }) => {
           >
             <Ionicons name="map" size={30} color="white" />
           </LinearGradient>
-          <SansFont style={styles.buttonText}>Map</SansFont>
+          <Text style={styles.buttonText}>Map</Text>
         </TouchableOpacity>
       </View>
+      <SansFont style={styles.buttonText}>{restaurant.phoneNumber}</SansFont>
     </View>
   );
 }
@@ -103,6 +104,7 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center', // Center the text vertically
     marginTop: 20,
     width: '100%',
     paddingHorizontal: 20,
@@ -110,15 +112,16 @@ const styles = StyleSheet.create({
   lilacButton: {
     backgroundColor: 'transparent', // Remove background color
     borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: 'column', // Stack the icon and text vertically
+    alignItems: 'center', // Center the items horizontally
     paddingVertical: 10,
     paddingHorizontal: 20,
   },
   buttonText: {
     color: '#A333E5', // Change text color
-    marginLeft: 10,
+    marginTop: 5, // Add margin to separate text from icons
     fontWeight: 'bold',
+    fontSize: 16, // Adjust font size as needed
   },
   closeIcon: {
     position: 'absolute',
