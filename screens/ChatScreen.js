@@ -5,8 +5,10 @@ import { Button, TextInput, Card, Title, Paragraph } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import SansFont from '../SansFont';
-import { chatWithBot } from '../backend';
+import { chatWithBot, uploadScreenshot } from '../backend';
 import { getIdToken } from '../firebase';
+import * as ImagePicker from 'expo-image-picker';
+
 
 
 const ChatBotScreen = () => {
@@ -63,6 +65,33 @@ const ChatBotScreen = () => {
     setMessage('');
 };
 
+const handleScreenshot = async () => {
+  if (!idToken) {
+      console.error('ID token is not available.');
+      return;
+  }
+
+  let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images, // Only images
+      quality: 1,
+  });
+
+  if (!result.canceled) {
+
+      try {
+          // Use the uploadScreenshot function to send the screenshot to the server
+          const serverResponse = await uploadScreenshot(result.uri, idToken);
+          console.log('ChatScreen - Server Response', serverResponse);
+
+          // Handle the server's response
+          if (serverResponse && serverResponse.message) {
+              setMessages(prevMessages => [...prevMessages, {role: 'bot', content: serverResponse.message}]);
+          }
+      } catch (error) {
+          console.error('Error uploading screenshot:', error);
+      }
+  }
+};
   
 
   const renderItem = ({ item }) => (
@@ -97,7 +126,15 @@ const ChatBotScreen = () => {
               style={styles.input}
               placeholder="Type your message..."
           />
-         <Button 
+         
+<MaterialCommunityIcons 
+    name="paperclip" 
+    size={24} 
+    color="black" 
+    onPress={handleScreenshot}
+/>
+
+<Button 
             icon={({color}) => <MaterialCommunityIcons name="send" size={30} color={color} />} 
             mode="contained" 
             onPress={sendMessage} 
@@ -153,3 +190,7 @@ const styles = StyleSheet.create({
 });
 
 export default ChatBotScreen;
+
+
+
+

@@ -261,25 +261,25 @@ async function uploadUserPhoto(imageUri, firebaseToken) {
   const formData = new FormData();
 
   // Logging the imageUri received
-  console.log('backend.js - Received imageUri:', imageUri);
+  console.log('profilePhoto - Received imageUri:', imageUri);
 
   // Convert the image URI to a blob
   const response = await fetch(imageUri);
-  console.log('backend.js - Fetch response:', response);
+  console.log('profilePhoto - Fetch response:', response);
   
   const blob = await response.blob();
-  console.log('backend.js - Converted imageUri to blob:', blob);
+  console.log('profilePhoto - Converted imageUri to blob:', blob);
 
   // Convert blob to a File object
   const imageFile = new File([blob], "uploadedImage.jpg", { type: blob.type });
-  console.log('backend.js - Converted blob to File:', imageFile);
+  console.log('profilePhoto - Converted blob to File:', imageFile);
 
   // Append the File object to the FormData
   //formData.append('image', imageFile);
   formData.append('image', { name: 'photo.jpg', uri: imageUri, type: 'image/jpeg',
 });
 
-  console.log('backend.js - Appended File to formData:', formData);
+  console.log('profilePhoto - Appended File to formData:', formData);
 
   try {
       const uploadResponse = await axios.post(`${API_URL}/uploadUserPhoto`, formData, {
@@ -289,16 +289,61 @@ async function uploadUserPhoto(imageUri, firebaseToken) {
           }
       });
 
-      console.log('backend.js - Upload photo response:');
+      console.log('profilePhoto - Upload photo response:');
 
   } catch (error) {
-      console.error('backend.js - Error uploading user photo:', error.message);
+      console.error('profilePhoto - Error uploading user photo:', error.message);
       if (error.response) {
-          console.error('backend.js - Server response:', error.response.data);
+          console.error('profilePhoto - Server response:', error.response.data);
       }
       throw error;
   }
 }
+
+async function uploadScreenshot(imageUri, firebaseToken) {
+    const formData = new FormData();
+  
+    // Logging the imageUri received
+    console.log('Screenshot - Received imageUri:', imageUri);
+  
+    // Convert the image URI to a blob
+    const response = await fetch(imageUri);
+    console.log('Screenshot - Fetch response:', response);
+    
+    const blob = await response.blob();
+    console.log('Screenshot - Converted imageUri to blob:', blob);
+  
+    // Convert blob to a File object
+    const imageFile = new File([blob], "uploadedImage.jpg", { type: blob.type });
+    console.log('Screenshot - Converted blob to File:', imageFile);
+  
+    // Append the File object to the FormData
+    //formData.append('image', imageFile);
+    formData.append('image', { name: 'photo.jpg', uri: imageUri, type: 'image/jpeg',
+  });
+  
+    console.log('Screenshot - Appended File to formData:', formData);
+  
+    try {
+        const uploadResponse = await axios.post(`${API_URL}/screenshotReader`, formData, {
+            headers: {
+                Authorization: `${firebaseToken}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+  
+        console.log('Screenshot - Upload photo response:', uploadResponse.data);
+        return uploadResponse.data;
+        
+  
+    } catch (error) {
+        console.error('Screenshot - Error uploading user photo:', error.message);
+        if (error.response) {
+            console.error('Screenshot - Server response:', error.response.data);
+        }
+        throw error;
+    }
+  }
 
 
 async function getUserPhoto(firebaseToken) {
@@ -323,4 +368,7 @@ async function getUserPhoto(firebaseToken) {
 }
 
 
-export { uploadUserPhoto , getUserPhoto ,updateUser, initializeUser, getUser, deleteUser, getRestaurantRecommendations, checkUserExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions, chatWithBot };
+
+
+
+export { uploadScreenshot, uploadUserPhoto , getUserPhoto ,updateUser, initializeUser, getUser, deleteUser, getRestaurantRecommendations, checkUserExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions, chatWithBot };
