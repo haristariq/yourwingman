@@ -11,6 +11,8 @@ import { getIdToken } from '../firebase';
 import { useUserData } from '../UserContext';
 import Matches from './Matches';
 import { addFavoriteRestaurant } from '../backend';
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 const HeartScreen = () => {
   const navigation = useNavigation();
@@ -195,19 +197,25 @@ const HeartStack = () => {
           if (route.name === 'insideHeartScreen') {
             iconName = 'home-outline';
           } else if (route.name === 'Matches') {
-            iconName = 'play-circle-outline';
+            iconName = 'heart-outline';
           }
 
+          const gradientColors = focused ? ['#A333E5', '#F02FC2'] : ['transparent', 'transparent'];
+
           return (
-            <View
+            <LinearGradient 
+              colors={gradientColors}
               style={{
                 padding: 2,
                 borderRadius: 5,
-                backgroundColor: focused ? '#A333E5' : 'transparent',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
             >
               <Ionicons name={iconName} size={size} color={color} />
-            </View>
+            </LinearGradient>
           );
         },
         tabBarLabel: '',
@@ -220,5 +228,6 @@ const HeartStack = () => {
     </Tab.Navigator>
   );
 }
+
 
 export default HeartStack;
