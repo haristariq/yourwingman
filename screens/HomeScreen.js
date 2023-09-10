@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
-import { getIdToken} from '../firebase';
+import { getIdToken } from '../firebase';
 import Swiper from 'react-native-swiper';
 import notificationPurple from '../assets/images/notificationPurple.png';
 import wingmanChat from '../assets/images/wingmanChat.png';
@@ -19,7 +19,6 @@ import LottieView from 'lottie-react-native';
 import { uploadUserPhoto } from '../backend';
 import * as ImagePicker from 'expo-image-picker';
 
-
 import places from '../assets/images/places.jpg';
 import food from '../assets/images/food.png';
 import heart from '../assets/images/heart.jpg';
@@ -31,16 +30,16 @@ export default function App() {
 
   return (
     <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen 
+      <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
 }
 
-function HomeScreen({navigation}) {
+function HomeScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
 
   const header = "Explore";
@@ -48,35 +47,34 @@ function HomeScreen({navigation}) {
   const [userData, setUserData] = useState('');
   const [idToken, setIdToken] = useState(null);
   const { setRestaurants } = useUserData();
-  
-    const handleUploadPhoto = async () => {
-        if (!idToken) {
-            console.error('ID token is not available.');
-            return;
-        }
-    
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
 
-        if (!result.canceled) {
-            setImage(result.uri);
-    
-            try {
-                const uploadResponse = await uploadUserPhoto(result.uri, idToken);
-                if (uploadResponse && uploadResponse.imageUrl) {
-                    setUserData(prevData => ({ ...prevData, profilePhotoUrl: uploadResponse.imageUrl }));
-                }
-            } catch (error) {
-                console.error('Error uploading photo:', error);
-            }
-        }
-    };
+  const handleUploadPhoto = async () => {
+    if (!idToken) {
+      console.error('ID token is not available.');
+      return;
+    }
 
-  
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.uri);
+
+      try {
+        const uploadResponse = await uploadUserPhoto(result.uri, idToken);
+        if (uploadResponse && uploadResponse.imageUrl) {
+          setUserData(prevData => ({ ...prevData, profilePhotoUrl: uploadResponse.imageUrl }));
+        }
+      } catch (error) {
+        console.error('Error uploading photo:', error);
+      }
+    }
+  };
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -86,9 +84,9 @@ function HomeScreen({navigation}) {
         if (token) {
           const user = await getUser(token);
 
-        // Fetch user photo
-        const photoData = await getUserPhoto(token);
-        setUserData(prevData => ({ ...prevData, profilePhotoUrl: photoData.imageUrl }));
+          // Fetch user photo
+          const photoData = await getUserPhoto(token);
+          setUserData(prevData => ({ ...prevData, profilePhotoUrl: photoData.imageUrl }));
 
           setUserData(user);
           const restaurants = await getRestaurantRecommendations(user, token);
@@ -102,16 +100,14 @@ function HomeScreen({navigation}) {
     fetchData();
   }, []);
 
-
   const thumbnails = [
-    { key: '1', text: 'Food Spots', navigateTo: 'HeartScreen', image: food},
-    { key: '3', text: 'Spicy Time', navigateTo: 'SpicyTime', image: heart},
-    { key: '2', text: 'Places to Go', navigateTo: 'PlacesToGo', image: places},
-
+    { key: '1', text: 'Food Spots', navigateTo: 'HeartScreen', image: food },
+    { key: '3', text: 'Spicy Time', navigateTo: 'SpicyTime', image: heart },
+    { key: '2', text: 'Places to Go', navigateTo: 'PlacesToGo', image: places },
   ];
 
   const buttonSets = [
-    { key: '1', thumbnail: notificationPurple , thumbnailWidth: '40%', buttons: ['I love you', "I'm sad", "I'm horny"], showButtons: true },
+    { key: '1', thumbnail: notificationPurple, thumbnailWidth: '40%', buttons: ['I love you', "I'm sad", "I'm horny"], showButtons: true },
     { key: '2', thumbnail: wingmanChat, thumbnailWidth: '100%', showButtons: false, navigateTo: 'Chat' },
     { key: '3', thumbnail: FeatureSoon, thumbnailWidth: '100%', showButtons: false },
   ];
@@ -119,26 +115,21 @@ function HomeScreen({navigation}) {
   const userName = userData ? userData.name : '';
   const locationed = userData ? userData.location : '';
 
-
-
   const users = [
-    { key: '1', name: userName , image: userData.profilePhotoUrl ? userData.profilePhotoUrl : 'https://via.placeholder.com/100' },
+    { key: '1', name: userName, image: userData.profilePhotoUrl ? userData.profilePhotoUrl : 'https://via.placeholder.com/100' },
     { key: '2', name: 'User2', image: 'https://via.placeholder.com/100' },
   ];
 
-  
-  
-
   return (
-    <LinearGradient 
-      start={{ x: 0, y: 0 }} 
-      end={{ x: 1, y: 0 }} 
-      colors={['#C56AF0', '#F578C9']}  
+    <LinearGradient
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      colors={['#C56AF0', '#F578C9']}
       style={styles.container}
     >
       <View style={styles.topPart}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => { }}>
             <SansFont style={styles.buttonText}>{locationed}</SansFont>
           </TouchableOpacity>
         </View>
@@ -147,7 +138,7 @@ function HomeScreen({navigation}) {
         <View style={styles.usersContainer}>
           {users.map(user => (
             <View key={user.key} style={styles.userContainer}>
-                <SansFont style={styles.userName}>{user.name}</SansFont>
+              <SansFont style={styles.userName}>{user.name}</SansFont>
               <Image source={{ uri: user.image }} style={styles.userImage} />
             </View>
           ))}
@@ -158,53 +149,61 @@ function HomeScreen({navigation}) {
         <SansFont style={styles.title}>Easy Date</SansFont>
 
         <FlatList
-  style={styles.middlePart}
-  data={thumbnails}
-  horizontal
-  showsHorizontalScrollIndicator={false}
-  renderItem={({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate(item.navigateTo)}>
-      <View style={styles.thumbnailContainer}>
-        <Image source={item.image} style={styles.middleThumbnail} />
-        {item.key === '1' && loading && (
-          <View style={styles.lottieContainer}>
-            <LottieView 
-              source={require('../assets/loading3.json')} 
-              autoPlay 
-              loop 
-              style={styles.lottieStyle}
-            />
-          </View>
-        )}
-        <SansFont style={styles.thumbnailText}>{item.text}</SansFont>
-      </View>
-    </TouchableOpacity>
-  )}
-/>
-
+          style={styles.middlePart}
+          data={thumbnails}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => (item.key !== '2' ? navigation.navigate(item.navigateTo) : null)}
+            >
+              <View style={styles.thumbnailContainer}>
+                <Image source={item.image} style={styles.middleThumbnail} />
+                {item.key === '1' && loading && (
+                  <View style={styles.lottieContainer}>
+                    <LottieView
+                      source={require('../assets/loading3.json')}
+                      autoPlay
+                      loop
+                      style={styles.lottieStyle}
+                    />
+                  </View>
+                )}
+                {item.key === '2' && (
+                  <View style={styles.comingSoonOverlay}>
+                    <View style={styles.comingSoonBackground}>
+                      <SansFont style={styles.comingSoonText}>Coming Soon</SansFont>
+                    </View>
+                  </View>
+                )}
+                <SansFont style={styles.thumbnailText}>{item.text}</SansFont>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
 
         <SansFont style={styles.secondTitle}>Actions</SansFont>
 
         <Swiper showsPagination loop={false} paginationStyle={{ bottom: -5 }} style={{ marginTop: 30 }}>
-    {buttonSets.map(set => (
-        <TouchableOpacity 
-            key={set.key} 
-            onPress={() => set.navigateTo && navigation.navigate(set.navigateTo)}
-            activeOpacity={set.navigateTo ? 0.7 : 1}
-        >
-            <View style={styles.actions}>
+          {buttonSets.map(set => (
+            <TouchableOpacity
+              key={set.key}
+              onPress={() => set.navigateTo && navigation.navigate(set.navigateTo)}
+              activeOpacity={set.navigateTo ? 0.7 : 1}
+            >
+              <View style={styles.actions}>
                 <Image source={set.thumbnail} style={[styles.bottomThumbnail, { width: set.thumbnailWidth }]} />
                 {set.showButtons && (
-                    <View style={styles.buttons}>
-                        {set.buttons.map(button => (
-                            <TouchableOpacity key={button} style={styles.button}><SansFont>{button}</SansFont></TouchableOpacity>
-                        ))}
-                    </View>
+                  <View style={styles.buttons}>
+                    {set.buttons.map(button => (
+                      <TouchableOpacity key={button} style={styles.button}><SansFont>{button}</SansFont></TouchableOpacity>
+                    ))}
+                  </View>
                 )}
-            </View>
-        </TouchableOpacity>
-    ))}
-</Swiper>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </Swiper>
 
       </View>
     </LinearGradient>
@@ -215,7 +214,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 80, // adjust this value based on your needs
-
   },
 
   topPart: {
@@ -236,14 +234,14 @@ const styles = StyleSheet.create({
   buttonText: {
     marginLeft: 10,
     marginRight: 10,
-  }, 
-    
+  },
+
   usersContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-  marginTop: 20,
-  marginBottom: -100,
+    marginTop: 20,
+    marginBottom: -100,
   },
   userContainer: {
     alignItems: 'center',
@@ -256,13 +254,11 @@ const styles = StyleSheet.create({
   },
   userName: {
     marginBottom: 15, // adjust this value based on your needs
-
   },
 
   lilac: {
     height: 20,
     backgroundColor: '#DBD8E3', // Adjust the color to your need
-    
   },
   whiteContainer: {
     flex: 3,
@@ -280,7 +276,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     paddingTop: 10, // Move the title a bit down
-
   },
   secondTitle: {
     fontSize: 20,
@@ -318,7 +313,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
-  
   bottomPart: {
     flex: 1,
   },
@@ -326,12 +320,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: -25,
-    
   },
   buttons: {
     flexDirection: 'column',
-  justifyContent: 'space-between', // Add this
-},
+    justifyContent: 'space-between', // Add this
+  },
 
   button: {
     backgroundColor: '#FFFF',
@@ -340,15 +333,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 150,
     shadowColor: "#000",
-  shadowOffset: {
-    width: -1.9,
-    height: 2,
-  },
-  shadowOpacity: 0.23,
-  shadowRadius: 2,
-  elevation: 4,
-  marginRight: 20,
-  alignItems: 'center',
+    shadowOffset: {
+      width: -1.9,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2,
+    elevation: 4,
+    marginRight: 20,
+    alignItems: 'center',
   },
 
   lottieContainer: {
@@ -361,10 +354,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: semi-transparent background
   },
-  
+
   lottieStyle: {
     width: '97%', // Adjust as needed
     height: '97%', // Adjust as needed
   },
-  
+
+  comingSoonOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  comingSoonBackground: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Background color with transparency
+    padding: 10, // Adjust padding as needed
+    borderRadius: 10, // Adjust border radius as needed
+  },
+
+  comingSoonText: {
+    color: '#fff', // Text color
+    fontSize: 14, // Adjust font size as needed
+    fontWeight: 'bold',
+  },
 });

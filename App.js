@@ -8,10 +8,9 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-
-import SansFont from './SansFont'
+import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient from expo-linear-gradient
+import SansFont from './SansFont';
 import { UserDataProvider } from './UserContext';
-
 import LocationScreen from './screens/Location';
 import PlacesToGo from './screens/PlacesToGo';
 import SpicyTime from './screens/SpicyTime';
@@ -25,9 +24,8 @@ import VerificationScreen from './screens/VerificationScreen';
 import NameScreen from './screens/NameScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import RestaurantDetailScreen from './screens/RestaurantDetailsScreen.js';
-import SpicyAnswers from './screens/SpicyAnswers'
+import SpicyAnswers from './screens/SpicyAnswers';
 import PreferencesScreen from './screens/PreferencesScreen';
-
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -38,14 +36,11 @@ const fetchFonts = () => {
   });
 };
 
-
-
-
-
 // Define the TabNavigator component
 function TabNavigator() {
   console.log('Logged in [App.js] Rendering App component...');
-return (
+
+  return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
@@ -63,16 +58,30 @@ return (
             iconName = 'settings-outline';
           }
 
-          console.log('Changed Tab [App.js] Rendering App component...');
-return (
-            <View 
+          // Define your gradient colors here
+          const gradientColors = focused ? ['#F63199', '#A333E5'] : ['transparent', 'transparent'];
+
+          return (
+            <View
               style={{
-                padding: 2,
-                borderRadius: 5,
-                backgroundColor: focused ? '#A333E5' : 'transparent',
+                width: size + 8, // Adjust the width to accommodate the icon
+                height: size + 8, // Adjust the height to accommodate the icon
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
-              <Ionicons name={iconName} size={size} color={color} />
+              <LinearGradient
+                colors={gradientColors}
+                style={{
+                  width: size + 8, // Same as the parent View
+                  height: size + 8, // Same as the parent View
+                  borderRadius: (size - 16)/2, // Make it circular
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Ionicons name={iconName} size={size} color={color} />
+              </LinearGradient>
             </View>
           );
         },
@@ -86,7 +95,6 @@ return (
       <Tab.Screen name="Chat" component={ChatScreen} options={{ headerShown: false }}/>
       <Tab.Screen name="Play" component={PlayScreen} options={{ headerShown: false }}/>
       <Tab.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }}/>
-
     </Tab.Navigator>
   );
 }
@@ -137,10 +145,10 @@ export default function App() {
     return null;
   }
 
-  
   console.log('After useEffect [App.js] Rendering App component...');
-return (
-      <UserDataProvider>
+
+  return (
+    <UserDataProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName={user ? "Main" : "Login"}>
           <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
@@ -150,23 +158,18 @@ return (
           <Stack.Screen name="Preferences" component={PreferencesScreen} options={{ headerShown: false }} />
           <Tab.Screen name="Chat" component={ChatScreen} options={{ headerShown: false }}/>
 
-  
-        <Stack.Screen
-          name="Main"
-          options={{ headerShown: false }}
-          component={TabNavigator}
-        />
-        <Stack.Screen name="PlacesToGo" component={PlacesToGo} options={{ headerShown: false }} />
-        <Stack.Screen name="SpicyTime" component={SpicyTime} options={{ headerShown: false }} />
-        <Stack.Screen name="SpicyAnswers" component={SpicyAnswers} options={{ headerShown: false }} />
-
-        <Stack.Screen name="HeartScreen" component={HeartScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="RestaurantDetail" component={RestaurantDetailScreen} options={{ headerShown: false }} />
-
-
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen
+            name="Main"
+            options={{ headerShown: false }}
+            component={TabNavigator}
+          />
+          <Stack.Screen name="PlacesToGo" component={PlacesToGo} options={{ headerShown: false }} />
+          <Stack.Screen name="SpicyTime" component={SpicyTime} options={{ headerShown: false }} />
+          <Stack.Screen name="SpicyAnswers" component={SpicyAnswers} options={{ headerShown: false }} />
+          <Stack.Screen name="HeartScreen" component={HeartScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="RestaurantDetail" component={RestaurantDetailScreen} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </UserDataProvider>
-
   );
 }
