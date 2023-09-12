@@ -77,6 +77,7 @@ const handleScreenshot = async () => {
   });
 
   if (!result.canceled) {
+    setIsTyping(true);
 
       try {
           // Use the uploadScreenshot function to send the screenshot to the server
@@ -90,6 +91,9 @@ const handleScreenshot = async () => {
       } catch (error) {
           console.error('Error uploading screenshot:', error);
       }
+
+      setIsTyping(false);
+
   }
 };
   
@@ -127,14 +131,14 @@ const handleScreenshot = async () => {
               placeholder="Type your message..."
           />
          
-<MaterialCommunityIcons 
-    name="paperclip" 
-    size={34} 
-    color="black" 
-    onPress={handleScreenshot}
-/>
+            <MaterialCommunityIcons 
+                name="paperclip" 
+                size={34} 
+                color="black" 
+                onPress={handleScreenshot}
+            />
 
-<Button 
+            <Button 
             icon={({color}) => <MaterialCommunityIcons name="send" size={30} color={color} />} 
             mode="contained" 
             onPress={sendMessage} 
