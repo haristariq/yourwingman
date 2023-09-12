@@ -12,6 +12,9 @@ import { useUserData } from '../UserContext';
 import Matches from './Matches';
 import { addFavoriteRestaurant } from '../backend';
 import { LinearGradient } from 'expo-linear-gradient';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+
+
 
 
 const HeartScreen = () => {
@@ -90,16 +93,36 @@ const HeartScreen = () => {
                 <Image source={{ uri: card.photoUrl || placeholderImage }} style={styles.image} />
                 <SansFont style={styles.cardText}>{card.name}</SansFont>
                 <View style={styles.buttons}>
-                  <Icon.Button name="times" backgroundColor="white" color="#A833E1" size={30} onPress={() => swiperRef.current.swipeLeft()} />
-                  <Icon.Button 
-  name="heart" 
-  backgroundColor="white" 
-  color="#A833E1" 
-  size={30} 
-  onPress={() => swiperRef.current.swipeRight()}
-/>
-                  <Icon.Button name="phone" backgroundColor="white" color="#A833E1" size={30} onPress={() => onBook(swiperRef.current.state.firstCardIndex)} />
-                </View>
+            <LinearGradient 
+              colors={['#ede8e8', '#ede8e8']}
+              style={styles.iconGradient}
+              start={{ x: 1, y: 1 }}
+              end={{ x: 0, y: 0 }}
+            >
+              <Icon.Button name="times" backgroundColor="transparent" color="red" size={30}           marginLeft = {2} marginRight = {-7} marginBottom ={2} 
+onPress={() => swiperRef.current.swipeLeft()} />
+            </LinearGradient>
+            
+            <LinearGradient 
+              colors={['#A333E5', '#F02FC2']}
+              style={styles.iconGradient}
+              start={{ x: 1, y: 1 }}
+              end={{ x: 0, y: 0 }}
+            >
+              <Icon.Button name="heart" backgroundColor="transparent" color="white" size={30}           marginRight = {-9}
+onPress={() => swiperRef.current.swipeRight()} />
+            </LinearGradient>
+
+            <LinearGradient 
+              colors={['#ede8e8', '#ede8e8']}
+              style={styles.iconGradient}
+              start={{ x: 1, y: 1 }}
+              end={{ x: 0, y: 0 }}
+            >
+              <Icon.Button name="phone" backgroundColor="transparent" color="blue" size={30}           marginRight = {-7}
+onPress={() => onBook(swiperRef.current.state.firstCardIndex)} />
+            </LinearGradient>
+          </View>
               </View>
             )}
             onSwipedLeft={onSwipeLeft}
@@ -182,7 +205,17 @@ const styles = StyleSheet.create({
     bottom: 10,
     width: '100%',
     paddingHorizontal: 20,
-  },
+    alignItems: 'center', // Add this line to ensure children are centered vertically
+},
+
+iconGradient: {
+  justifyContent: 'center',
+  borderRadius: 60,
+  padding: 2,
+  alignItems: 'center',
+
+},
+
 });
 
 const Tab = createBottomTabNavigator();
