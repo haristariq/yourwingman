@@ -56,15 +56,15 @@ export default function LoginScreen({ navigation }) {
         <SansFont style={styles.welcome}>Welcome</SansFont>
         <SansFont style={styles.phone}>Let’s get your phone number first</SansFont>
 
-        <TextInput
-  style={styles.input}
-  placeholder="+1(650) 5555-3434"
-  value={phoneNumber} // Bind phoneNumber state here
-  onChangeText={text => setPhoneNumber(`+${text.replace(/\D/g, '')}`)} // Remove all non-numeric characters and prepend '+'
-  keyboardType="numeric"
-  returnKeyType="done" // Add this line
-  autoCompleteType="tel"
-/>
+         <TextInput
+        style={styles.input}
+        placeholder="+1(650) 5555-3434"
+        value={phoneNumber} // Bind phoneNumber state here
+        onChangeText={text => setPhoneNumber(`+${text.replace(/\D/g, '')}`)} // Remove all non-numeric characters and prepend '+'
+        keyboardType="numeric"
+        returnKeyType="done" // Add this line
+        autoCompleteType="tel"
+      />
         <TouchableOpacity style={styles.button} onPress={sendVerification}>
           <SansFont style={styles.buttonText}>Next</SansFont>
         </TouchableOpacity>

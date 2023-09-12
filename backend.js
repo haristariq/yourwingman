@@ -62,6 +62,29 @@ async function getUser(firebaseToken) {
   }
 }
 
+
+// Function to get user information
+async function getPartner(firebaseToken) {
+  try {
+    const response = await axios.get(`${API_URL}/getPartner`, {
+      headers: {
+        Authorization: `${firebaseToken}`
+      }
+    });
+
+    const user = response.data;
+
+    console.log('Partner data:', user); 
+    return user;
+  } catch (error) {
+    console.error('Error getting Partner info:', error.message);
+    if (error.response) {
+      console.error('Response:', error.response.data);
+    }
+    throw error; 
+  }
+}
+
 // Function to get restaurant recommendations
 // Function to get restaurant recommendations
 async function getRestaurantRecommendations(userData, firebaseToken) {
@@ -102,6 +125,29 @@ async function checkUserExists(firebaseToken) {
 
   } catch (error) {
     console.error('Error checking user existence:', error.message);
+    if (error.response) {
+      console.error('Response:', error.response.data);
+    }
+    throw error;
+  }
+}
+
+// Function to check if partner exists
+async function checkPartnerExists(firebaseToken) {
+  try {
+    const response = await axios.get(`${API_URL}/partnerExists`, {
+      headers: {
+        Authorization: `${firebaseToken}`
+      }
+    });
+
+    const { exists } = response.data; // Destructure the result from the response
+
+    console.log('Partner existence:', exists);
+    return exists;
+
+  } catch (error) {
+    console.error('Error checking partner existence:', error.message);
     if (error.response) {
       console.error('Response:', error.response.data);
     }
@@ -373,4 +419,4 @@ async function getUserPhoto(firebaseToken) {
 
 
 
-export { uploadScreenshot, uploadUserPhoto , getUserPhoto ,updateUser, initializeUser, getUser, deleteUser, getRestaurantRecommendations, checkUserExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions, chatWithBot };
+export { uploadScreenshot, uploadUserPhoto , getUserPhoto ,updateUser, initializeUser, getUser, getPartner, deleteUser, getRestaurantRecommendations, checkUserExists, checkPartnerExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions, chatWithBot };

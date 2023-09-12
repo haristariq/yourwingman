@@ -12,11 +12,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import PlacesToGo from './PlacesToGo';
 import SpicyTime from './SpicyTime';
 import HeartScreen from './HeartScreen';
-import { getUser, getUserPhoto } from '../backend';
+import { checkPartnerExists, getUser, getUserPhoto, getRestaurantRecommendations, getPartner, uploadUserPhoto, checkUserExists } from '../backend';
 import { useUserData } from '../UserContext';
-import { getRestaurantRecommendations } from '../backend';
 import LottieView from 'lottie-react-native';
-import { uploadUserPhoto, checkUserExists } from '../backend';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -45,7 +43,8 @@ function HomeScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [photoData, setPhotoData] = useState({ imageUrl: null }); // Initialize photoData
   const [photoUploaded, setPhotoUploaded] = useState(false);
-  const [partnerExists, setPartnerExists] = useState(false);
+  const [partnerData, setPartnerData] = useState(null);
+
 
 
   const header = "Explore";
@@ -90,6 +89,10 @@ function HomeScreen({ navigation }) {
     }
   };
 
+
+ 
+  
+
   useEffect(() => {
     // When the component mounts, check AsyncStorage for the previous state
     const checkPhotoUploadedState = async () => {
@@ -105,6 +108,26 @@ function HomeScreen({ navigation }) {
   
     checkPhotoUploadedState();
   }, []);
+
+
+  useEffect(() => {
+    // Existing logic ...
+
+    // Check if a partner exists
+    const checkAndFetchPartner = async () => {
+      const token = await getIdToken();
+      const partnerExists = await checkPartnerExists(token);
+      if (partnerExists) {
+        const partnerData = await getPartner(token);
+        setPartnerData(partnerData);
+
+      }
+    };
+
+    checkAndFetchPartner();
+  }, []);
+
+
 
   useEffect(() => {
     async function checkAndFetchData() {
@@ -147,6 +170,8 @@ function HomeScreen({ navigation }) {
   ];
 
   const userName = userData ? userData.name : '';
+  const partnerName = partnerData ? partnerData.name : 'Partner';
+
   const locationed = userData ? userData.location : '';
   console.log('photo beinh displayed');
 
@@ -166,7 +191,7 @@ function HomeScreen({ navigation }) {
         ? photoData.imageUrl
         : 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/Add-Button-PNG-Isolated-File.png?alt=media&token=b8b65f41-f0f0-44d7-80f0-4f6442fdb7b4',
     },
-    { key: '2', name: 'Partner', image: 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/AmercianHeartMonth-1-300x300.jpg?alt=media&token=8d8b2e04-c203-48d5-bac0-4cd18e84e270' },
+    { key: '2', name: partnerName, image: 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/AmercianHeartMonth-1-300x300.jpg?alt=media&token=8d8b2e04-c203-48d5-bac0-4cd18e84e270' },
   ];
 
   return (

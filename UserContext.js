@@ -18,6 +18,20 @@ export const UserDataProvider = ({ children }) => {
     partner_number: '+12223456789',
     location: 'LA'
   });
+
+
+  const [partnerData, setPartnerData] = useState({
+    username: 'Name',
+    birthday: 'yyyy-dd-mm',
+    preferences: { 
+      cuisine: 'Any',
+      activities: 'Any'
+    },
+    phone_number: '+12223456789',
+    partner_number: '+12223456789',
+    location: 'LA'
+  });
+
   const [restaurants, setRestaurants] = useState([]);
   const [confirmationResult, setConfirmationResult] = useState(null);
 
@@ -50,7 +64,7 @@ export const UserDataProvider = ({ children }) => {
   console.log("[UserDataContext] Rendering Provider...");
 
   return (
-    <UserDataContext.Provider value={{ userData, setUserData, restaurants, setRestaurants, confirmationResult, setConfirmationResult }}>
+    <UserDataContext.Provider value={{ userData, setUserData, partnerData, setPartnerData, restaurants, setRestaurants, confirmationResult, setConfirmationResult }}>
       {children}
     </UserDataContext.Provider>
   );
