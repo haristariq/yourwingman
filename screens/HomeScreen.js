@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, Image, FlatList, StyleSheet } from 'react-native';
 import { getIdToken, logout } from '../firebase';
 import Swiper from 'react-native-swiper';
 import notificationPurple from '../assets/images/notificationPurple.png';
@@ -48,6 +48,7 @@ function HomeScreen({ navigation }) {
   const [idToken, setIdToken] = useState(null);
   const { setRestaurants } = useUserData();
 
+  const [image, setImage] = useState(null);
 
   const handleUploadPhoto = async () => {
     if (!idToken) {
@@ -78,23 +79,19 @@ function HomeScreen({ navigation }) {
 
   useEffect(() => {
     async function checkAndFetchData() {
-      // First, check user status
       const token = await getIdToken();
       const userExists = await checkUserExists(token);
 
       if (!userExists) {
           logout();
-          navigation.navigate('Login'); // Assuming there's a 'Login' route
-          return; // Exit the function early if the user doesn't exist
+          navigation.navigate('Login');
+          return;
       }
 
-      // If userExists is true, proceed to fetch data
-      console.log('HomeScreen');
       setIdToken(token);
 
       const user = await getUser(token);
 
-      // Fetch user photo
       const photoData = await getUserPhoto(token);
       if (photoData && photoData.imageUrl) {
           setUserData(prevData => ({ ...prevData, profilePhotoUrl: photoData.imageUrl }));
@@ -107,9 +104,7 @@ function HomeScreen({ navigation }) {
       setLoading(false);
     }
     checkAndFetchData();
-}, []);
-
-
+  }, []);
 
   const thumbnails = [
     { key: '1', text: 'Food Spots', navigateTo: 'HeartScreen', image: food },
@@ -145,6 +140,10 @@ function HomeScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         <SansFont style={styles.headerName}>{header}</SansFont>
+
+        <TouchableOpacity onPress={handleUploadPhoto} style={styles.uploadButton}>
+          <SansFont style={styles.uploadButtonText}>Upload Photo</SansFont>
+        </TouchableOpacity>
 
         <View style={styles.usersContainer}>
           {users.map(user => (
@@ -215,7 +214,6 @@ function HomeScreen({ navigation }) {
             </TouchableOpacity>
           ))}
         </Swiper>
-
       </View>
     </LinearGradient>
   );
@@ -224,9 +222,8 @@ function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 80, // adjust this value based on your needs
+    paddingTop: 80,
   },
-
   topPart: {
     flex: 1,
     justifyContent: 'center',
@@ -246,7 +243,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
   },
-
   usersContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -256,47 +252,45 @@ const styles = StyleSheet.create({
   },
   userContainer: {
     alignItems: 'center',
-    marginHorizontal: -3, // adjust this value based on your needs
+    marginHorizontal: -3,
   },
   userImage: {
-    width: 80, // adjust this value based on your needs
-    height: 80, // adjust this value based on your needs
-    borderRadius: 50, // adjust this value based on your needs
+    width: 80,
+    height: 80,
+    borderRadius: 50,
   },
   userName: {
-    marginBottom: 15, // adjust this value based on your needs
+    marginBottom: 15,
   },
-
   lilac: {
     height: 20,
-    backgroundColor: '#DBD8E3', // Adjust the color to your need
+    backgroundColor: '#DBD8E3',
   },
   whiteContainer: {
     flex: 3,
     backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 50, // Adjust this value
-    borderTopRightRadius: 50, // Adjust this value
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
     paddingTop: 20,
     paddingBottom: 20,
     paddingLeft: 20,
-    paddingRight: 0, // Remove padding from the right side
+    paddingRight: 0,
   },
-
   title: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
-    paddingTop: 10, // Move the title a bit down
+    paddingTop: 10,
   },
   secondTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
-    marginTop: -40, // Move the second title a bit up
+    marginTop: -40,
   },
   middlePart: {
     flex: 1,
-    marginTop: 5, // Move thumbnails a bit down
+    marginTop: 5,
   },
   thumbnailContainer: {
     width: 120,
@@ -304,7 +298,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderRadius: 10,
     alignItems: 'center',
-    justifyContent: 'flex-end', // Change this
+    justifyContent: 'flex-end',
     overflow: 'hidden',
   },
   middleThumbnail: {
@@ -313,17 +307,15 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   thumbnailText: {
-    color: '#fff', // text color on the image
+    color: '#fff',
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
   },
-
   bottomThumbnail: {
     height: 190,
     borderRadius: 10,
   },
-
   bottomPart: {
     flex: 1,
   },
@@ -334,9 +326,8 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: 'column',
-    justifyContent: 'space-between', // Add this
+    justifyContent: 'space-between',
   },
-
   button: {
     backgroundColor: '#FFFF',
     padding: 10,
@@ -354,7 +345,6 @@ const styles = StyleSheet.create({
     marginRight: 20,
     alignItems: 'center',
   },
-
   lottieContainer: {
     position: 'absolute',
     top: 0,
@@ -363,14 +353,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: semi-transparent background
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
-
   lottieStyle: {
-    width: '97%', // Adjust as needed
-    height: '97%', // Adjust as needed
+    width: '97%',
+    height: '97%',
   },
-
   comingSoonOverlay: {
     position: 'absolute',
     top: 0,
@@ -380,16 +368,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   comingSoonBackground: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Background color with transparency
-    padding: 10, // Adjust padding as needed
-    borderRadius: 10, // Adjust border radius as needed
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 10,
+    borderRadius: 10,
   },
-
   comingSoonText: {
-    color: '#fff', // Text color
-    fontSize: 14, // Adjust font size as needed
+    color: '#fff',
+    fontSize: 14,
     fontWeight: 'bold',
   },
 });
