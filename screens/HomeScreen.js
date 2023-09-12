@@ -18,6 +18,8 @@ import { getRestaurantRecommendations } from '../backend';
 import LottieView from 'lottie-react-native';
 import { uploadUserPhoto, checkUserExists } from '../backend';
 import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 import places from '../assets/images/places.jpg';
 import food from '../assets/images/food.png';
@@ -42,6 +44,7 @@ export default function App() {
 function HomeScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [photoData, setPhotoData] = useState({ imageUrl: null }); // Initialize photoData
+  const [photoUploaded, setPhotoUploaded] = useState(false);
 
 
   const header = "Explore";
@@ -66,7 +69,14 @@ function HomeScreen({ navigation }) {
     });
 
     if (!result.canceled) {
+
       setImage(result.uri);
+      setPhotoUploaded(true);
+      try {
+        await AsyncStorage.setItem('photoUploaded', 'true'); // Store the state as a string
+      } catch (error) {
+        console.error('Error storing photoUploaded state in AsyncStorage:', error);
+      }
 
       try {
         const uploadResponse = await uploadUserPhoto(result.uri, idToken);
@@ -78,6 +88,22 @@ function HomeScreen({ navigation }) {
       }
     }
   };
+
+  useEffect(() => {
+    // When the component mounts, check AsyncStorage for the previous state
+    const checkPhotoUploadedState = async () => {
+      try {
+        const storedPhotoUploaded = await AsyncStorage.getItem('photoUploaded');
+        if (storedPhotoUploaded) {
+          setPhotoUploaded(storedPhotoUploaded === 'true'); // Convert the stored value to a boolean
+        }
+      } catch (error) {
+        console.error('Error reading photoUploaded state from AsyncStorage:', error);
+      }
+    };
+  
+    checkPhotoUploadedState();
+  }, []);
 
   useEffect(() => {
     async function checkAndFetchData() {
@@ -121,103 +147,125 @@ function HomeScreen({ navigation }) {
 
   const userName = userData ? userData.name : '';
   const locationed = userData ? userData.location : '';
+  console.log('photo beinh displayed');
+
+  if (photoUploaded) {
+    console.log('photo true');
+
+  } else {
+    console.log('photo falsr');
+
+  }
 
   const users = [
-    { key: '1', name: userName, image: photoData.imageUrl ? photoData.imageUrl : 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/AmercianHeartMonth-1-300x300.jpg?alt=media&token=8d8b2e04-c203-48d5-bac0-4cd18e84e270' },
+    {
+      key: '1',
+      name: userName,
+      image: photoUploaded
+        ? photoData.imageUrl
+        : 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/uploadcircularbutton_80223.png?alt=media&token=22aa6e44-3585-402e-be40-68472676d1b8',
+    },
     { key: '2', name: 'Partner', image: 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/AmercianHeartMonth-1-300x300.jpg?alt=media&token=8d8b2e04-c203-48d5-bac0-4cd18e84e270' },
   ];
 
   return (
-    <LinearGradient
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 0 }}
-      colors={['#C56AF0', '#F578C9']}
-      style={styles.container}
-    >
-      <View style={styles.topPart}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => { }}>
-            <SansFont style={styles.buttonText}>{locationed}</SansFont>
-          </TouchableOpacity>
-        </View>
-        <SansFont style={styles.headerName}>{header}</SansFont>
+  <LinearGradient
+    start={{ x: 0, y: 0 }}
+    end={{ x: 1, y: 0 }}
+    colors={['#C56AF0', '#F578C9']}
+    style={styles.container}
+  >
+    <View style={styles.topPart}>
+  <View style={styles.header}>
+    <TouchableOpacity onPress={() => { }}>
+      <SansFont style={styles.buttonText}>{locationed}</SansFont>
+    </TouchableOpacity>
+  </View>
+  <SansFont style={styles.headerName}>{header}</SansFont>
 
-        <TouchableOpacity onPress={handleUploadPhoto} style={styles.uploadButton}>
-          <SansFont style={styles.uploadButtonText}>Upload Photo</SansFont>
+  <View style={styles.usersContainer}>
+    {users.map(user => (
+      <View key={user.key} style={styles.userContainer}>
+                <SansFont style={styles.userName}>{user.name}</SansFont>
+
+        <TouchableOpacity
+          onPress={() => {
+            if (user.key === '1' && !photoUploaded) {
+              handleUploadPhoto();
+            }
+          }}
+          style={styles.userImageContainer}
+          disabled={user.key !== '1' || !!photoUploaded}
+        >
+          <Image source={{ uri: user.image }} style={styles.userImage} />
         </TouchableOpacity>
+      </View>
+    ))}
+  </View>
+</View>
 
-        <View style={styles.usersContainer}>
-          {users.map(user => (
-            <View key={user.key} style={styles.userContainer}>
-              <SansFont style={styles.userName}>{user.name}</SansFont>
-              <Image source={{ uri: user.image }} style={styles.userImage} />
+    <View style={styles.whiteContainer}>
+      <SansFont style={styles.title}>Easy Date</SansFont>
+
+      <FlatList
+        style={styles.middlePart}
+        data={thumbnails}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => (item.key !== '2' ? navigation.navigate(item.navigateTo) : null)}
+          >
+            <View style={styles.thumbnailContainer}>
+              <Image source={item.image} style={styles.middleThumbnail} />
+              {item.key === '1' && loading && (
+                <View style={styles.lottieContainer}>
+                  <LottieView
+                    source={require('../assets/loading3.json')}
+                    autoPlay
+                    loop
+                    style={styles.lottieStyle}
+                  />
+                </View>
+              )}
+              {item.key === '2' && (
+                <View style={styles.comingSoonOverlay}>
+                  <View style={styles.comingSoonBackground}>
+                    <SansFont style={styles.comingSoonText}>Coming Soon</SansFont>
+                  </View>
+                </View>
+              )}
+              <SansFont style={styles.thumbnailText}>{item.text}</SansFont>
             </View>
-          ))}
-        </View>
-      </View>
+          </TouchableOpacity>
+        )}
+      />
 
-      <View style={styles.whiteContainer}>
-        <SansFont style={styles.title}>Easy Date</SansFont>
+      <SansFont style={styles.secondTitle}>Actions</SansFont>
 
-        <FlatList
-          style={styles.middlePart}
-          data={thumbnails}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => (item.key !== '2' ? navigation.navigate(item.navigateTo) : null)}
-            >
-              <View style={styles.thumbnailContainer}>
-                <Image source={item.image} style={styles.middleThumbnail} />
-                {item.key === '1' && loading && (
-                  <View style={styles.lottieContainer}>
-                    <LottieView
-                      source={require('../assets/loading3.json')}
-                      autoPlay
-                      loop
-                      style={styles.lottieStyle}
-                    />
-                  </View>
-                )}
-                {item.key === '2' && (
-                  <View style={styles.comingSoonOverlay}>
-                    <View style={styles.comingSoonBackground}>
-                      <SansFont style={styles.comingSoonText}>Coming Soon</SansFont>
-                    </View>
-                  </View>
-                )}
-                <SansFont style={styles.thumbnailText}>{item.text}</SansFont>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
-
-        <SansFont style={styles.secondTitle}>Actions</SansFont>
-
-        <Swiper showsPagination loop={false} paginationStyle={{ bottom: -5 }} style={{ marginTop: 30 }}>
-          {buttonSets.map(set => (
-            <TouchableOpacity
-              key={set.key}
-              onPress={() => set.navigateTo && navigation.navigate(set.navigateTo)}
-              activeOpacity={set.navigateTo ? 0.7 : 1}
-            >
-              <View style={styles.actions}>
-                <Image source={set.thumbnail} style={[styles.bottomThumbnail, { width: set.thumbnailWidth }]} />
-                {set.showButtons && (
-                  <View style={styles.buttons}>
-                    {set.buttons.map(button => (
-                      <TouchableOpacity key={button} style={styles.button}><SansFont>{button}</SansFont></TouchableOpacity>
-                    ))}
-                  </View>
-                )}
-              </View>
-            </TouchableOpacity>
-          ))}
-        </Swiper>
-      </View>
-    </LinearGradient>
-  );
+      <Swiper showsPagination loop={false} paginationStyle={{ bottom: -5 }} style={{ marginTop: 30 }}>
+        {buttonSets.map(set => (
+          <TouchableOpacity
+            key={set.key}
+            onPress={() => set.navigateTo && navigation.navigate(set.navigateTo)}
+            activeOpacity={set.navigateTo ? 0.7 : 1}
+          >
+            <View style={styles.actions}>
+              <Image source={set.thumbnail} style={[styles.bottomThumbnail, { width: set.thumbnailWidth }]} />
+              {set.showButtons && (
+                <View style={styles.buttons}>
+                  {set.buttons.map(button => (
+                    <TouchableOpacity key={button} style={styles.button}><SansFont>{button}</SansFont></TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </View>
+          </TouchableOpacity>
+        ))}
+      </Swiper>
+    </View>
+  </LinearGradient>
+);
 }
 
 const styles = StyleSheet.create({
