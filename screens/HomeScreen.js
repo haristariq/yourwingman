@@ -41,6 +41,8 @@ export default function App() {
 
 function HomeScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
+  const [photoData, setPhotoData] = useState({ imageUrl: null }); // Initialize photoData
+
 
   const header = "Explore";
 
@@ -92,10 +94,9 @@ function HomeScreen({ navigation }) {
 
       const user = await getUser(token);
 
-      const photoData = await getUserPhoto(token);
-      if (photoData && photoData.imageUrl) {
-          setUserData(prevData => ({ ...prevData, profilePhotoUrl: photoData.imageUrl }));
-      }
+      const fetchedPhotoData = await getUserPhoto(token); // Fetch photo data here
+      setPhotoData(fetchedPhotoData);
+      console.log('photo data displayed', fetchedPhotoData);
 
       setUserData(user);
       const restaurants = await getRestaurantRecommendations(user, token);
@@ -122,7 +123,7 @@ function HomeScreen({ navigation }) {
   const locationed = userData ? userData.location : '';
 
   const users = [
-    { key: '1', name: userName, image: userData.profilePhotoUrl ? userData.profilePhotoUrl : 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/AmercianHeartMonth-1-300x300.jpg?alt=media&token=8d8b2e04-c203-48d5-bac0-4cd18e84e270' },
+    { key: '1', name: userName, image: photoData.imageUrl ? photoData.imageUrl : 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/AmercianHeartMonth-1-300x300.jpg?alt=media&token=8d8b2e04-c203-48d5-bac0-4cd18e84e270' },
     { key: '2', name: 'Partner', image: 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/AmercianHeartMonth-1-300x300.jpg?alt=media&token=8d8b2e04-c203-48d5-bac0-4cd18e84e270' },
   ];
 
