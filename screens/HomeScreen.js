@@ -45,6 +45,7 @@ function HomeScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [photoData, setPhotoData] = useState({ imageUrl: null }); // Initialize photoData
   const [photoUploaded, setPhotoUploaded] = useState(false);
+  const [partnerExists, setPartnerExists] = useState(false);
 
 
   const header = "Explore";
@@ -163,7 +164,7 @@ function HomeScreen({ navigation }) {
       name: userName,
       image: photoUploaded
         ? photoData.imageUrl
-        : 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/uploadcircularbutton_80223.png?alt=media&token=22aa6e44-3585-402e-be40-68472676d1b8',
+        : 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/Add-Button-PNG-Isolated-File.png?alt=media&token=b8b65f41-f0f0-44d7-80f0-4f6442fdb7b4',
     },
     { key: '2', name: 'Partner', image: 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/AmercianHeartMonth-1-300x300.jpg?alt=media&token=8d8b2e04-c203-48d5-bac0-4cd18e84e270' },
   ];

@@ -6,6 +6,8 @@ import { updateUser, deleteUser } from '../backend'; // Import the updateUser fu
 import SansFont from '../SansFont';
 import { getIdToken } from '../firebase';
 import { useUserData } from '../UserContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function SettingsScreen() {
   const navigation = useNavigation();
@@ -25,6 +27,7 @@ export default function SettingsScreen() {
 
   const handleLogout = async () => {
     try {
+      await AsyncStorage.clear();
       await logout();
       navigation.navigate('Login');
     } catch (error) {
@@ -47,6 +50,7 @@ export default function SettingsScreen() {
           {
             text: 'Delete',
             onPress: async () => {
+              await AsyncStorage.clear();
               await deleteUser(idToken);
               // Log the user out and navigate to a login or landing page after deletion
               logout();
