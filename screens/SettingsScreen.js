@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, Text, Alert, StyleSheet, TextInput, Modal, TouchableOpacity } from 'react-native';
+import { View, Button, Alert, StyleSheet, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { logout } from '../firebase';
-import { updateUser, deleteUser } from '../backend'; // Import the updateUser function
+import { updateUser, deleteUser } from '../backend'; // Import the updateUser and deleteUser functions
 import SansFont from '../SansFont';
 import { getIdToken } from '../firebase';
 import { useUserData } from '../UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 
 export default function SettingsScreen() {
   const navigation = useNavigation();
@@ -17,12 +16,14 @@ export default function SettingsScreen() {
   const { userData, setUserData } = useUserData();
 
   useEffect(() => {
-    getIdToken().then(token => {
-      console.log('Settingsnosir');
-      setIdToken(token);
-    }).catch(error => {
-      console.error('Error getting ID token:', error);
-    });
+    getIdToken()
+      .then((token) => {
+        console.log('Settingsnosir');
+        setIdToken(token);
+      })
+      .catch((error) => {
+        console.error('Error getting ID token:', error);
+      });
   }, []);
 
   const handleLogout = async () => {
@@ -55,14 +56,23 @@ export default function SettingsScreen() {
               // Log the user out and navigate to a login or landing page after deletion
               logout();
               navigation.navigate('Login'); // Assuming there's a 'Login' route
-            }
-          }
+            },
+          },
         ]
       );
     } catch (error) {
       console.error('Error deleting user:', error);
       Alert.alert('Error', 'There was an error deleting your account. Please try again later.');
     }
+  };
+
+  const handleContactUs = () => {
+    // Display the email address in a pop-up
+    Alert.alert(
+      'Contact Us',
+      'Email: admin@yourwingman.xyz',
+      [{ text: 'OK', onPress: () => {} }]
+    );
   };
 
 
@@ -88,11 +98,14 @@ export default function SettingsScreen() {
     }
   };
 
+  
   return (
     <View style={styles.container}>
       <SansFont style={styles.header}>Settings</SansFont>
-      {/* Commenting out the "Change Username" button */}
-      {/* <Button title="Change Username" onPress={() => setModalVisible(true)} /> */}
+
+      {/* Add a "Contact Us" button */}
+      <Button title="Contact Us" onPress={handleContactUs} />
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -102,13 +115,10 @@ export default function SettingsScreen() {
       </Modal>
 
       <Button title="Delete User" onPress={handleDeleteUser} color={'black'} />
-
       <Button title="Logout" onPress={handleLogout} color="red" />
-    
-</View>
+    </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -160,5 +170,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-  }
+  },
+   emailText: {
+    marginTop: 10,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000', // Set the color for the email text
+  },
 });

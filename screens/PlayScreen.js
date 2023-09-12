@@ -37,7 +37,7 @@ const PlayScreen = () => {
                             <View style={styles.circle}/>
                             <Image style={styles.gameIcon} source={require('../assets/young-couple-discuss-together.png')} />
                         </TouchableOpacity>
-                        <SansFont style={styles.gameName}>Partner Quiz</SansFont>
+                        <SansFont style={styles.gameName}>Coming Soon</SansFont>
                     </View>
                 </View>
                 <View style={styles.gamePair}>
@@ -46,7 +46,7 @@ const PlayScreen = () => {
                             <View style={styles.circle}/>
                             <Image style={styles.gameIcon} source={require('../assets/alphabet-board-game.png')} />
                         </TouchableOpacity>
-                        <SansFont style={styles.gameName}>Wordle</SansFont>
+                        <SansFont style={styles.gameName}>Coming Soon</SansFont>
                     </View>
                     <View style={styles.gameWrapper}>
                         <TouchableOpacity style={styles.iconButton} onPress={() => handlePress('Coming Soon')}>

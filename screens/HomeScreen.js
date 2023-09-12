@@ -170,7 +170,7 @@ function HomeScreen({ navigation }) {
   ];
 
   const userName = userData ? userData.name : '';
-  const partnerName = partnerData ? partnerData.name : 'Partner';
+  const partnerName = partnerData ? partnerData.name : 'Awaiting Partner Signup!';
 
   const locationed = userData ? userData.location : '';
   console.log('photo beinh displayed');
@@ -189,7 +189,7 @@ function HomeScreen({ navigation }) {
       name: userName,
       image: photoUploaded
         ? photoData.imageUrl
-        : 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/Add-Button-PNG-Isolated-File.png?alt=media&token=b8b65f41-f0f0-44d7-80f0-4f6442fdb7b4',
+        : 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/360_F_218218632_jF6XAkcrlBjv1mAg9Ow0UBMLBaJrhygH.jpg?alt=media&token=0314db3e-06d3-4adf-865c-d95bce9f6db7',
     },
     { key: '2', name: partnerName, image: 'https://firebasestorage.googleapis.com/v0/b/yourwingman.appspot.com/o/AmercianHeartMonth-1-300x300.jpg?alt=media&token=8d8b2e04-c203-48d5-bac0-4cd18e84e270' },
   ];
