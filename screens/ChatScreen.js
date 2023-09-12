@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, FlatList, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, FlatList, KeyboardAvoidingView, Platform, ActivityIndicator, Image } from 'react-native';
 import { Button, TextInput, Card, Title, Paragraph } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios';
@@ -45,6 +45,7 @@ const ChatBotScreen = () => {
     try {
       // Use the chatWithBot function to get the bot's response
       console.log(message);
+      setMessage('');
       const botResponse = await chatWithBot(message, idToken);
       
       // Update the messages state to include the bot's response
@@ -62,7 +63,6 @@ const ChatBotScreen = () => {
     setIsTyping(false);
   
     // Clear the message state to reset the input field
-    setMessage('');
 };
 
 const handleScreenshot = async () => {
@@ -79,26 +79,39 @@ const handleScreenshot = async () => {
   if (!result.canceled) {
     setIsTyping(true);
 
-      try {
-          // Use the uploadScreenshot function to send the screenshot to the server
-          const serverResponse = await uploadScreenshot(result.uri, idToken);
-          console.log('ChatScreen - Server Response', serverResponse);
+    // Add the selected image's URI to the chat messages array
+    setMessages(prevMessages => [...prevMessages, {role: 'user', content: result.uri, type: 'image'}]);
 
-          // Handle the server's response
-          if (serverResponse && serverResponse.message) {
-              setMessages(prevMessages => [...prevMessages, {role: 'bot', content: serverResponse.message}]);
-          }
-      } catch (error) {
-          console.error('Error uploading screenshot:', error);
-      }
+    try {
+        // Use the uploadScreenshot function to send the screenshot to the server
+        const serverResponse = await uploadScreenshot(result.uri, idToken);
+        console.log('ChatScreen - Server Response', serverResponse);
 
-      setIsTyping(false);
+        // Handle the server's response
+        if (serverResponse && serverResponse.message) {
+            setMessages(prevMessages => [...prevMessages, {role: 'bot', content: serverResponse.message}]);
+        }
+    } catch (error) {
+        console.error('Error uploading screenshot:', error);
+    }
+
+    setIsTyping(false);
 
   }
 };
   
 
-  const renderItem = ({ item }) => (
+const renderItem = ({ item }) => {
+  if (item.type === 'image') {
+    return (
+      <Card style={item.role === 'user' ? styles.userMessage : styles.botMessage}>
+        <Card.Content>
+          <Image source={{ uri: item.content }} style={{ width: 200, height: 300 }} />
+        </Card.Content>
+      </Card>
+    );
+  }
+  return (
     <Card style={item.role === 'user' ? styles.userMessage : styles.botMessage}>
         <Card.Content>
             <Title style={item.role === 'user' ? styles.userTitle : styles.botTitle}>{item.role === 'user' ? 'You' : 'YourWingman'}</Title>
@@ -106,6 +119,7 @@ const handleScreenshot = async () => {
         </Card.Content>
     </Card>
   );
+};
 
   return (
     <KeyboardAvoidingView

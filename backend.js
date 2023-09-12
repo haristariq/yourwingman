@@ -357,6 +357,8 @@ async function getUserPhoto(firebaseToken) {
     const userPhoto = response.data;
 
     console.log('User photo data:', userPhoto); 
+    console.log('Photo Fetched'); 
+
     return userPhoto;
   } catch (error) {
     console.error('Error getting user photo:', error.message);

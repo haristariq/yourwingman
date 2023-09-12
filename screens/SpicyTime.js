@@ -66,7 +66,7 @@ const SpicyTime = () => {
           size={30} 
           onPress={() => navigation.goBack()} 
         />
-        <SansFont style={styles.headerText}>  Play Time 😻</SansFont>
+        <SansFont style={styles.headerText}>  Spicy Time 😻</SansFont>
       </View>
 
       <View style={[styles.TitleButtons, styles.titleButtonsContainer]}>
