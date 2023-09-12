@@ -197,6 +197,29 @@ async function getFavoriteRestaurants(firebaseToken) {
   }
 }
 
+// Function to get favorite restaurants
+async function getRestaurantMatches (firebaseToken) {
+  try {
+    const response = await axios.get(`${API_URL}/getRestaurantMatches`, {
+      headers: {
+        Authorization: `${firebaseToken}`
+      }
+    });
+
+    const matches = response.data;
+
+    console.log('Matched restaurants:', matches);
+    return matches;
+  } catch (error) {
+    console.error('Error fetching matched restaurants:', error.message);
+    if (error.response) {
+      console.error('Response:', error.response.data);
+    }
+    throw error; 
+  }
+}
+
+
 const GetSpicyQuestions = async (firebaseToken) => {
   try {
       const response = await axios.get(`${API_URL}/getSpicyQuestions`, {
@@ -419,4 +442,4 @@ async function getUserPhoto(firebaseToken) {
 
 
 
-export { uploadScreenshot, uploadUserPhoto , getUserPhoto ,updateUser, initializeUser, getUser, getPartner, deleteUser, getRestaurantRecommendations, checkUserExists, checkPartnerExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions, chatWithBot };
+export { uploadScreenshot, uploadUserPhoto , getUserPhoto ,updateUser, initializeUser, getUser, getPartner, deleteUser, getRestaurantRecommendations,getRestaurantMatches, checkUserExists, checkPartnerExists, addFavoriteRestaurant, getFavoriteRestaurants, AnswerSpicyQuestion, GetPartnerSpicyAnswers, GetSpicyAnswers, GetSpicyQuestions, chatWithBot };
