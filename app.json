@@ -2,9 +2,9 @@
   "expo": {
     "name": "yourwingman",
     "slug": "yourwingman",
-    "version": "1.0.14",
+    "version": "1.0.15",
     "orientation": "portrait",
-    "icon": "./assets/appstore.png",
+    "icon": "./assets/playstore.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
