@@ -2,12 +2,12 @@
   "expo": {
     "name": "yourwingman",
     "slug": "yourwingman",
-    "version": "1.0.11",
+    "version": "1.0.14",
     "orientation": "portrait",
-    "icon": "./assets/batman.png",
+    "icon": "./assets/appstore.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/appstore.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
