@@ -170,7 +170,7 @@ function HomeScreen({ navigation }) {
   ];
 
   const userName = userData ? userData.name : '';
-  const partnerName = partnerData ? partnerData.name : 'Awaiting Partner Signup!';
+  const partnerName = partnerData ? partnerData.name : 'Partner pending 👀';
 
   const locationed = userData ? userData.location : '';
   console.log('photo beinh displayed');
