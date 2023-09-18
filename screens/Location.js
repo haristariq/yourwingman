@@ -35,7 +35,7 @@ export default function LocationScreen({ route, navigation }) {
             <LinearGradient colors={['#A833E1', '#EC32A3']} style={styles.container}>
                 <Image source={LogoImage} style={styles.logo} />
 
-                <SansFont style={styles.title}>Your Wingman</SansFont>
+                <SansFont style={styles.title}>Amour AI</SansFont>
                 <SansFont style={styles.subtitle}>Enter your location</SansFont>
 
                 <TextInput
